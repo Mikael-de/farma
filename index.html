@@ -24,7 +24,7 @@
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
 
-        /* Barra Superior Verde Claro */
+        /* Barra Superior */
         .top-bar {
             background: var(--bg-topbar);
             padding: 8px 40px;
@@ -42,7 +42,7 @@
         /* ==================== CABEÇALHO ==================== */
         .main-header {
             background: var(--primary-green);
-            padding: 15px 40px;
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -72,7 +72,7 @@
         }
         
         .logo-area img {
-            height: 55px;
+            height: 80px;
             width: auto;
             object-fit: contain;
             transition: all 0.3s ease;
@@ -95,9 +95,10 @@
             fill: currentColor;
         }
 
+        /* ==================== BARRA DE BUSCA (COM LUPA) ==================== */
         .search-bar {
             flex: 1;
-            max-width: 550px; /* Corrigido de 5500px para 550px */
+            max-width: 550px;
             margin: 0 30px;
             display: flex;
             position: relative;
@@ -112,10 +113,11 @@
             outline: none;
             background: white;
             transition: all 0.3s ease;
+            color: #333;
         }
 
         .search-bar button {
-            padding: 12px 25px;
+            padding: 12px 20px;
             background: var(--accent-green);
             border: none;
             border-radius: 0 30px 30px 0;
@@ -124,22 +126,31 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease, background 0.2s;
+            min-width: 54px;
         }
         
         .search-bar button:hover { background: #2e7d32; }
-        .search-bar button svg { fill: white; width: 20px; height: 20px; }
 
-        /* Efeito Shrink */
+        /* Ícone da lupa em branco */
+        .search-bar button svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            display: block;
+        }
+
+        /* Efeito Shrink (Rolar para baixo) */
         .main-header.shrink {
             padding: 8px 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        .main-header.shrink .logo-area img { height: 35px; }
+        .main-header.shrink .logo-area img { height: 45px; }
         .main-header.shrink .header-info { font-size: 0.75rem; opacity: 0.8; }
         .main-header.shrink .search-bar input { padding: 6px 15px; font-size: 0.8rem; }
-        .main-header.shrink .search-bar button { padding: 6px 15px; }
+        .main-header.shrink .search-bar button { padding: 6px 15px; min-width: 40px; }
+        .main-header.shrink .search-bar button svg { width: 16px; height: 16px; }
 
-        /* ==================== NAVEGAÇÃO E PRODUTOS ==================== */
+        /* ==================== NAVEGAÇÃO ==================== */
         .main-nav {
             background: white;
             border-bottom: 1px solid #e0e0e0;
@@ -162,7 +173,7 @@
 
         .main-nav ul li a:hover { color: var(--accent-green); }
 
-        /* ==================== BANNER COM CARROSSEL ==================== */
+        /* ==================== BANNER ==================== */
         .banner-area {
             width: 100%;
             padding: 20px 20px 40px;
@@ -348,9 +359,208 @@
         .btn-buy:hover { background: #2e7d32; transform: scale(1.02); }
         .btn-buy:active { transform: scale(0.98); }
 
-        .empty-msg { display: none; text-align: center; padding: 40px; color: #888; font-size: 1.2rem; }
+        /* ==================== CARRINHO FLUTUANTE ==================== */
+        .cart-float {
+            position: fixed;
+            bottom: 90px; 
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            z-index: 998;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
 
-        /* ==================== RODAPÉ ==================== */
+        .cart-float.show { display: flex; }
+        .cart-float:hover { transform: scale(1.1); }
+        .cart-float svg { width: 30px; height: 30px; fill: white; }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid white;
+        }
+
+        /* Modal do Carrinho */
+        .cart-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cart-modal-overlay.open { display: flex; }
+
+        .cart-modal {
+            background: white;
+            width: 90%;
+            max-width: 450px;
+            max-height: 80vh;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .cart-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .cart-modal-header h3 { color: var(--text-dark); margin: 0; }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .cart-items-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .cart-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .cart-item-name { font-weight: 600; font-size: 0.9rem; }
+        .cart-item-price { font-size: 0.8rem; color: #666; }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item-controls button {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cart-item-controls button.remove-btn {
+            background: #dc3545;
+        }
+
+        .cart-item-controls span {
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .cart-total {
+            border-top: 2px solid #eee;
+            padding-top: 15px;
+            margin-bottom: 15px;
+            text-align: right;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .btn-checkout {
+            background: var(--whatsapp-green);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        .btn-checkout:hover { background: #128C7E; }
+
+        /* ==================== WHATSAPP E RODAPÉ ==================== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--whatsapp-green);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: pulse 2s infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-float::before {
+            content: '';
+            position: absolute;
+            top: -10px; right: -10px; bottom: -10px; left: -10px;
+            border-radius: 50%;
+            background-color: rgba(37, 211, 102, 0.15);
+            z-index: -1;
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-float:hover { transform: scale(1.05); animation: none; }
+        .whatsapp-float:hover::before { transform: scale(1.05); }
+        .whatsapp-float svg { width: 34px; height: 34px; fill: white; display: block; }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
+            100% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+        }
+
         .site-footer {
             background: var(--primary-dark-green);
             color: #cfcfcf;
@@ -395,7 +605,7 @@
 
         .footer-bottom strong { color: white; }
 
-        /* ==================== RESPONSIVIDADE ==================== */
+        /* RESPONSIVIDADE */
         @media (max-width: 2400px) { .product-grid { grid-template-columns: repeat(8, 1fr); } }
         @media (max-width: 1800px) { .product-grid { grid-template-columns: repeat(6, 1fr); } }
         @media (max-width: 1500px) { .product-grid { grid-template-columns: repeat(5, 1fr); } }
@@ -403,75 +613,36 @@
         @media (max-width: 1000px) { 
             .product-grid { grid-template-columns: repeat(3, 1fr); }
             .banner-carousel-wrapper { height: 200px; }
-            .header-info { display: none; } 
         }
 
-        /* ==================== AJUSTE EXCLUSIVO PARA O CELULAR ==================== */
         @media (max-width: 1024px) {
-            .main-header {
-                flex-wrap: nowrap; /* Obriga logo e busca a ficarem na mesma linha */
-                padding: 10px 15px;
-                gap: 10px; /* Reduz o espaço entre os itens */
-            }
-            
-            .header-left {
-                min-width: auto;
-                gap: 5px;
-            }
-
-            .logo-area img {
-                height: 40px; /* Reduz o tamanho da logo para sobrar espaço */
-            }
-
-            .search-bar {
-                order: 2;
-                margin: 0 0 0 10px; /* Encosta a busca bem próxima da logo */
-                max-width: none; /* Remove o limite máximo */
-                flex: 1; /* Preenche exatamente o espaço que sobra até a borda */
-                width: auto;
-            }
-            
-            .search-bar input {
-                font-size: 0.85rem;
-                padding: 8px 15px;
-            }
-            .search-bar button {
-                padding: 8px 15px;
-            }
+            .main-header { flex-wrap: nowrap; padding: 10px 15px; gap: 10px; }
+            .header-left { min-width: auto; gap: 5px; flex-shrink: 0; }
+            .logo-area img { height: 600px; } /* AUMENTEI A LOGO NO CELULAR */
+            .header-info { display: none; }
+            .search-bar { order: 2; margin: 0 0 0 10px; max-width: none; flex: 1; width: auto; }
+            .search-bar input { font-size: 0.85rem; padding: 8px 15px; }
+            .search-bar button { padding: 8px 15px; min-width: 40px; }
+            .search-bar button svg { width: 16px; height: 16px; }
         }
 
-        @media (max-width: 750px)  { 
+        @media (max-width: 7050px)  { 
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .banner-carousel-wrapper { height: 150px; }
             .banner-text-content h2 { font-size: 1.8rem; }
             .carousel-btn { width: 30px; height: 30px; font-size: 0.8rem; }
             .dot { width: 10px; height: 10px; }
-            
-            /* Reforça o layout lado a lado para telas bem pequenas */
-            .main-header {
-                flex-wrap: nowrap;
-                padding: 8px 10px;
-                gap: 8px;
-            }
-            .logo-area img {
-                height: 35px;
-            }
-            .search-bar input {
-                padding: 6px 10px;
-                font-size: 0.8rem;
-            }
-            .search-bar button {
-                padding: 6px 10px;
-            }
-            .search-bar button svg {
-                width: 16px; height: 16px;
-            }
+            .main-header { padding: 8px 10px; gap: 8px; }
+            .logo-area img { height: 5000px; } /* AUMENTEI A LOGO NO CELULAR */
+            .search-bar input { padding: 6px 12px; font-size: 0.8rem; }
+            .search-bar button { padding: 6px 12px; min-width: 36px; }
+            .search-bar button svg { width: 14px; height: 14px; }
         }
 
-        @media (max-width: 500px)  { 
+        @media (max-width: 5000px)  { 
             .product-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
             .banner-carousel-wrapper { height: 120px; border-radius: 8px; }
-            .logo-area img { height: 28px; } /* Logo ainda menor */
+            .logo-area img { height: 70px; } /* AUMENTEI A LOGO NO CELULAR */
         }
         
         @media (max-width: 700px) {
@@ -480,44 +651,6 @@
             .category-tabs { justify-content: center; flex-wrap: wrap; }
             .footer-container { grid-template-columns: 1fr; text-align: center; }
             .social-icons { justify-content: center; }
-        }
-
-        /* ==================== BOTÃO WHATSAPP ==================== */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--whatsapp-green);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            z-index: 999;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            animation: pulse 2s infinite;
-            transition: transform 0.3s ease;
-        }
-
-        .whatsapp-float::before {
-            content: '';
-            position: absolute;
-            top: -10px; right: -10px; bottom: -10px; left: -10px;
-            border-radius: 50%;
-            background-color: rgba(37, 211, 102, 0.15);
-            z-index: -1;
-            transition: transform 0.3s ease;
-        }
-
-        .whatsapp-float:hover { transform: scale(1.05); animation: none; }
-        .whatsapp-float:hover::before { transform: scale(1.05); }
-        .whatsapp-float svg { width: 34px; height: 34px; fill: white; display: block; }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
-            100% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
         }
     </style>
 </head>
@@ -534,25 +667,29 @@
         <div class="header-left">
             <div class="logo-area">
                 <a href="https://www.farmaciasbrasilpoupalar.com.br/">
-                    <img src="logo.png">
+                    <img src="logo.png" width="600" height="400">
                 </a>
             </div>
             
-            <!-- Apenas o nome da cidade e estado -->
             <div class="header-info">
-                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <svg viewBox="0 0 24 24"></svg>
             </div>
         </div>
 
+        <!-- ==================== BARRA DE BUSCA COM LUPA ==================== -->
         <div class="search-bar">
             <input type="text" id="search-input" placeholder="Busque seu medicamento..." onkeyup="performSearch()">
             <button onclick="performSearch()" aria-label="Buscar">
-                <svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <!-- Ícone de Lupa Branca -->
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </button>
         </div>
     </header>
 
-    <!-- ==================== BANNER COM CARROSSEL ==================== -->
+   
+    <!-- ==================== BANNER ==================== -->
     <section class="banner-area">
         <div class="banner-carousel-wrapper" id="bannerCarousel">
             <img src="https://placehold.co/900x280/2e7d32/ffffff?text=Oferta+1+-+Medicamentos" alt="Oferta 1" class="active">
@@ -571,197 +708,47 @@
         </div>
 
         <div class="banner-text-content">
-            <h2>OFERTAS DE INVERNO </h2>
+            <h2>OFERTAS DE INVERNO</h2>
             <p>Validade 01/07 a 15/07</p>
         </div>
     </section>
 
-    <!-- ==================== SEÇÃO DE PRODUTOS ==================== -->
+    <!-- ==================== PRODUTOS ==================== -->
     <main class="container">
         <div class="category-tabs">
             <button class="tab-btn active" onclick="changeCategory('medicamentos', this)">Medicamentos</button>
             <button class="tab-btn" onclick="changeCategory('perfumaria', this)">Perfumaria</button>
         </div>
 
-        <div id="medicamentos" class="product-grid category-section">
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="perfenol_paracetamol_400mg_cloridrato_fenillefrina_4mg_maleato_de_clorfeniramina_4mg_20_capsulas_55647_1_3bab1cc7cfc9113ec779814c083007ee.webp" alt="Perfenol"></div>
-                <div class="product-title">Perfenol</div>
-                <div class="product-desc">Gripes e Resfriados - 20 caps</div>
-                <div class="price-area"><div class="price-main">R$ 9,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Perfenol', 'R$ 18,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="3.webp" alt="Paracetamol"></div>
-                <div class="product-title">Paracetamol União Química</div>
-                <div class="product-desc">Dor e Febre 750mg - 20 comp</div>
-                <div class="price-area"><div class="price-main">R$ 8,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Paracetamol 750mg', 'R$ 8,50')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="lorasliv-antialergico-loratadina-10mg-com-12-comprimidos-vitamedic_jpg.webp" alt="Lorasliv"></div>
-                <div class="product-title">Lorasliv</div>
-                <div class="product-desc">Antialérgico 10mg - 12 comp</div>
-                <div class="price-area"><div class="price-main">R$ 4,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Lorasliv', 'R$ 14,00')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="small-638821509277526261-830116_2.jpg" alt="Dipirona"></div>
-                <div class="product-title">Dipirona Neo Química</div>
-                <div class="product-desc">Gotas 500mg/mL - 20mL</div>
-                <div class="price-area"><div class="price-main">R$ 6,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Dipirona Neo Química', 'R$ 5,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="9.webp" alt="RinoSoft"></div>
-                <div class="product-title">RinoSoft</div>
-                <div class="product-desc">Spray Nasal - 50mL</div>
-                <div class="price-area"><div class="price-main">R$ 19,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('RinoSoft', 'R$ 21,00')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="18.jpg" alt="Nevralgex"></div>
-                <div class="product-title">Nevralgex</div>
-                <div class="product-desc">2 em 1 Analg./Relax. - 30 comp</div>
-                <div class="price-area"><div class="price-main">R$ 9,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Nevralgex', 'R$ 22,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="mucolisil-acetilcisteina-xpe-40mgml-120ml.webp" alt="Mucolisil"></div>
-                <div class="product-title">Mucolisil</div>
-                <div class="product-desc">Acetilcisteína 40mg/mL - 120mL</div>
-                <div class="price-area"><div class="price-main">R$ 9,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Mucolisil', 'R$ 24,50')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="public.avif" alt="Stilgrip"></div>
-                <div class="product-title">Stilgrip</div>
-                <div class="product-desc">Gripes/Resf. - 5 sachês</div>
-                <div class="price-area"><div class="price-main">R$ 12,50</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Stilgrip', 'R$ 12,80')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="8.webp" alt="Buprolivium"></div>
-                <div class="product-title">Buprolivium Mulher</div>
-                <div class="product-desc">Ibuprofeno 400mg - 10 caps</div>
-                <div class="price-area"><div class="price-main">R$ 9,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Buprolivium Mulher', 'R$ 16,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="7.webp" alt="Soro"></div>
-                <div class="product-title">Soro Fisiológico LBS</div>
-                <div class="product-desc">Cloreto de Sódio 0,9% - 1L</div>
-                <div class="price-area"><div class="price-main">R$ 14,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Soro Fisiológico LBS', 'R$ 5,00')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="11.webp" alt="Energrip C"></div>
-                <div class="product-title">Energrip C</div>
-                <div class="product-desc">Tripla Ação - Vit C+Zn+D</div>
-                <div class="price-area"><div class="price-main">R$ 7,99</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Energrip C', 'R$ 19,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="https://placehold.co/200x200/6c757d/white?text=Eficazvit" alt="Eficazvit"></div>
-                <div class="product-title">Eficazvit Immunity</div>
-                <div class="product-desc">Própolis + Vitaminas - 30 caps</div>
-                <div class="price-area"><div class="price-main">R$ 69,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Eficazvit Immunity', 'R$ 75,00')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="16.jpg" alt="Beritin Kids"></div>
-                <div class="product-title">Beritin Kids</div>
-                <div class="product-desc">Suplemento Líquido - 240mL</div>
-                <div class="price-area"><div class="price-main">R$ 19,99</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Beritin Kids', 'R$ 32,00')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="10.webp" alt="Forday"></div>
-                <div class="product-title">Forday Energy</div>
-                <div class="product-desc">Vit C + Arginina - 16 comp</div>
-                <div class="price-area"><div class="price-main">R$ 19,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Forday Energy', 'R$ 28,00')">Pedir</button>
-            </div>
-        </div>
-
-        <div id="perfumaria" class="product-grid category-section" style="display: none;">
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="14.webp" alt="Principia"></div>
-                <div class="product-title">Principia VC-10</div>
-                <div class="product-desc">Sérum Facial - 30ml</div>
-                <div class="price-area"><div class="price-main">R$ 79,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Principia VC-10', 'R$ 89,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="15.jpg" alt="Bepantriz"></div>
-                <div class="product-title">Bepantriz Derma</div>
-                <div class="product-desc">Creme Hidratante - 450g</div>
-                <div class="price-area"><div class="price-main">R$ 75,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Bepantriz Derma', 'R$ 52,00')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="6.webp" alt="Johnson's"></div>
-                <div class="product-title">Johnson's Baby</div>
-                <div class="product-desc">Shampoo Glicerina - 400mL</div>
-                <div class="price-area"><div class="price-main">R$ 29,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Johnson\'s Baby', 'R$ 16,50')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="17.jpg" alt="Suavebaby"></div>
-                <div class="product-title">Suavebaby</div>
-                <div class="product-desc">Pomada Assaduras - 45g</div>
-                <div class="price-area"><div class="price-main">R$ 8,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Suavebaby', 'R$ 9,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="4.jpg" alt="Personalidade"></div>
-                <div class="product-title">Personalidade Baby</div>
-                <div class="product-desc">Toalhas Umedecidas - 50 un</div>
-                <div class="price-area"><div class="price-main">R$ 7,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Personalidade Baby', 'R$ 11,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="12.webp" alt="Pampers"></div>
-                <div class="product-title">Pampers Confort Sec</div>
-                <div class="product-desc">Fraldas XXG - 56 un</div>
-                <div class="price-area"><div class="price-main">R$ 79,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Pampers Confort Sec', 'R$ 47,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="5.webp" alt="Nivea Labial"></div>
-                <div class="product-title">Nivea Original Care</div>
-                <div class="product-desc">Hidratante Labial - 4,8g</div>
-                <div class="price-area"><div class="price-main">R$ 22,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Nivea Original Care', 'R$ 7,50')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="13.webp" alt="Giovanna"></div>
-                <div class="product-title">Giovanna Baby Candy</div>
-                <div class="product-desc">Loção Hidratante - 200mL</div>
-                <div class="price-area"><div class="price-main">R$ 22,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Giovanna Baby Candy', 'R$ 22,50')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="2.webp" alt="Nivea Milk"></div>
-                <div class="product-title">Nivea Soft Milk</div>
-                <div class="product-desc">Loção Deo-Hidratante - 200mL</div>
-                <div class="price-area"><div class="price-main">R$ 19,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Nivea Soft Milk', 'R$ 18,90')">Pedir</button>
-            </div>
-            <div class="product-card">
-                <div class="product-img-wrap"><img src="1.webp" alt="Dove Serum"></div>
-                <div class="product-title">Dove Pró-Ceramidas</div>
-                <div class="product-desc">Sérum Corporal - 180mL</div>
-                <div class="price-area"><div class="price-main">R$ 34,90</div></div>
-                <button class="btn-buy" onclick="pedirProduto('Dove Pró-Ceramidas', 'R$ 26,90')">Pedir</button>
-            </div>
-        </div>
+        <div id="medicamentos" class="product-grid category-section"></div>
+        <div id="perfumaria" class="product-grid category-section" style="display: none;"></div>
         
-        <div id="empty-msg" class="empty-msg">Nenhum produto encontrado para esta busca.</div>
+        <div id="empty-msg" class="empty-msg">Nenhum produto encontrado.</div>
     </main>
 
-    <!-- ==================== BOTÃO WHATSAPP (REFINADO) ==================== -->
-    <a id="whatsapp-float-link" href="https://wa.me/5547996475401?text=Olá!%20Gostaria%20de%20fazer%20um%20pedido." target="_blank" class="whatsapp-float" aria-label="WhatsApp">
+    <!-- ==================== BOTÃO CARRINHO FLUTUANTE ==================== -->
+    <div class="cart-float" id="cartFloat" onclick="toggleCartModal()">
+        <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.11 6.8l.52 1.2h11.7c.78 0 1.44-.5 1.69-1.2l2.98-5.88c.1-.2.1-.4.1-.52 0-.8-.7-1.4-1.4-1.4H5.89l-.98-1.96C4.85.5 4.45 0 3.8 0H1v2h2l3.2 6.8L4.39 14.8C4.19 15.2 4 15.6 4 16c0 1.1.9 2 2 2h14v-2H6l.8-1.6h9.71l2.45-4.4H7.11z"/></svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+    </div>
+
+    <!-- ==================== MODAL DO CARRINHO ==================== -->
+    <div class="cart-modal-overlay" id="cartModal" onclick="closeCartModal(event)">
+        <div class="cart-modal" onclick="event.stopPropagation()">
+            <div class="cart-modal-header">
+                <h3>Meu Carrinho</h3>
+                <button class="close-cart" onclick="toggleCartModal()">✕</button>
+            </div>
+            <div class="cart-items-list" id="cartItemsList">
+                <p style="text-align:center; color:#999; padding: 20px;">Seu carrinho está vazio.</p>
+            </div>
+            <div class="cart-total" id="cartTotal">Total: R$ 0,00</div>
+            <button class="btn-checkout" onclick="finalizarPedidoWhatsApp()">Finalizar Pedido no WhatsApp</button>
+        </div>
+    </div>
+
+    <!-- ==================== WHATSAPP FIXO ==================== -->
+    <a href="https://wa.me/5547996475401?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido." target="_blank" class="whatsapp-float" aria-label="WhatsApp">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
         </svg>
@@ -775,9 +762,7 @@
                 <ul>
                     <li><strong style="color:white;">Telefone:</strong> (47) 3355-1055</li>
                     <li><strong style="color:white;">WhatsApp:</strong> (47) 99647-5401</li>
-                    <li>Seg. à sext. das 07:00h às 21h<br>
-Sábado das 07:30h às 13h<br>
-Domingo e feriados fechado</li>
+                    <li>Seg. à sext. das 07:00h às 21h<br>Sábado das 07:30h às 13h<br>Domingo e feriados fechado</li>
                     <li style="margin-top: 15px;"><a href="#">Trabalhe Conosco</a></li>
                 </ul>
             </div>
@@ -791,7 +776,6 @@ Domingo e feriados fechado</li>
                     <a href="#" target="_blank" aria-label="Facebook">
                         <svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
                     </a>
-                   
                 </div>
             </div>
         </div>
@@ -804,38 +788,225 @@ Domingo e feriados fechado</li>
     <!-- ==================== SCRIPTS ==================== -->
     <script>
         // =========================================
-        //  CONFIGURAÇÕES DO SITE
+        //  CONFIGURAÇÕES
         // =========================================
-        const WHATSAPP_NUMBER = '5547996475401'; // Número do WhatsApp com DDD (sem o +)
+        const WHATSAPP_NUMBER = '5547996475401';
+        const SHEETDB_API_URL = 'https://sheetdb.io/api/v1/munh3scrx4jbl';
+        let cart = [];
 
         // =========================================
-        //  FUNÇÃO DE PEDIDO VIA WHATSAPP
+        //  FUNÇÃO DE ADICIONAR AO CARRINHO
         // =========================================
-        function pedirProduto(productName, productPrice) {
-            const message = `Olá! Gostaria de comprar esse produto: ${productName} pelo valor de ${productPrice}. Pode me passar mais informações?`;
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-            window.open(whatsappLink, '_blank');
+        function adicionarAoCarrinho(productName, productPrice) {
+            const rawPrice = productPrice.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+            const priceFloat = parseFloat(rawPrice);
+
+            if (isNaN(priceFloat)) {
+                console.error("Erro ao converter preço:", productPrice);
+                return;
+            }
+
+            const existingItem = cart.find(item => item.name === productName);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: productName,
+                    price: priceFloat,
+                    quantity: 1
+                });
+            }
+            
+            updateCartUI();
         }
 
         // =========================================
-        //  FUNÇÃO DE BUSCA
+        //  FUNÇÕES DE ATUALIZAÇÃO DA UI DO CARRINHO
+        // =========================================
+        function formatCurrency(value) {
+            return value.toFixed(2).replace('.', ',');
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cartBadge');
+            const floatBtn = document.getElementById('cartFloat');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            badge.innerText = totalItems;
+            if (totalItems > 0) {
+                floatBtn.classList.add('show');
+            } else {
+                floatBtn.classList.remove('show');
+            }
+
+            if (document.getElementById('cartModal').classList.contains('open')) {
+                renderCartModal();
+            }
+        }
+
+        function renderCartModal() {
+            const list = document.getElementById('cartItemsList');
+            const totalDisplay = document.getElementById('cartTotal');
+
+            if (cart.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#999; padding: 20px;">Seu carrinho está vazio.</p>';
+                totalDisplay.innerText = 'Total: R$ 0,00';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">R$ ${formatCurrency(item.price)}</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <button onclick="updateQuantity(${index}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateQuantity(${index}, 1)">+</button>
+                            <button class="remove-btn" onclick="updateQuantity(${index}, -999)">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            list.innerHTML = html;
+            totalDisplay.innerText = `Total: R$ ${formatCurrency(total)}`;
+        }
+
+        function updateQuantity(index, change) {
+            if (cart[index].quantity + change <= 0) {
+                cart.splice(index, 1);
+            } else {
+                cart[index].quantity += change;
+            }
+            updateCartUI();
+            renderCartModal();
+        }
+
+        // =========================================
+        //  ABRIR E FECHAR MODAL
+        // =========================================
+        function toggleCartModal() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('open');
+            if (modal.classList.contains('open')) {
+                renderCartModal();
+            }
+        }
+
+        function closeCartModal(event) {
+            if (event.target === event.currentTarget) {
+                document.getElementById('cartModal').classList.remove('open');
+            }
+        }
+
+        // =========================================
+        //  FINALIZAR PEDIDO
+        // =========================================
+        function finalizarPedidoWhatsApp() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+
+            let message = '🛒 *Novo Pedido:*\n\n';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `- ${item.name} (x${item.quantity}) - R$ ${formatCurrency(itemTotal)}\n`;
+            });
+
+            message += `\n💰 *Total do Pedido: R$ ${formatCurrency(total)}*`;
+            message += `\n\nPor favor, confirmar disponibilidade e formas de pagamento.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+
+            window.open(whatsappLink, '_blank');
+
+            cart = [];
+            updateCartUI();
+            document.getElementById('cartModal').classList.remove('open');
+        }
+
+        // =========================================
+        //  CARREGAR PRODUTOS DA PLANILHA
+        // =========================================
+        async function carregarProdutos() {
+            try {
+                const resposta = await fetch(SHEETDB_API_URL);
+                
+                if (!resposta.ok) {
+                    throw new Error(`Erro HTTP ${resposta.status}`);
+                }
+
+                const data = await resposta.json();
+
+                // Se não houver dados, exibe a mensagem padrão de vazio
+                if (!data || data.length === 0) {
+                    document.getElementById('empty-msg').style.display = 'block';
+                    return;
+                }
+
+                const gridMed = document.getElementById('medicamentos');
+                const gridPerf = document.getElementById('perfumaria');
+                gridMed.innerHTML = '';
+                gridPerf.innerHTML = '';
+
+                data.forEach(item => {
+                    const nome = item.Nome || 'Sem nome';
+                    const desc = item.Descricao || '';
+                    const preco = item.Preco || '0,00';
+                    const imagem = item.Imagem || 'https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem';
+                    const categoria = item.Categoria ? item.Categoria.toLowerCase() : 'medicamentos';
+
+                    const cardHTML = `
+                        <div class="product-card">
+                            <div class="product-img-wrap"><img src="${imagem}" alt="${nome}"></div>
+                            <div class="product-title">${nome}</div>
+                            <div class="product-desc">${desc}</div>
+                            <div class="price-area"><div class="price-main">R$ ${preco}</div></div>
+                            <button class="btn-buy" onclick="adicionarAoCarrinho('${nome}', 'R$ ${preco}')">Adicionar</button>
+                        </div>
+                    `;
+
+                    if(categoria === 'perfumaria') {
+                        gridPerf.innerHTML += cardHTML;
+                    } else {
+                        gridMed.innerHTML += cardHTML;
+                    }
+                });
+
+            } catch (erro) {
+                console.error("Erro ao carregar produtos:", erro);
+                // Exibe uma mensagem amigável se a API falhar
+                document.getElementById('empty-msg').style.display = 'block';
+                document.getElementById('empty-msg').innerText = "Erro ao carregar produtos. Verifique a conexão.";
+            }
+        }
+
+        // =========================================
+        //  FUNÇÃO DE BUSCA GLOBAL 
         // =========================================
         function performSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
             
-            let activeSection;
-            if(document.getElementById('medicamentos').style.display !== 'none') {
-                activeSection = document.getElementById('medicamentos');
-            } else {
-                activeSection = document.getElementById('perfumaria');
-            }
-
-            const cards = activeSection.querySelectorAll('.product-card');
+            // Pega todos os cards de TODAS as categorias
+            const allCards = document.querySelectorAll('.product-card');
             const emptyMsg = document.getElementById('empty-msg');
             let found = false;
 
-            cards.forEach(card => {
+            allCards.forEach(card => {
                 const title = card.querySelector('.product-title').innerText.toLowerCase();
                 if(title.includes(query) || query === '') {
                     card.style.display = 'flex';
@@ -856,9 +1027,9 @@ Domingo e feriados fechado</li>
         //  FUNÇÃO DE TROCA DE ABAS
         // =========================================
         function changeCategory(categoryId, btnElement) {
+            // Muda a aba visualmente
             const sections = document.querySelectorAll('.category-section');
             sections.forEach(sec => sec.style.display = 'none');
-
             const targetSection = document.getElementById(categoryId);
             if(targetSection) targetSection.style.display = 'grid';
 
@@ -866,13 +1037,12 @@ Domingo e feriados fechado</li>
             buttons.forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // Limpar busca ao trocar de aba
-            document.getElementById('search-input').value = '';
+            // Refaz a busca para mostrar apenas o que pertence àquela aba + o termo buscado.
             performSearch();
         }
 
         // =========================================
-        //  FUNÇÃO DO CARROSSEL DE IMAGENS
+        //  CARROSSEL E EFEITO SCROLL
         // =========================================
         document.addEventListener('DOMContentLoaded', function() {
             const slides = document.querySelectorAll('#bannerCarousel img');
@@ -885,64 +1055,35 @@ Domingo e feriados fechado</li>
             function goToSlide(index) {
                 if (index < 0) index = slides.length - 1;
                 if (index >= slides.length) index = 0;
-
                 slides.forEach(img => img.classList.remove('active'));
                 slides[index].classList.add('active');
-
                 dots.forEach(dot => dot.classList.remove('active'));
                 dots[index].classList.add('active');
-
                 currentSlide = index;
             }
 
             function startAutoSlide() {
                 if (slideInterval) clearInterval(slideInterval);
-                slideInterval = setInterval(() => {
-                    goToSlide(currentSlide + 1);
-                }, 3000);
+                slideInterval = setInterval(() => { goToSlide(currentSlide + 1); }, 3000);
             }
 
-            prevBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                goToSlide(currentSlide - 1);
-                startAutoSlide();
-            });
-
-            nextBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                goToSlide(currentSlide + 1);
-                startAutoSlide();
-            });
-
+            prevBtn.addEventListener('click', function(e) { e.stopPropagation(); goToSlide(currentSlide - 1); startAutoSlide(); });
+            nextBtn.addEventListener('click', function(e) { e.stopPropagation(); goToSlide(currentSlide + 1); startAutoSlide(); });
             dots.forEach((dot, index) => {
-                dot.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    goToSlide(index);
-                    startAutoSlide();
-                });
+                dot.addEventListener('click', function(e) { e.stopPropagation(); goToSlide(index); startAutoSlide(); });
             });
-
             startAutoSlide();
-        });
 
-        // =========================================
-        //  EFEITO DE ENCOLHIMENTO DA LOGO AO ROLAR
-        // =========================================
-        document.addEventListener('DOMContentLoaded', function() {
             const header = document.getElementById('mainHeader');
-            let lastScrollTop = 0;
-
             window.addEventListener('scroll', function() {
                 let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                
-                if (scrollTop > 20) { // Se rolar mais que 20px
-                    header.classList.add('shrink');
-                } else {
-                    header.classList.remove('shrink');
-                }
-                lastScrollTop = scrollTop;
+                if (scrollTop > 20) header.classList.add('shrink');
+                else header.classList.remove('shrink');
             });
         });
+
+        // Inicializa o carregamento
+        carregarProdutos();
     </script>
 </body>
 </html>

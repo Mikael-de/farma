@@ -97,7 +97,7 @@
 
         .search-bar {
             flex: 1;
-            max-width: 550px;
+            max-width: 550px; /* Corrigido de 5500px para 550px */
             margin: 0 30px;
             display: flex;
             position: relative;
@@ -405,22 +405,75 @@
             .banner-carousel-wrapper { height: 200px; }
             .header-info { display: none; } 
         }
+
+        /* ==================== AJUSTE EXCLUSIVO PARA O CELULAR ==================== */
+        @media (max-width: 1024px) {
+            .main-header {
+                flex-wrap: nowrap; /* Obriga logo e busca a ficarem na mesma linha */
+                padding: 10px 15px;
+                gap: 10px; /* Reduz o espaço entre os itens */
+            }
+            
+            .header-left {
+                min-width: auto;
+                gap: 5px;
+            }
+
+            .logo-area img {
+                height: 40px; /* Reduz o tamanho da logo para sobrar espaço */
+            }
+
+            .search-bar {
+                order: 2;
+                margin: 0 0 0 10px; /* Encosta a busca bem próxima da logo */
+                max-width: none; /* Remove o limite máximo */
+                flex: 1; /* Preenche exatamente o espaço que sobra até a borda */
+                width: auto;
+            }
+            
+            .search-bar input {
+                font-size: 0.85rem;
+                padding: 8px 15px;
+            }
+            .search-bar button {
+                padding: 8px 15px;
+            }
+        }
+
         @media (max-width: 750px)  { 
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .banner-carousel-wrapper { height: 150px; }
             .banner-text-content h2 { font-size: 1.8rem; }
             .carousel-btn { width: 30px; height: 30px; font-size: 0.8rem; }
             .dot { width: 10px; height: 10px; }
+            
+            /* Reforça o layout lado a lado para telas bem pequenas */
+            .main-header {
+                flex-wrap: nowrap;
+                padding: 8px 10px;
+                gap: 8px;
+            }
+            .logo-area img {
+                height: 35px;
+            }
+            .search-bar input {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            .search-bar button {
+                padding: 6px 10px;
+            }
+            .search-bar button svg {
+                width: 16px; height: 16px;
+            }
         }
+
         @media (max-width: 500px)  { 
             .product-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
             .banner-carousel-wrapper { height: 120px; border-radius: 8px; }
+            .logo-area img { height: 28px; } /* Logo ainda menor */
         }
         
-        @media (max-width: 1024px) {
-            .main-header { flex-wrap: wrap; padding: 15px 20px; }
-            .search-bar { order: 3; width: 100%; max-width: none; margin: 10px 0 0; }
-        }
         @media (max-width: 700px) {
             .top-bar { flex-direction: column; gap: 5px; text-align: center; padding: 8px 15px; }
             .main-nav { overflow-x: auto; padding: 12px 20px; white-space: nowrap; }
@@ -429,7 +482,7 @@
             .social-icons { justify-content: center; }
         }
 
-        /* ==================== BOTÃO WHATSAPP (SEM BUGS) ==================== */
+        /* ==================== BOTÃO WHATSAPP ==================== */
         .whatsapp-float {
             position: fixed;
             bottom: 20px;
@@ -444,12 +497,10 @@
             text-decoration: none;
             z-index: 999;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            /* Animação de pulsar sem tremer */
             animation: pulse 2s infinite;
             transition: transform 0.3s ease;
         }
 
-        /* Anel Verde Claro ao redor (Estático, não treme) */
         .whatsapp-float::before {
             content: '';
             position: absolute;
@@ -490,7 +541,6 @@
             <!-- Apenas o nome da cidade e estado -->
             <div class="header-info">
                 <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <span style="font-weight: 600;">Brusque, SC</span>
             </div>
         </div>
 
@@ -501,8 +551,6 @@
             </button>
         </div>
     </header>
-
-    
 
     <!-- ==================== BANNER COM CARROSSEL ==================== -->
     <section class="banner-area">

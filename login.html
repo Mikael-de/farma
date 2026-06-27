@@ -147,19 +147,31 @@
     </div>
 
     <script>
+        // =========================================
+        //  CONFIGURAÇÃO DO SUPABASE
+        // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
 
+        // =========================================
+        //  FUNÇÃO DE LOGIN COM GOOGLE
+        // =========================================
         async function loginGoogle() {
             const url = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${window.location.origin}/minha-conta.html`;
             window.location.href = url;
         }
 
+        // =========================================
+        //  FUNÇÃO DE LOGIN COM E-MAIL E SENHA
+        // =========================================
         async function loginEmail() {
             const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
             
-            if(!email || !password) { alert('Preencha e-mail e senha.'); return; }
+            if(!email || !password) {
+                alert('Preencha e-mail e senha.');
+                return;
+            }
 
             try {
                 const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
@@ -170,13 +182,15 @@
                 const data = await response.json();
 
                 if(response.ok) {
+                    // Login bem-sucedido! Salva o usuário no navegador
                     localStorage.setItem('cliente_logado', JSON.stringify(data.user));
+                    // Redireciona diretamente para a área do cliente
                     window.location.href = 'minha-conta.html';
                 } else {
                     alert('Erro no login: ' + (data.error_description || data.message));
                 }
             } catch (error) {
-                alert('Erro de conexão');
+                alert('Erro de conexão: ' + error.message);
             }
         }
     </script>

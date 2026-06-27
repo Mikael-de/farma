@@ -35,24 +35,9 @@
             font-weight: 600;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            transition: border 0.2s;
-        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.9rem; color: #555; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; outline: none; transition: border 0.2s; }
         .form-group input:focus { border-color: #388E3C; }
         
         .forgot-password {
@@ -72,11 +57,7 @@
             margin: 20px 0;
         }
         .terms input { margin-top: 3px; width: 18px; height: 18px; accent-color: #1b5e20; cursor: pointer; }
-        .terms label {
-            font-size: 0.85rem;
-            color: #333;
-            line-height: 1.4;
-        }
+        .terms label { font-size: 0.85rem; color: #333; line-height: 1.4; }
         .terms label a { color: #1b5e20; text-decoration: none; }
         .terms label a:hover { text-decoration: underline; }
 
@@ -147,23 +128,16 @@
     </div>
 
     <script>
-        // =========================================
-        //  CONFIGURAÇÃO DO SUPABASE
-        // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
 
-        // =========================================
-        //  FUNÇÃO DE LOGIN COM GOOGLE
-        // =========================================
+        // ============ CORREÇÃO AQUI ============
         async function loginGoogle() {
-            const url = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${window.location.origin}/minha-conta.html`;
+            // Agora redireciona para a raiz do site.
+            const url = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${window.location.origin}`;
             window.location.href = url;
         }
 
-        // =========================================
-        //  FUNÇÃO DE LOGIN COM E-MAIL E SENHA
-        // =========================================
         async function loginEmail() {
             const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
@@ -182,9 +156,7 @@
                 const data = await response.json();
 
                 if(response.ok) {
-                    // Login bem-sucedido! Salva o usuário no navegador
                     localStorage.setItem('cliente_logado', JSON.stringify(data.user));
-                    // Redireciona diretamente para a área do cliente
                     window.location.href = 'minha-conta.html';
                 } else {
                     alert('Erro no login: ' + (data.error_description || data.message));

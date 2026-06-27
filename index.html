@@ -6,7 +6,6 @@
     <title>Farmácia - Encarte Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* (Mantivemos o CSS do seu arquivo original para não quebrar o layout) */
         :root { --bg-topbar: #e8f5e9; --primary-green: #1b5e20; --primary-dark-green: #143c16; --accent-green: #388E3C; --text-dark: #333333; --text-light: #666666; --whatsapp-green: #25D366; --border-light: #c8e6c9; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
@@ -354,7 +353,7 @@
 
     <script>
         // =========================================
-        //  CONFIGURAÇÃO DO SUPABASE (DEFINIDA ANTES DE TUDO)
+        //  CONFIGURAÇÃO DO SUPABASE
         // =========================================
         var SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         var SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
@@ -366,33 +365,30 @@
         let currentProductSlide = 0;
 
         // =========================================
-        //  VERIFICADOR DE LOGIN APÓS REDIRECIONAMENTO DO GOOGLE
+        //  VERIFICADOR DE EMERGÊNCIA DO GOOGLE (EXECUTA IMEDIATAMENTE)
         // =========================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const hash = window.location.hash;
+        (function verificarLoginGoogle() {
+            var hash = window.location.hash;
             if (hash && hash.includes('access_token')) {
-                const params = new URLSearchParams(hash.substring(1));
-                const accessToken = params.get('access_token');
-
+                var params = new URLSearchParams(hash.substring(1));
+                var accessToken = params.get('access_token');
                 if (accessToken) {
-                    // Pega as informações do usuário
-                    fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    fetch(SUPABASE_URL + '/auth/v1/user', {
+                        headers: { 'Authorization': 'Bearer ' + accessToken }
                     })
-                    .then(res => res.json())
-                    .then(data => {
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
                         if (data.id) {
                             localStorage.setItem('cliente_logado', JSON.stringify(data));
-                            // Redireciona para a área do cliente
                             window.location.href = 'minha-conta.html';
                         }
                     })
-                    .catch(err => {
+                    .catch(function(err) {
                         console.error("Erro ao buscar usuário:", err);
                     });
                 }
             }
-        });
+        })();
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }
         function toggleFilterSidebar() { document.getElementById('filterSidebar').classList.toggle('open'); document.getElementById('filterOverlay').classList.toggle('open'); }

@@ -128,24 +128,18 @@
     </div>
 
     <script>
-        // =========================================
-        //  CONFIGURAÇÃO DO SUPABASE (DEFINIDA NO TOPO)
-        // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
 
         // =========================================
-        //  FUNÇÃO DE LOGIN COM GOOGLE
+        //  FUNÇÃO DE LOGIN COM GOOGLE (CORRIGIDA)
+        //  Agora manda direto para minha-conta.html
         // =========================================
         async function loginGoogle() {
-            // Redireciona para a raiz (SEM /minha-conta.html)
-            const url = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${window.location.origin}`;
+            const url = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${window.location.origin}/minha-conta.html`;
             window.location.href = url;
         }
 
-        // =========================================
-        //  FUNÇÃO DE LOGIN COM E-MAIL E SENHA
-        // =========================================
         async function loginEmail() {
             const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();

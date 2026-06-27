@@ -6,9 +6,35 @@
     <title>Painel do Atendente</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-green: #1b5e20; --accent-green: #388E3C; --bg-panel: #f0f2f5; }
+        :root { --primary-green: #1b5e20; --accent-green: #388E3C; --bg-panel: #f0f2f5; --red-error: #dc3545; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-panel); padding: 20px; }
+        body { background: var(--bg-panel); padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        
+        /* ======== TELA DE LOGIN ======== */
+        #login-container {
+            width: 100%; max-width: 400px;
+            margin-top: 50px;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+        #login-container h2 { color: var(--primary-green); text-align: center; margin-bottom: 20px; }
+        #login-container input {
+            width: 100%; padding: 12px; margin-bottom: 15px;
+            border: 1px solid #ccc; border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-login {
+            width: 100%; padding: 12px; background: var(--primary-green);
+            color: white; border: none; border-radius: 8px; cursor: pointer;
+            font-weight: 700; font-size: 1rem; transition: 0.2s;
+        }
+        .btn-login:hover { background: var(--accent-green); }
+
+        /* ======== DASHBOARD (SÓ APARECE SE LOGADO) ======== */
+        #dashboard-container { display: none; width: 100%; max-width: 1300px; }
         
         .header-panel {
             background: var(--primary-green);
@@ -24,46 +50,21 @@
         }
         .header-panel h1 { font-size: 1.8rem; }
         .header-panel p { font-size: 0.9rem; opacity: 0.8; }
-        .btn-limpar {
-            background: #dc3545; color: white; border: none;
-            padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;
-            transition: background 0.2s;
-        }
+        .btn-limpar { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
         .btn-limpar:hover { background: #a71d2a; }
+        .btn-logout { background: #ffc107; color: #333; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-left: 10px; transition: 0.2s; }
+        .btn-logout:hover { background: #e0a800; }
 
-        .grid-pedidos {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 20px;
-        }
+        .grid-pedidos { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
 
-        .card-pedido {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.04);
-            border-left: 6px solid #eee;
-            position: relative;
-            transition: 0.2s;
-        }
+        .card-pedido { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.04); border-left: 6px solid #eee; position: relative; transition: 0.2s; }
         
         /* Cores de acordo com o status */
         .card-pedido.status-atendimento { border-left-color: #0d6efd; }
         .card-pedido.status-atendido { border-left-color: #198754; }
 
-        .pedido-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .pedido-status { 
-            background: #e9ecef; color: #333;
-            font-size: 0.65rem; font-weight: 700;
-            padding: 4px 10px; border-radius: 20px;
-            text-transform: uppercase;
-        }
+        .pedido-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .pedido-status { background: #e9ecef; color: #333; font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
         .status-atendimento .pedido-status { background: #cfe2ff; color: #084298; }
         .status-atendido .pedido-status { background: #d1e7dd; color: #0f5132; }
 
@@ -71,58 +72,19 @@
         .pedido-hora { font-size: 0.8rem; color: #888; display: block; margin-top: 3px;}
         
         .pedido-itens { margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
-        .item-linha {
-            display: flex; justify-content: space-between;
-            font-size: 0.9rem; padding: 4px 0;
-            border-bottom: 1px dotted #f0f0f0;
-        }
+        .item-linha { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 4px 0; border-bottom: 1px dotted #f0f0f0; }
         .item-linha small { color: #888; font-weight: 600; }
 
-        .pedido-total {
-            margin-top: 10px; padding-top: 10px;
-            border-top: 2px solid #333;
-            text-align: right;
-            font-size: 1.2rem; font-weight: 800; color: #222;
-        }
+        .pedido-total { margin-top: 10px; padding-top: 10px; border-top: 2px solid #333; text-align: right; font-size: 1.2rem; font-weight: 800; color: #222; }
 
-        .sem-pedidos {
-            grid-column: 1 / -1;
-            text-align: center; padding: 40px; color: #888; font-size: 1.2rem;
-        }
+        .sem-pedidos { grid-column: 1 / -1; text-align: center; padding: 40px; color: #888; font-size: 1.2rem; }
 
-        /* MENU DOS 3 PONTINHOS */
-        .menu-container {
-            position: relative;
-            display: inline-block;
-        }
-        .menu-trigger {
-            background: none; border: none;
-            font-size: 1.5rem; cursor: pointer; color: #888;
-            padding: 0 5px;
-            transition: color 0.2s;
-        }
+        .menu-container { position: relative; display: inline-block; }
+        .menu-trigger { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #888; padding: 0 5px; transition: color 0.2s; }
         .menu-trigger:hover { color: #333; }
-        .menu-dropdown {
-            display: none;
-            position: absolute;
-            right: 0; top: 25px;
-            background: white;
-            min-width: 160px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border-radius: 8px;
-            z-index: 10;
-            overflow: hidden;
-            border: 1px solid #eee;
-        }
+        .menu-dropdown { display: none; position: absolute; right: 0; top: 25px; background: white; min-width: 160px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; z-index: 10; overflow: hidden; border: 1px solid #eee; }
         .menu-dropdown.open { display: block; }
-        .menu-dropdown button {
-            display: block; width: 100%;
-            padding: 10px 15px;
-            border: none; background: white;
-            text-align: left; cursor: pointer;
-            font-size: 0.85rem; font-weight: 500; color: #333;
-            transition: 0.2s;
-        }
+        .menu-dropdown button { display: block; width: 100%; padding: 10px 15px; border: none; background: white; text-align: left; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: #333; transition: 0.2s; }
         .menu-dropdown button:hover { background: #f8f9fa; }
         .menu-dropdown .wpp-btn { color: #25D366; }
         .menu-dropdown .atendimento-btn { color: #0d6efd; }
@@ -137,24 +99,90 @@
 </head>
 <body>
 
-    <div class="header-panel">
-        <div>
-            <h1>📋 Painel de Pedidos</h1>
-            <p>Pedidos enviados pelos clientes aparecem aqui em tempo real.</p>
-        </div>
-        <button class="btn-limpar" onclick="limparTodosPedidos()">🗑️ Limpar Todos</button>
+    <!-- TELA DE LOGIN -->
+    <div id="login-container">
+        <h2>🔐 Acesso Restrito</h2>
+        <input type="email" id="emailInput" placeholder="E-mail do atendente" value="">
+        <input type="password" id="passwordInput" placeholder="Senha" value="">
+        <button class="btn-login" onclick="fazerLogin()">Entrar no Painel</button>
+        <p style="text-align:center; margin-top: 15px; font-size: 0.8rem; color: #888;">Use o e-mail e senha cadastrados no Supabase.</p>
     </div>
 
-    <div class="grid-pedidos" id="listaPedidos">
-        <div class="sem-pedidos">Nenhum pedido recebido ainda. Aguarde...</div>
+    <!-- PAINEL -->
+    <div id="dashboard-container">
+        <div class="header-panel">
+            <div>
+                <h1>📋 Painel de Pedidos</h1>
+                <p>Bem-vindo, <strong id="nomeUsuarioDisplay">Atendente</strong>!</p>
+            </div>
+            <div>
+                <button class="btn-limpar" onclick="limparTodosPedidos()">🗑️ Limpar Todos</button>
+                <button class="btn-logout" onclick="fazerLogout()">🚪 Sair</button>
+            </div>
+        </div>
+
+        <div class="grid-pedidos" id="listaPedidos">
+            <div class="sem-pedidos">📭 Nenhum pedido recebido ainda. Aguarde...</div>
+        </div>
     </div>
 
     <script>
-        // CONFIGURAÇÃO DO SUPABASE (MESMA DO INDEX)
+        // =========================================
+        //  CONFIGURAÇÃO DO SUPABASE
+        // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
+        let userLogado = null; // Guarda os dados do atendente logado
 
+        // =========================================
+        //  SISTEMA DE LOGIN (SUPABASE AUTH)
+        // =========================================
+        async function fazerLogin() {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+
+            if(!email || !password) { alert('Preencha o e-mail e a senha!'); return; }
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    userLogado = data.user;
+                    document.getElementById('nomeUsuarioDisplay').innerText = userLogado.email;
+                    document.getElementById('login-container').style.display = 'none';
+                    document.getElementById('dashboard-container').style.display = 'block';
+                    carregarPedidos();
+                } else {
+                    alert('Erro no login: ' + data.error_description);
+                }
+            } catch (error) {
+                alert('Erro de conexão: ' + error.message);
+            }
+        }
+
+        function fazerLogout() {
+            userLogado = null;
+            document.getElementById('dashboard-container').style.display = 'none';
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('emailInput').value = '';
+            document.getElementById('passwordInput').value = '';
+        }
+
+        // =========================================
+        //  SISTEMA DE PEDIDOS (COM LOG DE ATENDENTE)
+        // =========================================
         async function carregarPedidos() {
+            if(!userLogado) return;
+
             const lista = document.getElementById('listaPedidos');
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?select=*&order=criado_em.desc`, {
@@ -263,7 +291,11 @@
             window.open(`https://wa.me/55${numeroLimpo}?text=${mensagem}`, '_blank');
         }
 
+        // =========================================
+        //  SALVA O ATENDENTE QUE MUDOU O STATUS
+        // =========================================
         async function mudarStatus(id, novoStatus) {
+            if(!userLogado) return;
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?id=eq.${id}`, {
                     method: 'PATCH',
@@ -272,7 +304,10 @@
                         'Authorization': `Bearer ${SUPABASE_KEY}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ status: novoStatus })
+                    body: JSON.stringify({ 
+                        status: novoStatus,
+                        atendido_por: userLogado.email // Salva o e-mail de quem atendeu
+                    })
                 });
                 if (!response.ok) throw new Error('Erro ao atualizar status');
                 carregarPedidos();
@@ -315,8 +350,11 @@
             }
         }
 
-        setInterval(carregarPedidos, 3000);
-        carregarPedidos();
+        // Verifica se já está logado ao recarregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            // O painel começa escondido. O usuário precisa clicar em Login.
+            // A função fazerLogin() vai ativar o dashboard.
+        });
     </script>
 </body>
 </html>

@@ -146,15 +146,15 @@
     <header class="main-header" id="mainHeader">
         <div class="header-left">
             <div class="logo-area"><a href="https://www.farmaciasbrasilpoupalar.com.br/"><img src="logo.png"></a></div>
-            <div class="header-info"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+            <div class="header-info"><svg viewBox="0 0 24 24"></svg></div>
         </div>
         <div class="search-bar">
             <input type="text" id="search-input" placeholder="Busque seu medicamento..." onkeyup="performSearch()">
-            <button onclick="performSearch()" aria-label="Buscar"><svg viewBox="0 0 24 24"></svg></button>
+            <button onclick="performSearch()" aria-label="Buscar"><svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
     </header>
 
-   
+    
     <section class="banner-area">
         <div class="banner-carousel-wrapper" id="bannerCarousel">
             <img src="https://placehold.co/900x280/2e7d32/ffffff?text=Oferta+1+-+Medicamentos" alt="Oferta 1" class="active">
@@ -223,14 +223,12 @@
     </footer>
 
     <script>
-        // CONFIGURAÇÃO DO SHEETDB (PRODUTOS) E SUPABASE (PEDIDOS)
         const SHEETDB_API_URL = 'https://sheetdb.io/api/v1/munh3scrx4jbl';
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlicG1scGViZndkeXVvbmRvc2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MjU4MDMsImV4cCI6MjA2MDAwMTgwM30.cW9T9WJCrQ8Qwp2XWq2YVhY4FqApgCiXfG22WlYh0Rg';
+        const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
         const WHATSAPP_NUMBER_FARMACIA = '5547996475401';
         let cart = [];
 
-        // MÁSCARA DO TELEFONE
         function mascaraTelefone(input) {
             let valor = input.value.replace(/\D/g, '');
             if (valor.length > 11) valor = valor.slice(0, 11);

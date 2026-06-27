@@ -58,8 +58,6 @@
         .grid-pedidos { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
 
         .card-pedido { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.04); border-left: 6px solid #eee; position: relative; transition: 0.2s; }
-        
-        /* Cores de acordo com o status */
         .card-pedido.status-atendimento { border-left-color: #0d6efd; }
         .card-pedido.status-atendido { border-left-color: #198754; }
 
@@ -99,7 +97,6 @@
 </head>
 <body>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-container">
         <h2>🔐 Acesso Restrito</h2>
         <input type="email" id="emailInput" placeholder="E-mail do atendente" value="">
@@ -108,7 +105,6 @@
         <p style="text-align:center; margin-top: 15px; font-size: 0.8rem; color: #888;">Use o e-mail e senha cadastrados no Supabase.</p>
     </div>
 
-    <!-- PAINEL -->
     <div id="dashboard-container">
         <div class="header-panel">
             <div>
@@ -127,22 +123,15 @@
     </div>
 
     <script>
-        // =========================================
-        //  CONFIGURAÇÃO DO SUPABASE
-        // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
         
         // =========================================
         //  SISTEMA DE LOGIN COM "LEMBRAR DE MIM"
         // =========================================
-        
-        // Verifica se já existe um login salvo ao abrir a página
         document.addEventListener('DOMContentLoaded', function() {
             const savedUser = localStorage.getItem('atendente_logado');
-            
             if (savedUser) {
-                // Se tiver login salvo, tenta logar automaticamente
                 const userData = JSON.parse(savedUser);
                 if (userData && userData.email) {
                     loginAutomatico(userData.email);
@@ -153,25 +142,18 @@
         async function fazerLogin() {
             const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
-
             if(!email || !password) { alert('Preencha o e-mail e a senha!'); return; }
 
             try {
                 const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
                     method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: password })
                 });
-
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Salva o login no navegador para não precisar digitar de novo
                     localStorage.setItem('atendente_logado', JSON.stringify({ email: data.user.email, token: data.access_token }));
-                    
                     entrarPainel(data.user);
                 } else {
                     alert('Erro no login: ' + (data.error_description || data.message || 'Credenciais inválidas'));
@@ -182,21 +164,16 @@
         }
 
         async function loginAutomatico(email) {
-            // Tenta entrar com o e-mail salvo. O token já está salvo.
             const saved = JSON.parse(localStorage.getItem('atendente_logado'));
             if (saved && saved.token) {
-                // Verifica se o token ainda é válido (opcional, mas fazemos uma chamada simples para garantir)
                 try {
                     const test = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?limit=1`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${saved.token}` }
                     });
-                    
                     if (test.ok) {
-                        // Token válido, entra direto
                         entrarPainel({ email: email });
                         return;
                     } else {
-                        // Token expirou, limpa e pede login novamente
                         localStorage.removeItem('atendente_logado');
                     }
                 } catch (e) {
@@ -228,16 +205,12 @@
         async function carregarPedidos() {
             const saved = JSON.parse(localStorage.getItem('atendente_logado'));
             if (!saved) return;
-
-            userLogado = saved; // Guarda o token e email globalmente
+            userLogado = saved;
 
             const lista = document.getElementById('listaPedidos');
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?select=*&order=criado_em.desc`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${saved.token}`
-                    }
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${saved.token}` }
                 });
                 
                 if (!response.ok) throw new Error('Erro ao buscar pedidos');
@@ -351,7 +324,7 @@
                     },
                     body: JSON.stringify({ 
                         status: novoStatus,
-                        atendido_por: userLogado.email // Salva o e-mail de quem atendeu
+                        atendido_por: userLogado.email
                     })
                 });
                 if (!response.ok) throw new Error('Erro ao atualizar status');

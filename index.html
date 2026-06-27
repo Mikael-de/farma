@@ -49,7 +49,7 @@
         .mobile-user-icon svg { width: 28px; height: 28px; fill: var(--primary-green); transition: fill 0.2s; }
         .mobile-user-icon:hover svg { fill: var(--accent-green); }
 
-        /* ==================== SIDEBAR DE CATEGORIAS (APENAS NO CELULAR) ==================== */
+        /* ==================== SIDEBAR DE CATEGORIAS ==================== */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 900; display: none; opacity: 0; transition: opacity 0.3s; }
         .sidebar-overlay.open { display: block; opacity: 1; }
 
@@ -252,13 +252,11 @@
         </button>
         
         <div class="links-desktop">
-            <!-- MUDANÇA AQUI: Redireciona para minha-conta.html -->
             <a href="minha-conta.html" style="font-weight: 500; font-size: 0.95rem; color: var(--primary-green);">Minha Conta</a>
             <a href="laminas.html" style="font-weight: 500; font-size: 0.95rem; color: var(--primary-green);">Ofertas da Semana</a>
             <a href="#" style="font-weight: 500; font-size: 0.95rem; color: var(--primary-green);">Lançamentos</a>
         </div>
 
-        <!-- MUDANÇA AQUI: Redireciona para minha-conta.html -->
         <a href="minha-conta.html" class="mobile-user-icon">
             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
         </a>
@@ -379,6 +377,35 @@
         let allProducts = [];
         let filteredProducts = [];
         let currentProductSlide = 0;
+
+        // =========================================
+        //  VERIFICADOR DE LOGIN APÓS REDIRECIONAMENTO DO GOOGLE
+        // =========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verifica se o usuário chegou aqui com um token de login do Google na URL
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token')) {
+                // O Google nos mandou de volta com um token. Vamos capturar e salvar.
+                const params = new URLSearchParams(hash.substring(1));
+                const accessToken = params.get('access_token');
+                const refreshToken = params.get('refresh_token');
+
+                if (accessToken) {
+                    // Pega as informações do usuário
+                    fetch(`${SUPABASE_URL}/auth/v1/user`, {
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.id) {
+                            localStorage.setItem('cliente_logado', JSON.stringify(data));
+                            // Redireciona para a área do cliente
+                            window.location.href = 'minha-conta.html';
+                        }
+                    });
+                }
+            }
+        });
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }
         function toggleFilterSidebar() { document.getElementById('filterSidebar').classList.toggle('open'); document.getElementById('filterOverlay').classList.toggle('open'); }

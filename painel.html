@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Atendente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-green: #1b5e20; --accent-green: #388E3C; --bg-panel: #f0f2f5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-panel); padding: 20px; }
+        
+        .header-panel {
+            background: var(--primary-green);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .header-panel h1 { font-size: 1.8rem; }
+        .header-panel p { font-size: 0.9rem; opacity: 0.8; }
+        .btn-limpar {
+            background: #dc3545; color: white; border: none;
+            padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-limpar:hover { background: #a71d2a; }
+
+        .grid-pedidos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .card-pedido {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+            border-left: 6px solid #eee;
+            position: relative;
+            transition: 0.2s;
+        }
+        
+        /* Cores de acordo com o status */
+        .card-pedido.status-atendimento { border-left-color: #0d6efd; }
+        .card-pedido.status-atendido { border-left-color: #198754; }
+
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .pedido-status { 
+            background: #e9ecef; color: #333;
+            font-size: 0.65rem; font-weight: 700;
+            padding: 4px 10px; border-radius: 20px;
+            text-transform: uppercase;
+        }
+        .status-atendimento .pedido-status { background: #cfe2ff; color: #084298; }
+        .status-atendido .pedido-status { background: #d1e7dd; color: #0f5132; }
+
+        .pedido-cliente { font-size: 1.2rem; font-weight: 700; color: #333; display: flex; align-items: center; gap: 8px;}
+        .pedido-hora { font-size: 0.8rem; color: #888; display: block; margin-top: 3px;}
+        
+        .pedido-itens { margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+        .item-linha {
+            display: flex; justify-content: space-between;
+            font-size: 0.9rem; padding: 4px 0;
+            border-bottom: 1px dotted #f0f0f0;
+        }
+        .item-linha small { color: #888; font-weight: 600; }
+
+        .pedido-total {
+            margin-top: 10px; padding-top: 10px;
+            border-top: 2px solid #333;
+            text-align: right;
+            font-size: 1.2rem; font-weight: 800; color: #222;
+        }
+
+        .sem-pedidos {
+            grid-column: 1 / -1;
+            text-align: center; padding: 40px; color: #888; font-size: 1.2rem;
+        }
+
+        /* MENU DOS 3 PONTINHOS */
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+        .menu-trigger {
+            background: none; border: none;
+            font-size: 1.5rem; cursor: pointer; color: #888;
+            padding: 0 5px;
+            transition: color 0.2s;
+        }
+        .menu-trigger:hover { color: #333; }
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            right: 0; top: 25px;
+            background: white;
+            min-width: 160px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            z-index: 10;
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+        .menu-dropdown.open { display: block; }
+        .menu-dropdown button {
+            display: block; width: 100%;
+            padding: 10px 15px;
+            border: none; background: white;
+            text-align: left; cursor: pointer;
+            font-size: 0.85rem; font-weight: 500; color: #333;
+            transition: 0.2s;
+        }
+        .menu-dropdown button:hover { background: #f8f9fa; }
+        .menu-dropdown .wpp-btn { color: #25D366; }
+        .menu-dropdown .atendimento-btn { color: #0d6efd; }
+        .menu-dropdown .atendido-btn { color: #198754; }
+        .menu-dropdown .excluir-btn { color: #dc3545; }
+
+        @media (max-width: 600px) {
+            .header-panel { flex-direction: column; gap: 15px; text-align: center; }
+            .grid-pedidos { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-panel">
+        <div>
+            <h1>📋 Painel de Pedidos</h1>
+            <p>Pedidos enviados pelos clientes aparecem aqui em tempo real.</p>
+        </div>
+        <button class="btn-limpar" onclick="limparTodosPedidos()">🗑️ Limpar Todos</button>
+    </div>
+
+    <div class="grid-pedidos" id="listaPedidos">
+        <div class="sem-pedidos">Nenhum pedido recebido ainda. Aguarde...</div>
+    </div>
+
+    <script>
+        function carregarPedidos() {
+            const lista = document.getElementById('listaPedidos');
+            const pedidos = JSON.parse(localStorage.getItem('pedidos_farmacia')) || [];
+
+            if (pedidos.length === 0) {
+                lista.innerHTML = '<div class="sem-pedidos">📭 Nenhum pedido recebido ainda. Aguarde...</div>';
+                return;
+            }
+
+            lista.innerHTML = ''; 
+
+            pedidos.forEach((pedido, index) => {
+                const data = new Date(pedido.id);
+                const horaFormatada = data.toLocaleString('pt-BR');
+
+                let itensHTML = '';
+                pedido.itens.forEach(item => {
+                    itensHTML += `
+                        <div class="item-linha">
+                            <span><small>${item.codigo}</small> ${item.qtd}x ${item.nome}</span>
+                            <span>R$ ${item.total_item.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                    `;
+                });
+
+                let corClass = '';
+                let statusText = pedido.status;
+                if (pedido.status === 'Em Atendimento') corClass = 'status-atendimento';
+                else if (pedido.status === 'Atendido') corClass = 'status-atendido';
+
+                // Prepara a mensagem para o WhatsApp
+                let msgWpp = `Olá *${pedido.cliente}*, tudo bem?%0A%0A`;
+                msgWpp += `Recebemos o seu pedido na Farmácia Brasil Poupa Lar:%0A%0A`;
+                pedido.itens.forEach(item => {
+                    msgWpp += `• ${item.qtd}x ${item.nome} (Cód. ${item.codigo}) - R$ ${item.total_item.toFixed(2).replace('.', ',')}%0A`;
+                });
+                msgWpp += `%0A💰 *Total: R$ ${pedido.total.toFixed(2).replace('.', ',')}*%0A%0A`;
+                msgWpp += `Por favor, nos confirme a forma de pagamento. Aguardamos seu retorno! 🙏`;
+
+                const card = document.createElement('div');
+                card.className = `card-pedido ${corClass}`;
+                
+                card.innerHTML = `
+                    <div class="pedido-header">
+                        <div>
+                            <div class="pedido-cliente">👤 ${pedido.cliente}</div>
+                            ${pedido.telefone ? `<div style="font-size:0.9rem; color:#555; margin-top:3px;">📞 ${pedido.telefone}</div>` : ''}
+                            <span class="pedido-hora">🕐 ${horaFormatada}</span>
+                        </div>
+                        <div class="menu-container">
+                            <button class="menu-trigger" onclick="toggleMenu(${index})">⋮</button>
+                            <div class="menu-dropdown" id="menu-${index}">
+                                <button class="wpp-btn" onclick="enviarWppCliente('${pedido.telefone}', '${msgWpp}')">💬 Responder no WhatsApp</button>
+                                <button class="atendimento-btn" onclick="mudarStatus(${index}, 'Em Atendimento')">🔄 Em Atendimento</button>
+                                <button class="atendido-btn" onclick="mudarStatus(${index}, 'Atendido')">✅ Atendido</button>
+                                <button class="excluir-btn" onclick="excluirPedido(${index})">🗑️ Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <span class="pedido-status">${statusText}</span>
+
+                    <div class="pedido-itens">
+                        ${itensHTML}
+                    </div>
+                    
+                    <div class="pedido-total">
+                        Total: R$ ${pedido.total.toFixed(2).replace('.', ',')}
+                    </div>
+                `;
+                lista.appendChild(card);
+            });
+        }
+
+        function toggleMenu(index) {
+            const menu = document.getElementById(`menu-${index}`);
+            document.querySelectorAll('.menu-dropdown.open').forEach(el => {
+                if(el.id !== `menu-${index}`) el.classList.remove('open');
+            });
+            menu.classList.toggle('open');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.menu-container')) {
+                document.querySelectorAll('.menu-dropdown.open').forEach(el => el.classList.remove('open'));
+            }
+        });
+
+        // =========================================
+        //  NOVO: Envia WhatsApp DIRETO para o cliente
+        // =========================================
+        function enviarWppCliente(telefoneCliente, mensagem) {
+            // Pega apenas os números, remove parênteses, traços e espaços
+            const numeroLimpo = telefoneCliente.replace(/\D/g, '');
+            
+            if (numeroLimpo.length < 10 || numeroLimpo.length > 11) {
+                alert('Número de telefone do cliente inválido ou não cadastrado no pedido!');
+                return;
+            }
+
+            // Adiciona o 55 (código do Brasil) automaticamente
+            const url = `https://wa.me/55${numeroLimpo}?text=${mensagem}`;
+            window.open(url, '_blank');
+        }
+
+        function mudarStatus(index, novoStatus) {
+            const pedidos = JSON.parse(localStorage.getItem('pedidos_farmacia')) || [];
+            if(pedidos[index]) {
+                pedidos[index].status = novoStatus;
+                localStorage.setItem('pedidos_farmacia', JSON.stringify(pedidos));
+                carregarPedidos();
+            }
+        }
+
+        function excluirPedido(index) {
+            if(confirm('Tem certeza que deseja excluir este pedido?')) {
+                const pedidos = JSON.parse(localStorage.getItem('pedidos_farmacia')) || [];
+                if(pedidos[index]) {
+                    pedidos.splice(index, 1);
+                    localStorage.setItem('pedidos_farmacia', JSON.stringify(pedidos));
+                    carregarPedidos();
+                }
+            }
+        }
+
+        function limparTodosPedidos() {
+            if(confirm('Tem certeza que deseja apagar TODOS os pedidos recebidos?')) {
+                localStorage.removeItem('pedidos_farmacia');
+                carregarPedidos();
+            }
+        }
+
+        setInterval(carregarPedidos, 2000);
+        carregarPedidos();
+    </script>
+</body>
+</html>

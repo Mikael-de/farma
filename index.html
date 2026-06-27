@@ -6,1052 +6,413 @@
     <title>Farmácia - Encarte Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Variáveis e Reset - TEMA VERDE CORPORATIVO */
-        :root {
-            --bg-topbar: #e8f5e9;
-            --primary-green: #1b5e20;
-            --primary-dark-green: #143c16;
-            --accent-green: #388E3C;
-            --text-dark: #333333;
-            --text-light: #666666;
-            --whatsapp-green: #25D366;
-            --border-light: #c8e6c9;
-        }
-
+        :root { --bg-topbar: #e8f5e9; --primary-green: #1b5e20; --primary-dark-green: #143c16; --accent-green: #388E3C; --text-dark: #333333; --text-light: #666666; --whatsapp-green: #25D366; --border-light: #c8e6c9; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #fcfcfc; display: flex; flex-direction: column; min-height: 100vh; }
-
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-
-        /* Barra Superior */
-        .top-bar {
-            background: var(--bg-topbar);
-            padding: 8px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
-            color: #2e4a33;
-            border-bottom: 1px solid var(--border-light);
-        }
-
+        a { text-decoration: none; color: inherit; } ul { list-style: none; }
+        .top-bar { background: var(--bg-topbar); padding: 8px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #2e4a33; border-bottom: 1px solid var(--border-light); }
         .top-bar a { color: var(--primary-green); font-weight: 600; }
         .top-bar a:hover { text-decoration: underline; }
-
-        /* ==================== CABEÇALHO ==================== */
-        .main-header {
-            background: var(--primary-green);
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            gap: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            flex: 0 1 auto;
-            min-width: 200px;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-        
-        .logo-area img {
-            height: 80px;
-            width: auto;
-            object-fit: contain;
-            transition: all 0.3s ease;
-        }
-
-        .header-info {
-            display: flex;
-            align-items: center;
-            color: #ffffff;
-            font-size: 0.9rem;
-            border-left: 1px solid rgba(255,255,255,0.3);
-            padding-left: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .header-info svg {
-            width: 18px;
-            height: 18px;
-            margin-right: 6px;
-            fill: currentColor;
-        }
-
-        /* ==================== BARRA DE BUSCA (COM LUPA) ==================== */
-        .search-bar {
-            flex: 1;
-            max-width: 550px;
-            margin: 0 30px;
-            display: flex;
-            position: relative;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 30px 0 0 30px;
-            font-size: 0.9rem;
-            outline: none;
-            background: white;
-            transition: all 0.3s ease;
-            color: #333;
-        }
-
-        .search-bar button {
-            padding: 12px 20px;
-            background: var(--accent-green);
-            border: none;
-            border-radius: 0 30px 30px 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease, background 0.2s;
-            min-width: 54px;
-        }
-        
+        .main-header { background: var(--primary-green); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.15); gap: 20px; transition: all 0.3s ease; }
+        .header-left { display: flex; align-items: center; gap: 25px; flex: 0 1 auto; min-width: 200px; }
+        .logo-area { display: flex; align-items: center; color: white; font-weight: 700; font-size: 1.2rem; flex-shrink: 0; }
+        .logo-area img { height: 80px; width: auto; object-fit: contain; transition: all 0.3s ease; }
+        .header-info { display: flex; align-items: center; color: #ffffff; font-size: 0.9rem; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 20px; transition: all 0.3s ease; }
+        .header-info svg { width: 18px; height: 18px; margin-right: 6px; fill: currentColor; }
+        .search-bar { flex: 1; max-width: 550px; margin: 0 30px; display: flex; position: relative; }
+        .search-bar input { width: 100%; padding: 12px 20px; border: none; border-radius: 30px 0 0 30px; font-size: 0.9rem; outline: none; background: white; transition: all 0.3s ease; color: #333; }
+        .search-bar button { padding: 12px 20px; background: var(--accent-green); border: none; border-radius: 0 30px 30px 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease, background 0.2s; min-width: 54px; }
         .search-bar button:hover { background: #2e7d32; }
-
-        /* Ícone da lupa em branco */
-        .search-bar button svg {
-            width: 20px;
-            height: 20px;
-            fill: white;
-            display: block;
-        }
-
-        /* Efeito Shrink (Rolar para baixo) */
-        .main-header.shrink {
-            padding: 8px 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
+        .search-bar button svg { width: 20px; height: 20px; fill: white; display: block; }
+        .main-header.shrink { padding: 8px 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
         .main-header.shrink .logo-area img { height: 45px; }
         .main-header.shrink .header-info { font-size: 0.75rem; opacity: 0.8; }
         .main-header.shrink .search-bar input { padding: 6px 15px; font-size: 0.8rem; }
         .main-header.shrink .search-bar button { padding: 6px 15px; min-width: 40px; }
         .main-header.shrink .search-bar button svg { width: 16px; height: 16px; }
-
-        /* ==================== NAVEGAÇÃO ==================== */
-        .main-nav {
-            background: white;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 12px 40px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .main-nav ul {
-            display: flex;
-            gap: 30px;
-        }
-
-        .main-nav ul li a {
-            font-weight: 500;
-            font-size: 0.95rem;
-            color: var(--primary-green);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
+        .main-nav { background: white; border-bottom: 1px solid #e0e0e0; padding: 12px 40px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .main-nav ul { display: flex; gap: 30px; }
+        .main-nav ul li a { font-weight: 500; font-size: 0.95rem; color: var(--primary-green); cursor: pointer; transition: color 0.2s; }
         .main-nav ul li a:hover { color: var(--accent-green); }
-
-        /* ==================== BANNER ==================== */
-        .banner-area {
-            width: 100%;
-            padding: 20px 20px 40px;
-            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            border-bottom: 4px solid #1b5e20;
-        }
-
-        .banner-carousel-wrapper {
-            width: 100%;
-            max-width: 900px;
-            height: 280px;
-            position: relative;
-            margin-bottom: 20px;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-        }
-
-        .banner-carousel-wrapper img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1.2s ease-in-out;
-            z-index: 1;
-        }
-
-        .banner-carousel-wrapper img.active {
-            opacity: 1;
-            z-index: 2;
-        }
-
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.4);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 10;
-            transition: background 0.3s, transform 0.2s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        }
-
-        .carousel-btn:hover {
-            background: rgba(0, 0, 0, 0.7);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .carousel-btn.prev { left: 15px; }
-        .carousel-btn.next { right: 15px; }
-
-        .carousel-dots {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 10;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-
+        .banner-area { width: 100%; padding: 20px 20px 40px; background: linear-gradient(135deg, var(--primary-green), var(--accent-green)); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; border-bottom: 4px solid #1b5e20; }
+        .banner-carousel-wrapper { width: 100%; max-width: 900px; height: 280px; position: relative; margin-bottom: 20px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+        .banner-carousel-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease-in-out; z-index: 1; }
+        .banner-carousel-wrapper img.active { opacity: 1; z-index: 2; }
+        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.4); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; z-index: 10; transition: background 0.3s, transform 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+        .carousel-btn:hover { background: rgba(0, 0, 0, 0.7); transform: translateY(-50%) scale(1.1); }
+        .carousel-btn.prev { left: 15px; } .carousel-btn.next { right: 15px; }
+        .carousel-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); cursor: pointer; transition: background 0.3s, transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
         .dot:hover { transform: scale(1.2); }
-        .dot.active {
-            background: #ffffff;
-            transform: scale(1.1);
-        }
-
+        .dot.active { background: #ffffff; transform: scale(1.1); }
         .banner-text-content { position: relative; z-index: 3; }
         .banner-text-content h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .banner-text-content p { font-size: 1.1rem; margin-top: 8px; opacity: 0.9; font-weight: 300; }
-
-        /* ==================== PRATELEIRA DE PRODUTOS ==================== */
-        .container {
-            max-width: 1300px;
-            margin: 30px auto;
-            padding: 0 20px;
-            flex: 1;
-        }
-
-        .category-tabs {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 15px;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: 2px solid var(--accent-green);
-            padding: 10px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--accent-green);
-            cursor: pointer;
-            transition: all 0.3s;
-            border-radius: 30px;
-        }
-
+        .container { max-width: 1300px; margin: 30px auto; padding: 0 20px; flex: 1; }
+        .category-tabs { display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; }
+        .tab-btn { background: transparent; border: 2px solid var(--accent-green); padding: 10px 30px; font-size: 1.1rem; font-weight: 600; color: var(--accent-green); cursor: pointer; transition: all 0.3s; border-radius: 30px; }
         .tab-btn:hover { background: rgba(56, 142, 60, 0.08); }
-        .tab-btn.active {
-            background: var(--accent-green);
-            color: white;
-            border-color: var(--accent-green);
-            box-shadow: 0 4px 8px rgba(56, 142, 60, 0.25);
-        }
-
-        .product-grid {
-            display: grid;
-            gap: 25px;
-            grid-template-columns: repeat(10, 1fr);
-        }
-
-        .product-card {
-            background: white;
-            padding: 20px 15px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            transition: all 0.3s ease;
-            border: 1px solid #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(27, 94, 32, 0.12);
-            border-color: var(--accent-green);
-        }
-
+        .tab-btn.active { background: var(--accent-green); color: white; border-color: var(--accent-green); box-shadow: 0 4px 8px rgba(56, 142, 60, 0.25); }
+        .product-grid { display: grid; gap: 25px; grid-template-columns: repeat(10, 1fr); }
+        .product-card { background: white; padding: 20px 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.3s ease; border: 1px solid #f0f0f0; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(27, 94, 32, 0.12); border-color: var(--accent-green); }
         .product-img-wrap { height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
         .product-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
         .product-title { font-weight: 600; font-size: 1rem; color: var(--text-dark); margin-bottom: 5px; line-height: 1.3; height: 42px; overflow: hidden; }
         .product-desc { font-size: 0.8rem; color: #999; margin-bottom: 15px; height: 30px; overflow: hidden; }
-
         .price-area { margin-bottom: 15px; }
         .price-main { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); }
-
-        .btn-buy {
-            background: var(--accent-green);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 12px 0;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-        }
-
+        .btn-buy { background: var(--accent-green); color: white; border: none; width: 100%; padding: 12px 0; border-radius: 30px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: background 0.2s, transform 0.1s; }
         .btn-buy:hover { background: #2e7d32; transform: scale(1.02); }
         .btn-buy:active { transform: scale(0.98); }
-
-        /* ==================== CARRINHO FLUTUANTE ==================== */
-        .cart-float {
-            position: fixed;
-            bottom: 90px; 
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--primary-green);
-            border-radius: 50%;
-            display: none; 
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            z-index: 998;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
+        .cart-float { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; background-color: var(--primary-green); border-radius: 50%; display: none; justify-content: center; align-items: center; text-decoration: none; z-index: 998; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease; }
         .cart-float.show { display: flex; }
         .cart-float:hover { transform: scale(1.1); }
         .cart-float svg { width: 30px; height: 30px; fill: white; }
-
-        .cart-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #dc3545;
-            color: white;
-            font-size: 0.75rem;
-            font-weight: bold;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid white;
-        }
-
-        /* Modal do Carrinho */
-        .cart-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: #dc3545; color: white; font-size: 0.75rem; font-weight: bold; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid white; }
+        .cart-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
         .cart-modal-overlay.open { display: flex; }
-
-        .cart-modal {
-            background: white;
-            width: 90%;
-            max-width: 450px;
-            max-height: 80vh;
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .cart-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-
+        .cart-modal { background: white; width: 90%; max-width: 450px; max-height: 80vh; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.3); position: relative; }
+        .cart-modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
         .cart-modal-header h3 { color: var(--text-dark); margin: 0; }
-
-        .close-cart {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #999;
-        }
-
-        .cart-items-list {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .cart-item-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
+        .close-cart { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+        .cart-items-list { flex: 1; overflow-y: auto; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px; }
+        .cart-item-info { display: flex; flex-direction: column; gap: 2px; }
         .cart-item-name { font-weight: 600; font-size: 0.9rem; }
         .cart-item-price { font-size: 0.8rem; color: #666; }
-
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .cart-item-controls button {
-            background: var(--accent-green);
-            color: white;
-            border: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .cart-item-controls button.remove-btn {
-            background: #dc3545;
-        }
-
-        .cart-item-controls span {
-            font-weight: 600;
-            min-width: 20px;
-            text-align: center;
-        }
-
-        .cart-total {
-            border-top: 2px solid #eee;
-            padding-top: 15px;
-            margin-bottom: 15px;
-            text-align: right;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .btn-checkout {
-            background: var(--whatsapp-green);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s;
-            width: 100%;
-        }
-
-        .btn-checkout:hover { background: #128C7E; }
-
-        /* ==================== WHATSAPP E RODAPÉ ==================== */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--whatsapp-green);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            z-index: 999;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            animation: pulse 2s infinite;
-            transition: transform 0.3s ease;
-        }
-
-        .whatsapp-float::before {
-            content: '';
-            position: absolute;
-            top: -10px; right: -10px; bottom: -10px; left: -10px;
-            border-radius: 50%;
-            background-color: rgba(37, 211, 102, 0.15);
-            z-index: -1;
-            transition: transform 0.3s ease;
-        }
-
+        .cart-item-controls { display: flex; align-items: center; gap: 10px; }
+        .cart-item-controls button { background: var(--accent-green); color: white; border: none; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .cart-item-controls button.remove-btn { background: #dc3545; }
+        .cart-item-controls span { font-weight: 600; min-width: 20px; text-align: center; }
+        .cart-total { border-top: 2px solid #eee; padding-top: 15px; margin-bottom: 15px; text-align: right; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
+        .btn-checkout { background: var(--accent-green); color: white; border: none; padding: 15px; border-radius: 30px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; width: 100%; }
+        .btn-checkout:hover { background: #2e7d32; }
+        .ticket-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
+        .ticket-modal-overlay.open { display: flex; }
+        .ticket-modal { background: white; width: 90%; max-width: 420px; max-height: 90vh; border-radius: 12px; padding: 25px; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); position: relative; border: 2px solid var(--primary-green); overflow-y: auto; }
+        .ticket-header { text-align: center; border-bottom: 1px dashed #ccc; padding-bottom: 15px; margin-bottom: 15px; }
+        .ticket-header h3 { color: var(--primary-green); font-size: 1.4rem; margin: 0; }
+        .ticket-header p { font-size: 0.8rem; color: #666; margin-top: 5px; }
+        .ticket-items { margin-bottom: 15px; }
+        .ticket-line { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; border-bottom: 1px dotted #eee; }
+        .ticket-line span:first-child { text-align: left; }
+        .ticket-line span:last-child { text-align: right; font-weight: 600; }
+        .ticket-total-area { border-top: 2px solid var(--primary-green); padding-top: 12px; margin-top: 10px; text-align: right; font-size: 1.3rem; font-weight: 800; color: var(--text-dark); }
+        .ticket-cliente-area { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e0e0e0; }
+        .ticket-cliente-area label { display: block; font-size: 0.8rem; font-weight: 600; color: #555; margin-bottom: 3px; }
+        .ticket-cliente-area input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; outline: none; }
+        .ticket-cliente-area input:focus { border-color: var(--accent-green); }
+        .ticket-buttons { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-ticket-confirm { flex: 1; padding: 12px; background: var(--whatsapp-green); color: white; border: none; border-radius: 30px; font-weight: 700; font-size: 1rem; cursor: pointer; }
+        .btn-ticket-confirm:hover { background: #128C7E; }
+        .btn-ticket-cancel { flex: 0.4; padding: 12px; background: #dc3545; color: white; border: none; border-radius: 30px; font-weight: 700; font-size: 1rem; cursor: pointer; }
+        .btn-ticket-cancel:hover { background: #a71d2a; }
+        .whatsapp-float { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background-color: var(--whatsapp-green); border-radius: 50%; display: flex; justify-content: center; align-items: center; text-decoration: none; z-index: 999; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: pulse 2s infinite; transition: transform 0.3s ease; }
+        .whatsapp-float::before { content: ''; position: absolute; top: -10px; right: -10px; bottom: -10px; left: -10px; border-radius: 50%; background-color: rgba(37, 211, 102, 0.15); z-index: -1; transition: transform 0.3s ease; }
         .whatsapp-float:hover { transform: scale(1.05); animation: none; }
         .whatsapp-float:hover::before { transform: scale(1.05); }
         .whatsapp-float svg { width: 34px; height: 34px; fill: white; display: block; }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
-            100% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-        }
-
-        .site-footer {
-            background: var(--primary-dark-green);
-            color: #cfcfcf;
-            padding: 50px 40px 20px;
-            margin-top: 40px;
-            border-top: 6px solid var(--accent-green);
-        }
-
-        .footer-container {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
-
-        .footer-col h4 {
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-        }
-
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); } 100% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } }
+        .site-footer { background: var(--primary-dark-green); color: #cfcfcf; padding: 50px 40px 20px; margin-top: 40px; border-top: 6px solid var(--accent-green); }
+        .footer-container { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .footer-col h4 { color: white; font-weight: 600; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .footer-col ul li { margin-bottom: 12px; }
         .footer-col ul li a { color: #cfcfcf; transition: color 0.2s, padding-left 0.2s; }
         .footer-col ul li a:hover { color: white; padding-left: 5px; }
-
         .social-icons { display: flex; gap: 15px; }
         .social-icons a svg { width: 32px; height: 32px; fill: #cfcfcf; transition: fill 0.2s, transform 0.2s; }
         .social-icons a svg:hover { fill: white; transform: translateY(-3px); }
-
-        .footer-bottom {
-            max-width: 1300px;
-            margin: 40px auto 0;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
+        .footer-bottom { max-width: 1300px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.9rem; }
         .footer-bottom strong { color: white; }
-
-        /* RESPONSIVIDADE */
         @media (max-width: 2400px) { .product-grid { grid-template-columns: repeat(8, 1fr); } }
         @media (max-width: 1800px) { .product-grid { grid-template-columns: repeat(6, 1fr); } }
         @media (max-width: 1500px) { .product-grid { grid-template-columns: repeat(5, 1fr); } }
         @media (max-width: 1250px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
-        @media (max-width: 1000px) { 
-            .product-grid { grid-template-columns: repeat(3, 1fr); }
-            .banner-carousel-wrapper { height: 200px; }
-        }
-
-        @media (max-width: 1024px) {
-            .main-header { flex-wrap: nowrap; padding: 10px 15px; gap: 10px; }
-            .header-left { min-width: auto; gap: 5px; flex-shrink: 0; }
-            .logo-area img { height: 600px; } /* AUMENTEI A LOGO NO CELULAR */
-            .header-info { display: none; }
-            .search-bar { order: 2; margin: 0 0 0 10px; max-width: none; flex: 1; width: auto; }
-            .search-bar input { font-size: 0.85rem; padding: 8px 15px; }
-            .search-bar button { padding: 8px 15px; min-width: 40px; }
-            .search-bar button svg { width: 16px; height: 16px; }
-        }
-
-        @media (max-width: 7050px)  { 
-            .product-grid { grid-template-columns: repeat(2, 1fr); }
-            .banner-carousel-wrapper { height: 150px; }
-            .banner-text-content h2 { font-size: 1.8rem; }
-            .carousel-btn { width: 30px; height: 30px; font-size: 0.8rem; }
-            .dot { width: 10px; height: 10px; }
-            .main-header { padding: 8px 10px; gap: 8px; }
-            .logo-area img { height: 5000px; } /* AUMENTEI A LOGO NO CELULAR */
-            .search-bar input { padding: 6px 12px; font-size: 0.8rem; }
-            .search-bar button { padding: 6px 12px; min-width: 36px; }
-            .search-bar button svg { width: 14px; height: 14px; }
-        }
-
-        @media (max-width: 5000px)  { 
-            .product-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
-            .banner-carousel-wrapper { height: 120px; border-radius: 8px; }
-            .logo-area img { height: 70px; } /* AUMENTEI A LOGO NO CELULAR */
-        }
-        
-        @media (max-width: 700px) {
-            .top-bar { flex-direction: column; gap: 5px; text-align: center; padding: 8px 15px; }
-            .main-nav { overflow-x: auto; padding: 12px 20px; white-space: nowrap; }
-            .category-tabs { justify-content: center; flex-wrap: wrap; }
-            .footer-container { grid-template-columns: 1fr; text-align: center; }
-            .social-icons { justify-content: center; }
-        }
+        @media (max-width: 1000px) { .product-grid { grid-template-columns: repeat(3, 1fr); } .banner-carousel-wrapper { height: 200px; } }
+        @media (max-width: 1024px) { .main-header { flex-wrap: nowrap; padding: 10px 15px; gap: 10px; } .header-left { min-width: auto; gap: 5px; flex-shrink: 0; } .logo-area img { height: 60px; } .header-info { display: none; } .search-bar { order: 2; margin: 0 0 0 10px; max-width: none; flex: 1; width: auto; } .search-bar input { font-size: 0.85rem; padding: 8px 15px; } .search-bar button { padding: 8px 15px; min-width: 40px; } .search-bar button svg { width: 16px; height: 16px; } }
+        @media (max-width: 750px)  { .product-grid { grid-template-columns: repeat(2, 1fr); } .banner-carousel-wrapper { height: 150px; } .banner-text-content h2 { font-size: 1.8rem; } .carousel-btn { width: 30px; height: 30px; font-size: 0.8rem; } .dot { width: 10px; height: 10px; } .main-header { padding: 8px 10px; gap: 8px; } .logo-area img { height: 50px; } .search-bar input { padding: 6px 12px; font-size: 0.8rem; } .search-bar button { padding: 6px 12px; min-width: 36px; } .search-bar button svg { width: 14px; height: 14px; } }
+        @media (max-width: 500px)  { .product-grid { grid-template-columns: 1fr 1fr; gap: 15px; } .banner-carousel-wrapper { height: 120px; border-radius: 8px; } .logo-area img { height: 38px; } }
+        @media (max-width: 700px) { .top-bar { flex-direction: column; gap: 5px; text-align: center; padding: 8px 15px; } .main-nav { overflow-x: auto; padding: 12px 20px; white-space: nowrap; } .category-tabs { justify-content: center; flex-wrap: wrap; } .footer-container { grid-template-columns: 1fr; text-align: center; } .social-icons { justify-content: center; } }
     </style>
 </head>
 <body>
 
-    <!-- Barra Superior -->
     <div class="top-bar">
         <div>Endereço</div>
         <div><a href="https://maps.app.goo.gl/yQecqXQRV1EXnEEk9">Farmácia Brasil Poupa Lar - Brusque</a></div>
     </div>
 
-    <!-- ==================== CABEÇALHO ==================== -->
     <header class="main-header" id="mainHeader">
         <div class="header-left">
-            <div class="logo-area">
-                <a href="https://www.farmaciasbrasilpoupalar.com.br/">
-                    <img src="logo.png" width="600" height="400">
-                </a>
-            </div>
-            
-            <div class="header-info">
-                <svg viewBox="0 0 24 24"></svg>
-            </div>
+            <div class="logo-area"><a href="https://www.farmaciasbrasilpoupalar.com.br/"><img src="logo.png"></a></div>
+            <div class="header-info"><svg viewBox="0 0 24 24"></svg></div>
         </div>
-
-        <!-- ==================== BARRA DE BUSCA COM LUPA ==================== -->
         <div class="search-bar">
             <input type="text" id="search-input" placeholder="Busque seu medicamento..." onkeyup="performSearch()">
-            <button onclick="performSearch()" aria-label="Buscar">
-                <!-- Ícone de Lupa Branca -->
-                <svg viewBox="0 0 24 24">
-                    <path d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
+            <button onclick="performSearch()" aria-label="Buscar"><svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
     </header>
 
-   
-    <!-- ==================== BANNER ==================== -->
+    
     <section class="banner-area">
         <div class="banner-carousel-wrapper" id="bannerCarousel">
             <img src="https://placehold.co/900x280/2e7d32/ffffff?text=Oferta+1+-+Medicamentos" alt="Oferta 1" class="active">
             <img src="https://placehold.co/900x280/388E3C/ffffff?text=Oferta+2+-+Perfumaria" alt="Oferta 2">
             <img src="https://placehold.co/900x280/4CAF50/ffffff?text=Oferta+3+-+Higiene" alt="Oferta 3">
             <img src="https://placehold.co/900x280/1b5e20/ffffff?text=Oferta+4+-+Promoção" alt="Oferta 4">
-
             <button class="carousel-btn prev" id="prevSlide" aria-label="Imagem anterior">❮</button>
             <button class="carousel-btn next" id="nextSlide" aria-label="Próxima imagem">❯</button>
-            <div class="carousel-dots" id="carouselDots">
-                <span class="dot active" data-index="0"></span>
-                <span class="dot" data-index="1"></span>
-                <span class="dot" data-index="2"></span>
-                <span class="dot" data-index="3"></span>
-            </div>
+            <div class="carousel-dots" id="carouselDots"><span class="dot active" data-index="0"></span><span class="dot" data-index="1"></span><span class="dot" data-index="2"></span><span class="dot" data-index="3"></span></div>
         </div>
-
-        <div class="banner-text-content">
-            <h2>OFERTAS DE INVERNO</h2>
-            <p>Validade 01/07 a 15/07</p>
-        </div>
+        <div class="banner-text-content"><h2>OFERTAS DE INVERNO</h2><p>Validade 01/07 a 15/07</p></div>
     </section>
 
-    <!-- ==================== PRODUTOS ==================== -->
     <main class="container">
         <div class="category-tabs">
             <button class="tab-btn active" onclick="changeCategory('medicamentos', this)">Medicamentos</button>
             <button class="tab-btn" onclick="changeCategory('perfumaria', this)">Perfumaria</button>
         </div>
-
         <div id="medicamentos" class="product-grid category-section"></div>
         <div id="perfumaria" class="product-grid category-section" style="display: none;"></div>
-        
         <div id="empty-msg" class="empty-msg">Nenhum produto encontrado.</div>
     </main>
 
-    <!-- ==================== BOTÃO CARRINHO FLUTUANTE ==================== -->
     <div class="cart-float" id="cartFloat" onclick="toggleCartModal()">
         <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.11 6.8l.52 1.2h11.7c.78 0 1.44-.5 1.69-1.2l2.98-5.88c.1-.2.1-.4.1-.52 0-.8-.7-1.4-1.4-1.4H5.89l-.98-1.96C4.85.5 4.45 0 3.8 0H1v2h2l3.2 6.8L4.39 14.8C4.19 15.2 4 15.6 4 16c0 1.1.9 2 2 2h14v-2H6l.8-1.6h9.71l2.45-4.4H7.11z"/></svg>
         <span class="cart-badge" id="cartBadge">0</span>
     </div>
 
-    <!-- ==================== MODAL DO CARRINHO ==================== -->
     <div class="cart-modal-overlay" id="cartModal" onclick="closeCartModal(event)">
         <div class="cart-modal" onclick="event.stopPropagation()">
-            <div class="cart-modal-header">
-                <h3>Meu Carrinho</h3>
-                <button class="close-cart" onclick="toggleCartModal()">✕</button>
-            </div>
-            <div class="cart-items-list" id="cartItemsList">
-                <p style="text-align:center; color:#999; padding: 20px;">Seu carrinho está vazio.</p>
-            </div>
+            <div class="cart-modal-header"><h3>Meu Carrinho</h3><button class="close-cart" onclick="toggleCartModal()">✕</button></div>
+            <div class="cart-items-list" id="cartItemsList"><p style="text-align:center; color:#999; padding: 20px;">Seu carrinho está vazio.</p></div>
             <div class="cart-total" id="cartTotal">Total: R$ 0,00</div>
-            <button class="btn-checkout" onclick="finalizarPedidoWhatsApp()">Finalizar Pedido no WhatsApp</button>
+            <button class="btn-checkout" onclick="abrirTicket()">Gerar Ticket de Compra</button>
         </div>
     </div>
 
-    <!-- ==================== WHATSAPP FIXO ==================== -->
+    <div class="ticket-modal-overlay" id="ticketModal" onclick="closeTicketModal(event)">
+        <div class="ticket-modal" onclick="event.stopPropagation()">
+            <div class="ticket-header"><h3>🧾 Ticket de Compra</h3><p>Farmácia Brasil Poupa Lar - Brusque</p></div>
+            <div class="ticket-cliente-area">
+                <label for="inputClienteNome">Nome do Cliente:</label>
+                <input type="text" id="inputClienteNome" placeholder="Ex: João da Silva" value="">
+                
+                <label for="inputClienteTel">WhatsApp do Cliente (com DDD):</label>
+                <input type="text" id="inputClienteTel" placeholder="(47) 99999-9999" maxlength="15" oninput="mascaraTelefone(this)">
+            </div>
+            <div class="ticket-items" id="ticketItemsList"></div>
+            <div class="ticket-total-area" id="ticketTotal"></div>
+            <div class="ticket-buttons">
+                <button class="btn-ticket-cancel" onclick="closeTicketModal(event)">Cancelar</button>
+                <button class="btn-ticket-confirm" onclick="enviarPedidoPainel()">Enviar Pedido para o Atendente</button>
+            </div>
+        </div>
+    </div>
+
     <a href="https://wa.me/5547996475401?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido." target="_blank" class="whatsapp-float" aria-label="WhatsApp">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-        </svg>
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
 
-    <!-- ==================== RODAPÉ ==================== -->
     <footer class="site-footer">
         <div class="footer-container">
-            <div class="footer-col">
-                <h4>Contato</h4>
-                <ul>
-                    <li><strong style="color:white;">Telefone:</strong> (47) 3355-1055</li>
-                    <li><strong style="color:white;">WhatsApp:</strong> (47) 99647-5401</li>
-                    <li>Seg. à sext. das 07:00h às 21h<br>Sábado das 07:30h às 13h<br>Domingo e feriados fechado</li>
-                    <li style="margin-top: 15px;"><a href="#">Trabalhe Conosco</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Redes Sociais</h4>
-                <p style="margin-bottom:15px;font-size:0.95rem;">Siga nossas redes e fique por dentro de todas as novidades.</p>
-                <div class="social-icons">
-                    <a href="https://www.instagram.com/brasilpoupalar.brusque" target="_blank" aria-label="Instagram">
-                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                    </a>
-                    <a href="#" target="_blank" aria-label="Facebook">
-                        <svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
-                    </a>
-                </div>
-            </div>
+            <div class="footer-col"><h4>Contato</h4><ul><li><strong style="color:white;">Telefone:</strong> (47) 3355-1055</li><li><strong style="color:white;">WhatsApp:</strong> (47) 99647-5401</li><li>Seg. à sext. das 07:00h às 21h<br>Sábado das 07:30h às 13h<br>Domingo e feriados fechado</li><li style="margin-top: 15px;"><a href="#">Trabalhe Conosco</a></li></ul></div>
+            <div class="footer-col"><h4>Redes Sociais</h4><p style="margin-bottom:15px;font-size:0.95rem;">Siga nossas redes e fique por dentro de todas as novidades.</p><div class="social-icons"><a href="https://www.instagram.com/brasilpoupalar.brusque" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a href="#" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg></a></div></div>
         </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2026 <strong>Brasil Poupa Lar</strong> - Todos os direitos reservados. CNPJ: 37.669.677/0001-27</p>
-        </div>
+        <div class="footer-bottom"><p>&copy; 2026 <strong>Brasil Poupa Lar</strong> - Todos os direitos reservados. CNPJ: 37.669.677/0001-27</p></div>
     </footer>
 
-    <!-- ==================== SCRIPTS ==================== -->
     <script>
-        // =========================================
-        //  CONFIGURAÇÕES
-        // =========================================
         const WHATSAPP_NUMBER = '5547996475401';
         const SHEETDB_API_URL = 'https://sheetdb.io/api/v1/munh3scrx4jbl';
         let cart = [];
 
-        // =========================================
-        //  FUNÇÃO DE ADICIONAR AO CARRINHO
-        // =========================================
-        function adicionarAoCarrinho(productName, productPrice) {
+        // MÁSCARA DO TELEFONE (Só permite números no formato (DD) 99999-9999)
+        function mascaraTelefone(input) {
+            let valor = input.value.replace(/\D/g, '');
+            if (valor.length > 11) valor = valor.slice(0, 11);
+            
+            if (valor.length <= 10) {
+                input.value = valor.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+            } else {
+                input.value = valor.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+            }
+        }
+
+        function adicionarAoCarrinho(productName, productPrice, productCode) {
             const rawPrice = productPrice.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
             const priceFloat = parseFloat(rawPrice);
-
-            if (isNaN(priceFloat)) {
-                console.error("Erro ao converter preço:", productPrice);
-                return;
-            }
-
+            if (isNaN(priceFloat)) return;
             const existingItem = cart.find(item => item.name === productName);
-            
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
-                cart.push({
-                    name: productName,
-                    price: priceFloat,
-                    quantity: 1
-                });
+                cart.push({ name: productName, code: productCode || 'SEM CÓDIGO', price: priceFloat, quantity: 1 });
             }
-            
             updateCartUI();
         }
 
-        // =========================================
-        //  FUNÇÕES DE ATUALIZAÇÃO DA UI DO CARRINHO
-        // =========================================
-        function formatCurrency(value) {
-            return value.toFixed(2).replace('.', ',');
-        }
+        function formatCurrency(value) { return value.toFixed(2).replace('.', ','); }
 
         function updateCartUI() {
             const badge = document.getElementById('cartBadge');
             const floatBtn = document.getElementById('cartFloat');
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-
             badge.innerText = totalItems;
-            if (totalItems > 0) {
-                floatBtn.classList.add('show');
-            } else {
-                floatBtn.classList.remove('show');
-            }
-
-            if (document.getElementById('cartModal').classList.contains('open')) {
-                renderCartModal();
-            }
+            if (totalItems > 0) floatBtn.classList.add('show');
+            else floatBtn.classList.remove('show');
+            if (document.getElementById('cartModal').classList.contains('open')) renderCartModal();
         }
 
         function renderCartModal() {
             const list = document.getElementById('cartItemsList');
             const totalDisplay = document.getElementById('cartTotal');
-
             if (cart.length === 0) {
                 list.innerHTML = '<p style="text-align:center; color:#999; padding: 20px;">Seu carrinho está vazio.</p>';
-                totalDisplay.innerText = 'Total: R$ 0,00';
-                return;
+                totalDisplay.innerText = 'Total: R$ 0,00'; return;
             }
-
-            let html = '';
-            let total = 0;
-
+            let html = '', total = 0;
             cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                html += `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-price">R$ ${formatCurrency(item.price)}</div>
-                        </div>
-                        <div class="cart-item-controls">
-                            <button onclick="updateQuantity(${index}, -1)">-</button>
-                            <span>${item.quantity}</span>
-                            <button onclick="updateQuantity(${index}, 1)">+</button>
-                            <button class="remove-btn" onclick="updateQuantity(${index}, -999)">✕</button>
-                        </div>
-                    </div>
-                `;
+                html += `<div class="cart-item"><div class="cart-item-info"><div class="cart-item-name">${item.name}</div><div class="cart-item-price">R$ ${formatCurrency(item.price)}</div></div><div class="cart-item-controls"><button onclick="updateQuantity(${index}, -1)">-</button><span>${item.quantity}</span><button onclick="updateQuantity(${index}, 1)">+</button><button class="remove-btn" onclick="updateQuantity(${index}, -999)">✕</button></div></div>`;
             });
-
             list.innerHTML = html;
             totalDisplay.innerText = `Total: R$ ${formatCurrency(total)}`;
         }
 
         function updateQuantity(index, change) {
-            if (cart[index].quantity + change <= 0) {
-                cart.splice(index, 1);
-            } else {
-                cart[index].quantity += change;
-            }
-            updateCartUI();
-            renderCartModal();
+            if (cart[index].quantity + change <= 0) cart.splice(index, 1);
+            else cart[index].quantity += change;
+            updateCartUI(); renderCartModal();
         }
 
-        // =========================================
-        //  ABRIR E FECHAR MODAL
-        // =========================================
         function toggleCartModal() {
             const modal = document.getElementById('cartModal');
             modal.classList.toggle('open');
-            if (modal.classList.contains('open')) {
-                renderCartModal();
-            }
+            if (modal.classList.contains('open')) renderCartModal();
         }
 
         function closeCartModal(event) {
-            if (event.target === event.currentTarget) {
-                document.getElementById('cartModal').classList.remove('open');
-            }
+            if (event.target === event.currentTarget) document.getElementById('cartModal').classList.remove('open');
         }
 
-        // =========================================
-        //  FINALIZAR PEDIDO
-        // =========================================
-        function finalizarPedidoWhatsApp() {
-            if (cart.length === 0) {
-                alert('Seu carrinho está vazio!');
-                return;
-            }
-
-            let message = '🛒 *Novo Pedido:*\n\n';
-            let total = 0;
-
-            cart.forEach(item => {
+        function abrirTicket() {
+            if (cart.length === 0) { alert('Seu carrinho está vazio!'); return; }
+            const ticketModal = document.getElementById('ticketModal');
+            const ticketList = document.getElementById('ticketItemsList');
+            const ticketTotal = document.getElementById('ticketTotal');
+            let html = '', total = 0;
+            cart.forEach((item) => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                message += `- ${item.name} (x${item.quantity}) - R$ ${formatCurrency(itemTotal)}\n`;
+                html += `<div class="ticket-line"><span><strong>${item.code}</strong> - ${item.quantity}x ${item.name}</span><span>R$ ${formatCurrency(itemTotal)}</span></div>`;
             });
+            ticketList.innerHTML = html;
+            ticketTotal.innerText = `Total: R$ ${formatCurrency(total)}`;
+            document.getElementById('cartModal').classList.remove('open');
+            ticketModal.classList.add('open');
+        }
 
-            message += `\n💰 *Total do Pedido: R$ ${formatCurrency(total)}*`;
-            message += `\n\nPor favor, confirmar disponibilidade e formas de pagamento.`;
+        function closeTicketModal(event) {
+            if (event.target === event.currentTarget || event.target.innerText === 'Cancelar') document.getElementById('ticketModal').classList.remove('open');
+        }
 
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+        function enviarPedidoPainel() {
+            const nomeCliente = document.getElementById('inputClienteNome').value.trim();
+            const telCliente = document.getElementById('inputClienteTel').value.trim();
 
-            window.open(whatsappLink, '_blank');
+            if (nomeCliente === '') { alert('Por favor, digite o Nome do Cliente!'); return; }
+
+            const itensFormatados = cart.map(item => ({
+                codigo: item.code,
+                nome: item.name,
+                qtd: item.quantity,
+                preco_unit: item.price,
+                total_item: item.price * item.quantity
+            }));
+
+            const pedido = {
+                id: Date.now(),
+                cliente: nomeCliente,
+                telefone: telCliente, // Agora o telefone é passado limpo
+                itens: itensFormatados,
+                total: cart.reduce((soma, item) => soma + (item.price * item.quantity), 0),
+                data: new Date().toLocaleString('pt-BR'),
+                status: 'Novo'
+            };
+
+            let pedidosExistentes = JSON.parse(localStorage.getItem('pedidos_farmacia')) || [];
+            pedidosExistentes.unshift(pedido);
+            localStorage.setItem('pedidos_farmacia', JSON.stringify(pedidosExistentes));
+
+            alert('Pedido enviado para o Painel do Atendente com sucesso!');
 
             cart = [];
             updateCartUI();
-            document.getElementById('cartModal').classList.remove('open');
+            document.getElementById('ticketModal').classList.remove('open');
         }
 
-        // =========================================
-        //  CARREGAR PRODUTOS DA PLANILHA
-        // =========================================
         async function carregarProdutos() {
             try {
                 const resposta = await fetch(SHEETDB_API_URL);
-                
-                if (!resposta.ok) {
-                    throw new Error(`Erro HTTP ${resposta.status}`);
-                }
-
+                if (!resposta.ok) throw new Error(`Erro HTTP ${resposta.status}`);
                 const data = await resposta.json();
-
-                // Se não houver dados, exibe a mensagem padrão de vazio
-                if (!data || data.length === 0) {
-                    document.getElementById('empty-msg').style.display = 'block';
-                    return;
-                }
-
+                if (!data || data.length === 0) { document.getElementById('empty-msg').style.display = 'block'; return; }
                 const gridMed = document.getElementById('medicamentos');
                 const gridPerf = document.getElementById('perfumaria');
-                gridMed.innerHTML = '';
-                gridPerf.innerHTML = '';
-
+                gridMed.innerHTML = ''; gridPerf.innerHTML = '';
                 data.forEach(item => {
                     const nome = item.Nome || 'Sem nome';
                     const desc = item.Descricao || '';
                     const preco = item.Preco || '0,00';
                     const imagem = item.Imagem || 'https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem';
                     const categoria = item.Categoria ? item.Categoria.toLowerCase() : 'medicamentos';
-
-                    const cardHTML = `
-                        <div class="product-card">
-                            <div class="product-img-wrap"><img src="${imagem}" alt="${nome}"></div>
-                            <div class="product-title">${nome}</div>
-                            <div class="product-desc">${desc}</div>
-                            <div class="price-area"><div class="price-main">R$ ${preco}</div></div>
-                            <button class="btn-buy" onclick="adicionarAoCarrinho('${nome}', 'R$ ${preco}')">Adicionar</button>
-                        </div>
-                    `;
-
-                    if(categoria === 'perfumaria') {
-                        gridPerf.innerHTML += cardHTML;
-                    } else {
-                        gridMed.innerHTML += cardHTML;
-                    }
+                    const codigo = item.Codigo ? item.Codigo.toString() : 'SEM CÓDIGO';
+                    const cardHTML = `<div class="product-card"><div class="product-img-wrap"><img src="${imagem}" alt="${nome}"></div><div class="product-title">${nome}</div><div class="product-desc">${desc}</div><div class="price-area"><div class="price-main">R$ ${preco}</div></div><button class="btn-buy" onclick="adicionarAoCarrinho('${nome}', 'R$ ${preco}', '${codigo}')">Adicionar</button></div>`;
+                    if(categoria === 'perfumaria') gridPerf.innerHTML += cardHTML;
+                    else gridMed.innerHTML += cardHTML;
                 });
-
             } catch (erro) {
                 console.error("Erro ao carregar produtos:", erro);
-                // Exibe uma mensagem amigável se a API falhar
                 document.getElementById('empty-msg').style.display = 'block';
                 document.getElementById('empty-msg').innerText = "Erro ao carregar produtos. Verifique a conexão.";
             }
         }
 
-        // =========================================
-        //  FUNÇÃO DE BUSCA GLOBAL 
-        // =========================================
         function performSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
-            
-            // Pega todos os cards de TODAS as categorias
             const allCards = document.querySelectorAll('.product-card');
             const emptyMsg = document.getElementById('empty-msg');
             let found = false;
-
             allCards.forEach(card => {
                 const title = card.querySelector('.product-title').innerText.toLowerCase();
                 if(title.includes(query) || query === '') {
-                    card.style.display = 'flex';
-                    found = true;
-                } else {
-                    card.style.display = 'none';
-                }
+                    card.style.display = 'flex'; found = true;
+                } else { card.style.display = 'none'; }
             });
-
-            if(!found && query !== '') {
-                emptyMsg.style.display = 'block';
-            } else {
-                emptyMsg.style.display = 'none';
-            }
+            if(!found && query !== '') emptyMsg.style.display = 'block';
+            else emptyMsg.style.display = 'none';
         }
 
-        // =========================================
-        //  FUNÇÃO DE TROCA DE ABAS
-        // =========================================
         function changeCategory(categoryId, btnElement) {
-            // Muda a aba visualmente
             const sections = document.querySelectorAll('.category-section');
             sections.forEach(sec => sec.style.display = 'none');
             const targetSection = document.getElementById(categoryId);
             if(targetSection) targetSection.style.display = 'grid';
-
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
-
-            // Refaz a busca para mostrar apenas o que pertence àquela aba + o termo buscado.
             performSearch();
         }
 
-        // =========================================
-        //  CARROSSEL E EFEITO SCROLL
-        // =========================================
         document.addEventListener('DOMContentLoaded', function() {
             const slides = document.querySelectorAll('#bannerCarousel img');
             const dots = document.querySelectorAll('#carouselDots .dot');
             const prevBtn = document.getElementById('prevSlide');
             const nextBtn = document.getElementById('nextSlide');
-            let currentSlide = 0;
-            let slideInterval;
-
+            let currentSlide = 0, slideInterval;
             function goToSlide(index) {
                 if (index < 0) index = slides.length - 1;
                 if (index >= slides.length) index = 0;
@@ -1061,19 +422,16 @@
                 dots[index].classList.add('active');
                 currentSlide = index;
             }
-
             function startAutoSlide() {
                 if (slideInterval) clearInterval(slideInterval);
                 slideInterval = setInterval(() => { goToSlide(currentSlide + 1); }, 3000);
             }
-
             prevBtn.addEventListener('click', function(e) { e.stopPropagation(); goToSlide(currentSlide - 1); startAutoSlide(); });
             nextBtn.addEventListener('click', function(e) { e.stopPropagation(); goToSlide(currentSlide + 1); startAutoSlide(); });
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', function(e) { e.stopPropagation(); goToSlide(index); startAutoSlide(); });
             });
             startAutoSlide();
-
             const header = document.getElementById('mainHeader');
             window.addEventListener('scroll', function() {
                 let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -1081,8 +439,6 @@
                 else header.classList.remove('shrink');
             });
         });
-
-        // Inicializa o carregamento
         carregarProdutos();
     </script>
 </body>

@@ -132,10 +132,14 @@
                     headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password: senha })
                 });
+                
                 const authData = await authResponse.json();
 
+                // Diagnóstico: Exibe o erro completo no console do navegador (Aperte F12 para ver)
                 if (!authResponse.ok) {
-                    throw new Error(authData.message || 'Erro ao criar usuário. Verifique se o e-mail já está cadastrado.');
+                    console.error("Erro completo do Supabase:", authData);
+                    // Lança o erro que o Supabase devolveu
+                    throw new Error(authData.message || authData.error_description || 'Erro desconhecido ao criar usuário.');
                 }
 
                 const perfilResponse = await fetch(`${SUPABASE_URL}/rest/v1/clientes`, {

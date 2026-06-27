@@ -132,11 +132,24 @@
         // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
-        let userLogado = null; // Guarda os dados do atendente logado
+        
+        // =========================================
+        //  SISTEMA DE LOGIN COM "LEMBRAR DE MIM"
+        // =========================================
+        
+        // Verifica se já existe um login salvo ao abrir a página
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedUser = localStorage.getItem('atendente_logado');
+            
+            if (savedUser) {
+                // Se tiver login salvo, tenta logar automaticamente
+                const userData = JSON.parse(savedUser);
+                if (userData && userData.email) {
+                    loginAutomatico(userData.email);
+                }
+            }
+        });
 
-        // =========================================
-        //  SISTEMA DE LOGIN (SUPABASE AUTH)
-        // =========================================
         async function fazerLogin() {
             const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
@@ -156,21 +169,51 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    userLogado = data.user;
-                    document.getElementById('nomeUsuarioDisplay').innerText = userLogado.email;
-                    document.getElementById('login-container').style.display = 'none';
-                    document.getElementById('dashboard-container').style.display = 'block';
-                    carregarPedidos();
+                    // Salva o login no navegador para não precisar digitar de novo
+                    localStorage.setItem('atendente_logado', JSON.stringify({ email: data.user.email, token: data.access_token }));
+                    
+                    entrarPainel(data.user);
                 } else {
-                    alert('Erro no login: ' + data.error_description);
+                    alert('Erro no login: ' + (data.error_description || data.message || 'Credenciais inválidas'));
                 }
             } catch (error) {
                 alert('Erro de conexão: ' + error.message);
             }
         }
 
+        async function loginAutomatico(email) {
+            // Tenta entrar com o e-mail salvo. O token já está salvo.
+            const saved = JSON.parse(localStorage.getItem('atendente_logado'));
+            if (saved && saved.token) {
+                // Verifica se o token ainda é válido (opcional, mas fazemos uma chamada simples para garantir)
+                try {
+                    const test = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?limit=1`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${saved.token}` }
+                    });
+                    
+                    if (test.ok) {
+                        // Token válido, entra direto
+                        entrarPainel({ email: email });
+                        return;
+                    } else {
+                        // Token expirou, limpa e pede login novamente
+                        localStorage.removeItem('atendente_logado');
+                    }
+                } catch (e) {
+                    localStorage.removeItem('atendente_logado');
+                }
+            }
+        }
+
+        function entrarPainel(user) {
+            document.getElementById('nomeUsuarioDisplay').innerText = user.email;
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('dashboard-container').style.display = 'block';
+            carregarPedidos();
+        }
+
         function fazerLogout() {
-            userLogado = null;
+            localStorage.removeItem('atendente_logado');
             document.getElementById('dashboard-container').style.display = 'none';
             document.getElementById('login-container').style.display = 'block';
             document.getElementById('emailInput').value = '';
@@ -178,17 +221,22 @@
         }
 
         // =========================================
-        //  SISTEMA DE PEDIDOS (COM LOG DE ATENDENTE)
+        //  SISTEMA DE PEDIDOS
         // =========================================
+        let userLogado = null;
+
         async function carregarPedidos() {
-            if(!userLogado) return;
+            const saved = JSON.parse(localStorage.getItem('atendente_logado'));
+            if (!saved) return;
+
+            userLogado = saved; // Guarda o token e email globalmente
 
             const lista = document.getElementById('listaPedidos');
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?select=*&order=criado_em.desc`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                        'Authorization': `Bearer ${saved.token}`
                     }
                 });
                 
@@ -291,9 +339,6 @@
             window.open(`https://wa.me/55${numeroLimpo}?text=${mensagem}`, '_blank');
         }
 
-        // =========================================
-        //  SALVA O ATENDENTE QUE MUDOU O STATUS
-        // =========================================
         async function mudarStatus(id, novoStatus) {
             if(!userLogado) return;
             try {
@@ -301,7 +346,7 @@
                     method: 'PATCH',
                     headers: {
                         'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Authorization': `Bearer ${userLogado.token}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ 
@@ -323,7 +368,7 @@
                     method: 'DELETE',
                     headers: {
                         'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                        'Authorization': `Bearer ${userLogado.token}`
                     }
                 });
                 if (!response.ok) throw new Error('Erro ao excluir');
@@ -340,7 +385,7 @@
                     method: 'DELETE',
                     headers: {
                         'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                        'Authorization': `Bearer ${userLogado.token}`
                     }
                 });
                 if (!response.ok) throw new Error('Erro ao limpar');
@@ -349,12 +394,6 @@
                 alert('Erro ao limpar: ' + error.message);
             }
         }
-
-        // Verifica se já está logado ao recarregar a página
-        document.addEventListener('DOMContentLoaded', function() {
-            // O painel começa escondido. O usuário precisa clicar em Login.
-            // A função fazerLogin() vai ativar o dashboard.
-        });
     </script>
 </body>
 </html>

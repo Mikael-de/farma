@@ -11,7 +11,6 @@
         body { background: var(--bg-panel); display: flex; flex-direction: column; min-height: 100vh; }
         a { text-decoration: none; color: inherit; }
 
-        /* Header específico */
         .page-header { background: var(--primary-green); color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
         .page-header h1 { font-size: 1.8rem; }
         .page-header .actions { display: flex; gap: 10px; }
@@ -21,9 +20,7 @@
         .btn-header.btn-support { background: var(--whatsapp-green); color: white; }
         .btn-header.btn-logout { background: #dc3545; color: white; }
 
-        /* Conteúdo */
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; }
-        
         .tab-nav { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; overflow-x: auto; white-space: nowrap; }
         .tab-btn { background: transparent; border: none; padding: 10px 20px; font-weight: 600; color: #888; cursor: pointer; border-radius: 8px; transition: 0.3s; }
         .tab-btn.active { background: var(--primary-green); color: white; }
@@ -32,7 +29,6 @@
         .tab-content.active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Cartões de Pedido (Estilo Rastreio) */
         .orders-list { display: flex; flex-direction: column; gap: 20px; }
         .order-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
         .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
@@ -41,7 +37,6 @@
         .order-items { font-size: 0.95rem; color: #555; margin-bottom: 15px; line-height: 1.6; }
         .order-total { font-weight: 700; font-size: 1.1rem; text-align: right; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
 
-        /* Linha do Tempo */
         .status-timeline { display: flex; justify-content: space-between; position: relative; margin-top: 15px; padding: 15px 0; border-top: 1px dashed #eee; }
         .status-timeline::before { content: ''; position: absolute; top: 26px; left: 5%; right: 5%; height: 2px; background: #eee; z-index: 0; }
         .status-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; flex: 1; }
@@ -50,12 +45,10 @@
         
         .status-step.done .status-dot { background: #28a745; box-shadow: 0 0 0 2px #28a745; }
         .status-step.done .status-label { color: #28a745; }
-        
         .status-step.active .status-dot { background: #0d6efd; box-shadow: 0 0 0 2px #0d6efd; animation: pulse-dot 1.5s infinite; }
         .status-step.active .status-label { color: #0d6efd; font-weight: 700; }
         @keyframes pulse-dot { 0% { box-shadow: 0 0 0 2px #0d6efd; } 50% { box-shadow: 0 0 0 6px rgba(13, 110, 253, 0.3); } 100% { box-shadow: 0 0 0 2px #0d6efd; } }
 
-        /* Dados Pessoais */
         .form-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-weight: 600; color: #555; margin-bottom: 5px; font-size: 0.9rem; }
@@ -63,9 +56,16 @@
         .form-group input:focus { border-color: var(--accent-green); }
         .btn-save { background: var(--primary-green); color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; width: 100%; }
         .btn-save:hover { background: var(--accent-green); }
-        
         .msg-empty { text-align: center; padding: 40px; color: #999; font-size: 1.1rem; }
-        
+
+        /* Tela de boas-vindas para quem não tem nome cadastrado */
+        .welcome-screen { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); text-align: center; border: 1px solid #f0f0f0; }
+        .welcome-screen h2 { color: var(--primary-green); margin-bottom: 15px; }
+        .welcome-screen p { color: #555; margin-bottom: 25px; }
+        .welcome-screen input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; outline: none; }
+        .welcome-screen input:focus { border-color: var(--accent-green); }
+        .btn-finish { background: var(--primary-green); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; width: 100%; cursor: pointer; }
+
         @media (max-width: 600px) {
             .page-header { flex-direction: column; text-align: center; padding: 15px; }
             .page-header .actions { width: 100%; justify-content: center; flex-wrap: wrap; }
@@ -87,61 +87,126 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="tab-nav">
-            <button class="tab-btn active" onclick="changeTab('pedidos', this)">Meus Pedidos</button>
-            <button class="tab-btn" onclick="changeTab('dados', this)">Meus Dados</button>
-        </div>
-
-        <!-- Aba Pedidos -->
-        <div class="tab-content active" id="tab-pedidos">
-            <h2 style="margin-bottom:20px; color:#333;">Histórico de Pedidos</h2>
-            <div id="ordersList" class="orders-list">
-                <div style="text-align:center; padding:20px;">Carregando seus pedidos...</div>
-            </div>
-        </div>
-
-        <!-- Aba Dados -->
-        <div class="tab-content" id="tab-dados">
-            <h2 style="margin-bottom:20px; color:#333;">Meus Dados</h2>
-            <div class="form-card">
-                <div class="form-group">
-                    <label>Nome Completo</label>
-                    <input type="text" id="inputNome" placeholder="Digite seu nome">
-                </div>
-                <div class="form-group">
-                    <label>E-mail</label>
-                    <input type="email" id="inputEmail" disabled style="background:#f9f9f9; cursor:not-allowed;">
-                </div>
-                <div class="form-group">
-                    <label>WhatsApp (com DDD)</label>
-                    <input type="text" id="inputTelefone" placeholder="(47) 99999-9999">
-                </div>
-                <button class="btn-save" onclick="salvarDados()">Salvar Alterações</button>
-            </div>
-        </div>
+    <div class="container" id="appContainer">
+        <!-- Conteúdo será renderizado aqui pelo JavaScript -->
     </div>
 
     <script>
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
 
-        // Verifica se está logado
+        let currentUser = null;
+
         document.addEventListener('DOMContentLoaded', function() {
             const userString = localStorage.getItem('cliente_logado');
             if(!userString) {
-                window.location.href = 'login.html'; // Se não estiver logado, manda pro login
+                window.location.href = 'login.html'; 
                 return;
             }
-            const user = JSON.parse(userString);
-            document.getElementById('inputEmail').value = user.email || '';
-            carregarPedidos(user.id);
-            carregarPerfil(user.id);
+            currentUser = JSON.parse(userString);
+            carregarDashboard(currentUser.id);
         });
 
         function logout() {
             localStorage.removeItem('cliente_logado');
             window.location.href = 'index.html';
+        }
+
+        async function carregarDashboard(userId) {
+            const container = document.getElementById('appContainer');
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/clientes?id=eq.${userId}`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                const data = await response.json();
+
+                // Se o usuário não tiver nome cadastrado, mostra tela de boas-vindas para cadastrar
+                if (!data || data.length === 0 || !data[0].nome_completo) {
+                    container.innerHTML = `
+                        <div class="welcome-screen">
+                            <h2>Bem-vindo!</h2>
+                            <p>Para completar seu cadastro, precisamos do seu nome e telefone.</p>
+                            <input type="text" id="welcomeNome" placeholder="Digite seu Nome Completo">
+                            <input type="text" id="welcomeTelefone" placeholder="Digite seu WhatsApp (com DDD)">
+                            <button class="btn-finish" onclick="finalizarCadastro('${userId}')">Salvar e Entrar</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Se já tem dados, mostra o painel normal
+                renderPainel(userId, data[0]);
+
+            } catch (error) {
+                console.error("Erro ao carregar perfil:", error);
+                container.innerHTML = `<div style="text-align:center; padding:40px; color:#dc3545;">Erro ao carregar seus dados. Tente recarregar a página.</div>`;
+            }
+        }
+
+        async function finalizarCadastro(userId) {
+            const nome = document.getElementById('welcomeNome').value.trim();
+            const telefone = document.getElementById('welcomeTelefone').value.trim();
+
+            if(!nome || !telefone) {
+                alert('Por favor, preencha o nome e o telefone.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/clientes`, {
+                    method: 'POST',
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+                    body: JSON.stringify({ id: userId, nome_completo: nome, telefone: telefone })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error('Erro ao salvar: ' + errText);
+                }
+
+                // Recarrega a página para mostrar o painel
+                location.reload();
+            } catch (error) {
+                alert('Erro ao salvar seus dados: ' + error.message);
+            }
+        }
+
+        function renderPainel(userId, perfil) {
+            const container = document.getElementById('appContainer');
+            container.innerHTML = `
+                <div class="tab-nav">
+                    <button class="tab-btn active" onclick="changeTab('pedidos', this)">Meus Pedidos</button>
+                    <button class="tab-btn" onclick="changeTab('dados', this)">Meus Dados</button>
+                </div>
+
+                <div class="tab-content active" id="tab-pedidos">
+                    <h2 style="margin-bottom:20px; color:#333;">Histórico de Pedidos</h2>
+                    <div id="ordersList" class="orders-list">
+                        <div style="text-align:center; padding:20px;">Carregando seus pedidos...</div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-dados">
+                    <h2 style="margin-bottom:20px; color:#333;">Meus Dados</h2>
+                    <div class="form-card">
+                        <div class="form-group">
+                            <label>Nome Completo</label>
+                            <input type="text" id="inputNome" value="${perfil.nome_completo || ''}" placeholder="Digite seu nome">
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            <input type="email" id="inputEmail" value="${currentUser.email || ''}" disabled style="background:#f9f9f9; cursor:not-allowed;">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp (com DDD)</label>
+                            <input type="text" id="inputTelefone" value="${perfil.telefone || ''}" placeholder="(47) 99999-9999">
+                        </div>
+                        <button class="btn-save" onclick="salvarDados('${userId}')">Salvar Alterações</button>
+                    </div>
+                </div>
+            `;
+
+            carregarPedidos(userId);
         }
 
         function changeTab(tabId, btn) {
@@ -151,9 +216,6 @@
             btn.classList.add('active');
         }
 
-        // =========================================
-        //  FUNÇÕES DE API
-        // =========================================
         async function carregarPedidos(userId) {
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?select=*&order=criado_em.desc`, {
@@ -176,7 +238,6 @@
                         'Em Atendimento': { label: 'Em Atendimento', class: 'active' },
                         'Atendido': { label: 'Finalizado', class: 'done' }
                     };
-                    
                     let steps = '';
                     const allStatus = ['Novo', 'Em Atendimento', 'Atendido'];
                     let foundCurrent = false;
@@ -193,16 +254,13 @@
                             </div>
                         `;
                     });
-
                     html += `
                         <div class="order-card">
                             <div class="order-header">
                                 <span class="order-id">Pedido #${String(p.id).slice(-6)}</span>
                                 <span class="order-date">${data.toLocaleDateString('pt-BR')}</span>
                             </div>
-                            <div class="order-items">
-                                ${p.itens.map(item => `${item.qtd}x ${item.nome}`).join('<br>')}
-                            </div>
+                            <div class="order-items">${p.itens.map(item => `${item.qtd}x ${item.nome}`).join('<br>')}</div>
                             <div class="status-timeline">${steps}</div>
                             <div class="order-total">Total: R$ ${p.total.toFixed(2).replace('.', ',')}</div>
                         </div>
@@ -215,22 +273,7 @@
             }
         }
 
-        async function carregarPerfil(userId) {
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/clientes?id=eq.${userId}`, {
-                    headers: { 'apikey': SUPABASE_KEY }
-                });
-                const data = await response.json();
-                if(data && data.length > 0) {
-                    document.getElementById('inputNome').value = data[0].nome_completo || '';
-                    document.getElementById('inputTelefone').value = data[0].telefone || '';
-                }
-            } catch (error) { console.error(error); }
-        }
-
-        async function salvarDados() {
-            const user = JSON.parse(localStorage.getItem('cliente_logado'));
-            const userId = user.id;
+        async function salvarDados(userId) {
             const nome = document.getElementById('inputNome').value.trim();
             const telefone = document.getElementById('inputTelefone').value.trim();
 

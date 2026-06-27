@@ -6,11 +6,12 @@
     <title>Farmácia - Encarte Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* (Mantivemos o CSS do seu arquivo original para não quebrar o layout) */
         :root { --bg-topbar: #e8f5e9; --primary-green: #1b5e20; --primary-dark-green: #143c16; --accent-green: #388E3C; --text-dark: #333333; --text-light: #666666; --whatsapp-green: #25D366; --border-light: #c8e6c9; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
         a { text-decoration: none; color: inherit; } ul { list-style: none; }
-        
+
         .top-bar { background: var(--bg-topbar); padding: 8px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #2e4a33; border-bottom: 1px solid var(--border-light); }
         .top-bar a { color: var(--primary-green); font-weight: 600; }
         .top-bar a:hover { text-decoration: underline; }
@@ -352,9 +353,13 @@
     </footer>
 
     <script>
-        const SHEETDB_API_URL = 'https://sheetdb.io/api/v1/munh3scrx4jbl';
-        const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
+        // =========================================
+        //  CONFIGURAÇÃO DO SUPABASE (DEFINIDA ANTES DE TUDO)
+        // =========================================
+        var SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
+        var SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
+        var SHEETDB_API_URL = 'https://sheetdb.io/api/v1/munh3scrx4jbl';
+
         let cart = [];
         let allProducts = [];
         let filteredProducts = [];
@@ -370,6 +375,7 @@
                 const accessToken = params.get('access_token');
 
                 if (accessToken) {
+                    // Pega as informações do usuário
                     fetch(`${SUPABASE_URL}/auth/v1/user`, {
                         headers: { 'Authorization': `Bearer ${accessToken}` }
                     })
@@ -377,10 +383,13 @@
                     .then(data => {
                         if (data.id) {
                             localStorage.setItem('cliente_logado', JSON.stringify(data));
+                            // Redireciona para a área do cliente
                             window.location.href = 'minha-conta.html';
                         }
                     })
-                    .catch(err => console.error("Erro ao buscar usuário:", err));
+                    .catch(err => {
+                        console.error("Erro ao buscar usuário:", err);
+                    });
                 }
             }
         });

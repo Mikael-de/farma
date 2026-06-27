@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Lâmina de Ofertas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #fcfcfc; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        
+        .voltar-btn {
+            align-self: flex-start;
+            margin: 20px;
+            background: #1b5e20;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .voltar-btn:hover { background: #2e7d32; }
+
+        .carousel-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            touch-action: pan-y;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: auto;
+            display: block;
+            pointer-events: none;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .carousel-btn:hover { background: rgba(0, 0, 0, 0.7); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .carousel-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ccc;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .carousel-dots span.active { background: #1b5e20; }
+
+        .erro-msg {
+            color: #dc3545;
+            font-weight: 600;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .voltar-btn { margin: 10px; font-size: 0.9rem; }
+            .carousel-btn { width: 30px; height: 30px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="voltar-btn">⬅ Voltar para a Loja</a>
+
+    <div class="carousel-container" id="carouselContainer">
+        <div style="text-align: center; color: #666;">Carregando lâminas de ofertas...</div>
+    </div>
+
+    <script>
+        const SHEETDB_API_URL = 'https://sheetdb.io/api/v1/munh3scrx4jbl?sheet=laminas';
+
+        let currentSlide = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        async function carregarLaminas() {
+            const container = document.getElementById('carouselContainer');
+            try {
+                const resposta = await fetch(SHEETDB_API_URL);
+                if (!resposta.ok) throw new Error('Erro ao buscar as lâminas');
+                const data = await resposta.json();
+
+                if (!data || data.length === 0 || !data[0].Link) {
+                    container.innerHTML = `<div class="erro-msg">❌ Nenhuma lâmina de ofertas cadastrada na planilha.</div>`;
+                    return;
+                }
+
+                let slidesHTML = '';
+                let dotsHTML = '';
+                
+                data.forEach((item, index) => {
+                    slidesHTML += `
+                        <div class="carousel-slide">
+                            <img src="${item.Link}" alt="Lâmina ${index + 1}" onerror="this.parentElement.innerHTML='<div class=\'erro-msg\'>Erro ao carregar imagem ${index + 1}</div>';">
+                        </div>
+                    `;
+                    dotsHTML += `<span class="${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></span>`;
+                });
+
+                container.innerHTML = `
+                    <div class="carousel-wrapper" id="carouselWrapper">
+                        <div class="carousel-track" id="carouselTrack">
+                            ${slidesHTML}
+                        </div>
+                        <button class="carousel-btn prev" onclick="prevSlide()">❮</button>
+                        <button class="carousel-btn next" onclick="nextSlide()">❯</button>
+                    </div>
+                    <div class="carousel-dots" id="carouselDots">
+                        ${dotsHTML}
+                    </div>
+                `;
+
+                const wrapper = document.getElementById('carouselWrapper');
+                wrapper.addEventListener('touchstart', handleTouchStart, false);
+                wrapper.addEventListener('touchmove', handleTouchMove, false);
+                wrapper.addEventListener('touchend', handleTouchEnd, false);
+
+            } catch (erro) {
+                console.error("Erro ao carregar lâminas:", erro);
+                container.innerHTML = `<div class="erro-msg">❌ Erro de conexão: ${erro.message}</div>`;
+            }
+        }
+
+        function updateCarousel() {
+            const track = document.getElementById('carouselTrack');
+            const dots = document.querySelectorAll('.carousel-dots span');
+            if (!track) return;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            const slides = document.querySelectorAll('.carousel-slide');
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        function nextSlide() { goToSlide(currentSlide + 1); }
+        function prevSlide() { goToSlide(currentSlide - 1); }
+
+        function handleTouchStart(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        }
+        function handleTouchMove(event) {
+            touchEndX = event.changedTouches[0].screenX;
+        }
+        function handleTouchEnd() {
+            if (touchStartX - touchEndX > 50) goToSlide(currentSlide + 1);
+            if (touchStartX - touchEndX < -50) goToSlide(currentSlide - 1);
+        }
+
+        carregarLaminas();
+    </script>
+</body>
+</html>

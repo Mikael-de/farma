@@ -150,84 +150,100 @@
     </div>
 
     <script>
-        function carregarPedidos() {
+        // CONFIGURAÇÃO DO SUPABASE (MESMA DO INDEX)
+        const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlicG1scGViZndkeXVvbmRvc2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MjU4MDMsImV4cCI6MjA2MDAwMTgwM30.cW9T9WJCrQ8Qwp2XWq2YVhY4FqApgCiXfG22WlYh0Rg';
+
+        async function carregarPedidos() {
             const lista = document.getElementById('listaPedidos');
-            const pedidos = JSON.parse(localStorage.getItem('pedidos_farmacia')) || [];
-
-            if (pedidos.length === 0) {
-                lista.innerHTML = '<div class="sem-pedidos">📭 Nenhum pedido recebido ainda. Aguarde...</div>';
-                return;
-            }
-
-            lista.innerHTML = ''; 
-
-            pedidos.forEach((pedido, index) => {
-                const data = new Date(pedido.id);
-                const horaFormatada = data.toLocaleString('pt-BR');
-
-                let itensHTML = '';
-                pedido.itens.forEach(item => {
-                    itensHTML += `
-                        <div class="item-linha">
-                            <span><small>${item.codigo}</small> ${item.qtd}x ${item.nome}</span>
-                            <span>R$ ${item.total_item.toFixed(2).replace('.', ',')}</span>
-                        </div>
-                    `;
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?select=*&order=criado_em.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
                 });
-
-                let corClass = '';
-                let statusText = pedido.status;
-                if (pedido.status === 'Em Atendimento') corClass = 'status-atendimento';
-                else if (pedido.status === 'Atendido') corClass = 'status-atendido';
-
-                // Prepara a mensagem para o WhatsApp
-                let msgWpp = `Olá *${pedido.cliente}*, tudo bem?%0A%0A`;
-                msgWpp += `Recebemos o seu pedido na Farmácia Brasil Poupa Lar:%0A%0A`;
-                pedido.itens.forEach(item => {
-                    msgWpp += `• ${item.qtd}x ${item.nome} (Cód. ${item.codigo}) - R$ ${item.total_item.toFixed(2).replace('.', ',')}%0A`;
-                });
-                msgWpp += `%0A💰 *Total: R$ ${pedido.total.toFixed(2).replace('.', ',')}*%0A%0A`;
-                msgWpp += `Por favor, nos confirme a forma de pagamento. Aguardamos seu retorno! 🙏`;
-
-                const card = document.createElement('div');
-                card.className = `card-pedido ${corClass}`;
                 
-                card.innerHTML = `
-                    <div class="pedido-header">
-                        <div>
-                            <div class="pedido-cliente">👤 ${pedido.cliente}</div>
-                            ${pedido.telefone ? `<div style="font-size:0.9rem; color:#555; margin-top:3px;">📞 ${pedido.telefone}</div>` : ''}
-                            <span class="pedido-hora">🕐 ${horaFormatada}</span>
-                        </div>
-                        <div class="menu-container">
-                            <button class="menu-trigger" onclick="toggleMenu(${index})">⋮</button>
-                            <div class="menu-dropdown" id="menu-${index}">
-                                <button class="wpp-btn" onclick="enviarWppCliente('${pedido.telefone}', '${msgWpp}')">💬 Responder no WhatsApp</button>
-                                <button class="atendimento-btn" onclick="mudarStatus(${index}, 'Em Atendimento')">🔄 Em Atendimento</button>
-                                <button class="atendido-btn" onclick="mudarStatus(${index}, 'Atendido')">✅ Atendido</button>
-                                <button class="excluir-btn" onclick="excluirPedido(${index})">🗑️ Excluir</button>
+                if (!response.ok) throw new Error('Erro ao buscar pedidos');
+                const pedidos = await response.json();
+
+                if (pedidos.length === 0) {
+                    lista.innerHTML = '<div class="sem-pedidos">📭 Nenhum pedido recebido ainda. Aguarde...</div>';
+                    return;
+                }
+
+                lista.innerHTML = ''; 
+
+                pedidos.forEach((pedido) => {
+                    const data = new Date(pedido.criado_em);
+                    const horaFormatada = data.toLocaleString('pt-BR');
+
+                    let itensHTML = '';
+                    pedido.itens.forEach(item => {
+                        itensHTML += `
+                            <div class="item-linha">
+                                <span><small>${item.codigo}</small> ${item.qtd}x ${item.nome}</span>
+                                <span>R$ ${item.total_item.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        `;
+                    });
+
+                    let corClass = '';
+                    let statusText = pedido.status;
+                    if (pedido.status === 'Em Atendimento') corClass = 'status-atendimento';
+                    else if (pedido.status === 'Atendido') corClass = 'status-atendido';
+
+                    let msgWpp = `Olá *${pedido.cliente}*, tudo bem?%0A%0A`;
+                    msgWpp += `Recebemos o seu pedido na Farmácia Brasil Poupa Lar:%0A%0A`;
+                    pedido.itens.forEach(item => {
+                        msgWpp += `• ${item.qtd}x ${item.nome} (Cód. ${item.codigo}) - R$ ${item.total_item.toFixed(2).replace('.', ',')}%0A`;
+                    });
+                    msgWpp += `%0A💰 *Total: R$ ${pedido.total.toFixed(2).replace('.', ',')}*%0A%0A`;
+                    msgWpp += `Por favor, nos confirme a forma de pagamento. Aguardamos seu retorno! 🙏`;
+
+                    const card = document.createElement('div');
+                    card.className = `card-pedido ${corClass}`;
+                    
+                    card.innerHTML = `
+                        <div class="pedido-header">
+                            <div>
+                                <div class="pedido-cliente">👤 ${pedido.cliente}</div>
+                                ${pedido.telefone ? `<div style="font-size:0.9rem; color:#555; margin-top:3px;">📞 ${pedido.telefone}</div>` : ''}
+                                <span class="pedido-hora">🕐 ${horaFormatada}</span>
+                            </div>
+                            <div class="menu-container">
+                                <button class="menu-trigger" onclick="toggleMenu(${pedido.id})">⋮</button>
+                                <div class="menu-dropdown" id="menu-${pedido.id}">
+                                    <button class="wpp-btn" onclick="enviarWppCliente('${pedido.telefone}', '${msgWpp}')">💬 Responder no WhatsApp</button>
+                                    <button class="atendimento-btn" onclick="mudarStatus(${pedido.id}, 'Em Atendimento')">🔄 Em Atendimento</button>
+                                    <button class="atendido-btn" onclick="mudarStatus(${pedido.id}, 'Atendido')">✅ Atendido</button>
+                                    <button class="excluir-btn" onclick="excluirPedido(${pedido.id})">🗑️ Excluir</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <span class="pedido-status">${statusText}</span>
+                        
+                        <span class="pedido-status">${statusText}</span>
 
-                    <div class="pedido-itens">
-                        ${itensHTML}
-                    </div>
-                    
-                    <div class="pedido-total">
-                        Total: R$ ${pedido.total.toFixed(2).replace('.', ',')}
-                    </div>
-                `;
-                lista.appendChild(card);
-            });
+                        <div class="pedido-itens">
+                            ${itensHTML}
+                        </div>
+                        
+                        <div class="pedido-total">
+                            Total: R$ ${pedido.total.toFixed(2).replace('.', ',')}
+                        </div>
+                    `;
+                    lista.appendChild(card);
+                });
+            } catch (error) {
+                console.error(error);
+                lista.innerHTML = `<div class="sem-pedidos" style="color:red;">❌ Erro ao conectar com o banco. Verifique a URL e a API Key.</div>`;
+            }
         }
 
-        function toggleMenu(index) {
-            const menu = document.getElementById(`menu-${index}`);
+        function toggleMenu(id) {
+            const menu = document.getElementById(`menu-${id}`);
             document.querySelectorAll('.menu-dropdown.open').forEach(el => {
-                if(el.id !== `menu-${index}`) el.classList.remove('open');
+                if(el.id !== `menu-${id}`) el.classList.remove('open');
             });
             menu.classList.toggle('open');
         }
@@ -238,51 +254,68 @@
             }
         });
 
-        // =========================================
-        //  NOVO: Envia WhatsApp DIRETO para o cliente
-        // =========================================
         function enviarWppCliente(telefoneCliente, mensagem) {
-            // Pega apenas os números, remove parênteses, traços e espaços
             const numeroLimpo = telefoneCliente.replace(/\D/g, '');
-            
             if (numeroLimpo.length < 10 || numeroLimpo.length > 11) {
-                alert('Número de telefone do cliente inválido ou não cadastrado no pedido!');
+                alert('Número de telefone do cliente inválido ou não cadastrado!');
                 return;
             }
-
-            // Adiciona o 55 (código do Brasil) automaticamente
-            const url = `https://wa.me/55${numeroLimpo}?text=${mensagem}`;
-            window.open(url, '_blank');
+            window.open(`https://wa.me/55${numeroLimpo}?text=${mensagem}`, '_blank');
         }
 
-        function mudarStatus(index, novoStatus) {
-            const pedidos = JSON.parse(localStorage.getItem('pedidos_farmacia')) || [];
-            if(pedidos[index]) {
-                pedidos[index].status = novoStatus;
-                localStorage.setItem('pedidos_farmacia', JSON.stringify(pedidos));
+        async function mudarStatus(id, novoStatus) {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?id=eq.${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: novoStatus })
+                });
+                if (!response.ok) throw new Error('Erro ao atualizar status');
                 carregarPedidos();
+            } catch (error) {
+                alert('Erro ao mudar status: ' + error.message);
             }
         }
 
-        function excluirPedido(index) {
-            if(confirm('Tem certeza que deseja excluir este pedido?')) {
-                const pedidos = JSON.parse(localStorage.getItem('pedidos_farmacia')) || [];
-                if(pedidos[index]) {
-                    pedidos.splice(index, 1);
-                    localStorage.setItem('pedidos_farmacia', JSON.stringify(pedidos));
-                    carregarPedidos();
-                }
-            }
-        }
-
-        function limparTodosPedidos() {
-            if(confirm('Tem certeza que deseja apagar TODOS os pedidos recebidos?')) {
-                localStorage.removeItem('pedidos_farmacia');
+        async function excluirPedido(id) {
+            if(!confirm('Tem certeza que deseja excluir este pedido?')) return;
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?id=eq.${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                if (!response.ok) throw new Error('Erro ao excluir');
                 carregarPedidos();
+            } catch (error) {
+                alert('Erro ao excluir: ' + error.message);
             }
         }
 
-        setInterval(carregarPedidos, 2000);
+        async function limparTodosPedidos() {
+            if(!confirm('Tem certeza que deseja apagar TODOS os pedidos?')) return;
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?id=neq.0`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                if (!response.ok) throw new Error('Erro ao limpar');
+                carregarPedidos();
+            } catch (error) {
+                alert('Erro ao limpar: ' + error.message);
+            }
+        }
+
+        setInterval(carregarPedidos, 3000);
         carregarPedidos();
     </script>
 </body>

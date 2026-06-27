@@ -58,7 +58,6 @@
         .btn-save:hover { background: var(--accent-green); }
         .msg-empty { text-align: center; padding: 40px; color: #999; font-size: 1.1rem; }
 
-        /* Tela de boas-vindas para quem não tem nome cadastrado */
         .welcome-screen { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); text-align: center; border: 1px solid #f0f0f0; }
         .welcome-screen h2 { color: var(--primary-green); margin-bottom: 15px; }
         .welcome-screen p { color: #555; margin-bottom: 25px; }
@@ -97,6 +96,33 @@
 
         let currentUser = null;
 
+        // =========================================
+        //  CAPTURADOR DE TOKEN DO GOOGLE (MUITO IMPORTANTE!)
+        //  Roda antes de qualquer carregamento de página
+        // =========================================
+        (function() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token')) {
+                const params = new URLSearchParams(hash.substring(1));
+                const accessToken = params.get('access_token');
+
+                if (accessToken) {
+                    fetch(`${SUPABASE_URL}/auth/v1/user`, {
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.id) {
+                            localStorage.setItem('cliente_logado', JSON.stringify(data));
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                            location.reload(); 
+                        }
+                    })
+                    .catch(err => console.error("Erro ao buscar usuário:", err));
+                }
+            }
+        })();
+
         document.addEventListener('DOMContentLoaded', function() {
             const userString = localStorage.getItem('cliente_logado');
             if(!userString) {
@@ -120,7 +146,6 @@
                 });
                 const data = await response.json();
 
-                // Se o usuário não tiver nome cadastrado, mostra tela de boas-vindas para cadastrar
                 if (!data || data.length === 0 || !data[0].nome_completo) {
                     container.innerHTML = `
                         <div class="welcome-screen">
@@ -134,7 +159,6 @@
                     return;
                 }
 
-                // Se já tem dados, mostra o painel normal
                 renderPainel(userId, data[0]);
 
             } catch (error) {
@@ -164,7 +188,6 @@
                     throw new Error('Erro ao salvar: ' + errText);
                 }
 
-                // Recarrega a página para mostrar o painel
                 location.reload();
             } catch (error) {
                 alert('Erro ao salvar seus dados: ' + error.message);

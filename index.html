@@ -70,29 +70,15 @@
         .banner-text-content h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .banner-text-content p { font-size: 1.1rem; margin-top: 8px; opacity: 0.9; font-weight: 300; }
 
-        .controls-area { max-width: 1300px; margin: 20px auto 10px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .controls-area h2 { color: var(--primary-green); font-size: 1.4rem; }
-        .btn-filter { background: white; border: 1px solid #ddd; padding: 8px 16px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; color: #333; transition: 0.2s; }
-        .btn-filter:hover { background: #f8f9fa; border-color: var(--accent-green); color: var(--accent-green); }
-        .filter-sidebar { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background: white; z-index: 901; box-shadow: -4px 0 15px rgba(0,0,0,0.1); transition: right 0.3s ease; padding: 30px 20px; overflow-y: auto; }
-        .filter-sidebar.open { right: 0; }
-        .filter-sidebar h3 { font-size: 1.2rem; margin-bottom: 20px; color: var(--text-dark); text-align: center; }
-        .filter-section { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-        .filter-section h4 { font-size: 0.9rem; color: #555; margin-bottom: 15px; text-align: center; }
-        .filter-options { display: flex; flex-direction: column; gap: 10px; }
-        .filter-options label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.9rem; color: #333; }
-        .filter-options input[type="radio"] { accent-color: var(--primary-green); width: 16px; height: 16px; }
-        .price-range-container { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 15px; }
-        .price-range-container input { width: 48%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; outline: none; }
-        .price-range-container input:focus { border-color: var(--accent-green); }
-        .filter-actions { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
-        .filter-actions button { padding: 10px 25px; border-radius: 20px; font-weight: 600; border: none; cursor: pointer; }
-        .btn-apply { background: var(--primary-green); color: white; }
-        .btn-apply:hover { background: var(--accent-green); }
-        .btn-clear { background: #f1f1f1; color: #333; }
-        .btn-clear:hover { background: #e0e0e0; }
-
+        /* ===== CSS DOS CARROSSÉIS ===== */
         .container { max-width: 1300px; margin: 10px auto 30px; padding: 0 20px; flex: 1; position: relative; }
+        
+        .category-section { margin-bottom: 50px; }
+        .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .category-header h2 { color: var(--primary-green); font-size: 1.6rem; }
+        .btn-ver-mais { background: var(--primary-green); color: white; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+        .btn-ver-mais:hover { background: var(--accent-green); transform: scale(1.05); }
+
         .product-carousel-wrapper { position: relative; overflow: hidden; border-radius: 12px; }
         .product-carousel-track { display: flex; transition: transform 0.4s ease-in-out; gap: 15px; }
         .product-carousel-track .product-card { min-width: calc(20% - 12px); flex-shrink: 0; background: white; padding: 20px 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; display: flex; flex-direction: column; justify-content: space-between; transition: 0.2s; }
@@ -108,6 +94,7 @@
         .tag-oferta { background: #dc3545; color: white; font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 5px; text-transform: uppercase; }
         .btn-buy { background: var(--accent-green); color: white; border: none; width: 100%; padding: 10px 0; border-radius: 30px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background 0.2s, transform 0.1s; }
         .btn-buy:hover { background: #2e7d32; transform: scale(1.02); }
+
         .product-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: white; border: 1px solid #ddd; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1); font-size: 1.2rem; font-weight: bold; color: #555; transition: 0.2s; }
         .product-nav-btn:hover { background: #f8f9fa; border-color: var(--accent-green); color: var(--accent-green); }
         .product-nav-btn.prev { left: -15px; }
@@ -119,7 +106,6 @@
         .cart-float:hover { transform: scale(1.1); }
         .cart-float svg { width: 30px; height: 30px; fill: white; }
         .cart-badge { position: absolute; top: -5px; right: -5px; background: #dc3545; color: white; font-size: 0.75rem; font-weight: bold; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid white; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
 
         .cart-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
         .cart-modal-overlay.open { display: flex; }
@@ -176,6 +162,8 @@
         @media (max-width: 1400px) { .product-carousel-track .product-card { min-width: calc(25% - 12px); } }
         @media (max-width: 1100px) { .product-carousel-track .product-card { min-width: calc(33.33% - 12px); } }
         @media (max-width: 800px) { .product-carousel-track .product-card { min-width: calc(50% - 12px); } }
+        @media (max-width: 600px) { .product-carousel-track .product-card { min-width: calc(100% - 12px); } }
+        
         @media (max-width: 1024px) {
             .main-header { flex-wrap: nowrap; padding: 10px 15px; gap: 10px; }
             .header-left { min-width: auto; gap: 5px; flex-shrink: 0; }
@@ -198,10 +186,6 @@
             .banner-area { height: 200px; padding: 15px 15px 20px; }
             .banner-carousel-wrapper { height: 150px; }
             .banner-text-content h2 { font-size: 1.8rem; }
-            .controls-area { flex-direction: column; align-items: flex-start; }
-            .filter-sidebar { width: 100%; right: -100%; }
-            .filter-sidebar.open { right: 0; }
-            .product-carousel-track .product-card { min-width: calc(50% - 12px); }
             .footer-container { grid-template-columns: 1fr; text-align: center; }
             .social-icons { justify-content: center; }
         }
@@ -249,9 +233,13 @@
     <div class="sidebar-menu" id="sidebarMenu">
         <h3>Categorias <button onclick="toggleSidebar()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;">✕</button></h3>
         <ul>
-            <li><a href="#" onclick="filterCategory('todos')">Todos os Produtos</a></li>
-            <li><a href="#" onclick="filterCategory('medicamentos')">Medicamentos</a></li>
-            <li><a href="#" onclick="filterCategory('perfumaria')">Perfumaria</a></li>
+            <li><a href="categorias.html?categoria=todos">Todos os Produtos</a></li>
+            <li><a href="categorias.html?categoria=medicamentos">Medicamentos</a></li>
+            <li><a href="categorias.html?categoria=higiene">Higiene</a></li>
+            <li><a href="categorias.html?categoria=suplementos">Suplementos</a></li>
+            <li><a href="categorias.html?categoria=alimentos">Alimentos</a></li>
+            <li><a href="categorias.html?categoria=cosmeticos">Cosméticos</a></li>
+            <li><a href="categorias.html?categoria=utilitarios">Utilitários</a></li>
         </ul>
     </div>
 
@@ -293,22 +281,19 @@
         <div class="banner-text-content"><h2>OFERTAS DE INVERNO</h2><p>Validade 01/07 a 15/07</p></div>
     </section>
 
-    <div class="controls-area">
-        <h2 id="section-title">Produtos em Destaque</h2>
-        <button class="btn-filter" onclick="toggleFilterSidebar()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M2 14h4M10 8h4M18 16h4"/></svg>
-            Filtrar
-        </button>
-    </div>
-
-    <main class="container">
-        <div class="product-carousel-wrapper">
-            <button class="product-nav-btn prev" onclick="moveProductCarousel(-1)">❮</button>
-            <button class="product-nav-btn next" onclick="moveProductCarousel(1)">❯</button>
-            <div class="product-carousel-track" id="productTrack"></div>
+    <!-- CONTAINER ONDE OS CARROSSÉIS SERÃO INSERIDOS -->
+    <div class="container" id="mainContainer">
+        <div id="carrossel-descontos" style="margin-bottom: 40px;">
+            <div class="category-header"><h2>🔥 Ofertas Imperdíveis</h2></div>
+            <div class="product-carousel-wrapper" id="wrapper-descontos">
+                <button class="product-nav-btn prev" onclick="moveCarousel('descontos', -1)">❮</button>
+                <button class="product-nav-btn next" onclick="moveCarousel('descontos', 1)">❯</button>
+                <div class="product-carousel-track" id="track-descontos"></div>
+            </div>
         </div>
+        <div id="categorias-container"></div>
         <div id="empty-msg" class="empty-msg" style="display:none;">Nenhum produto encontrado.</div>
-    </main>
+    </div>
 
     <div class="cart-float" id="cartFloat" onclick="toggleCartModal()">
         <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9 2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9 2-2-2zM7.11 6.8l.52 1.2h11.7c.78 0 1.44-.5 1.69-1.2l2.98-5.88c.1-.2.1-.4.1-.52 0-.8-.7-1.4-1.4-1.4H5.89l-.98-1.96C4.85.5 4.45 0 3.8 0H1v2h2l3.2 6.8L4.39 14.8C4.19 15.2 4 15.6 4 16c0 1.1.9 2 2 2h14v-2H6l.8-1.6h9.71l2.45-4.4H7.11z"/></svg>
@@ -361,8 +346,8 @@
 
         let cart = [];
         let allProducts = [];
-        let filteredProducts = [];
-        let currentProductSlide = 0;
+        // Objeto para guardar a posição de cada carrossel individualmente
+        let carouselPositions = {};
 
         document.addEventListener('DOMContentLoaded', function() {
             const hash = window.location.hash;
@@ -375,108 +360,129 @@
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }
         function toggleFilterSidebar() { document.getElementById('filterSidebar').classList.toggle('open'); document.getElementById('filterOverlay').classList.toggle('open'); }
 
+        // =========================================
+        //  LÓGICA DE NAVEGAÇÃO E FILTRO (Mantida)
+        // =========================================
         function filterCategory(category) {
-            toggleSidebar();
-            if(category === 'todos') { filteredProducts = [...allProducts]; document.getElementById('section-title').innerText = "Todos os Produtos"; } 
-            else { filteredProducts = allProducts.filter(p => p.categoria === category); document.getElementById('section-title').innerText = category.charAt(0).toUpperCase() + category.slice(1); }
-            renderProductCarousel(filteredProducts);
+            window.location.href = `categorias.html?categoria=${category}`;
         }
 
         function applyFilters() {
+            // Redireciona para a página de prateleira com os filtros aplicados
             const ordenacao = document.querySelector('input[name="ordenacao"]:checked');
-            const minPrice = parseFloat(document.getElementById('filter-min').value);
-            const maxPrice = parseFloat(document.getElementById('filter-max').value);
-            let products = [...allProducts];
-            if (!isNaN(minPrice)) products = products.filter(p => p.price >= minPrice);
-            if (!isNaN(maxPrice)) products = products.filter(p => p.price <= maxPrice);
-            if (ordenacao) {
-                if (ordenacao.value === 'a-z') products.sort((a,b) => a.nome.localeCompare(b.nome));
-                else if (ordenacao.value === 'z-a') products.sort((a,b) => b.nome.localeCompare(a.nome));
-                else if (ordenacao.value === 'menor-preco') products.sort((a,b) => a.price - b.price);
-                else if (ordenacao.value === 'maior-preco') products.sort((a,b) => b.price - a.price);
-            }
-            filteredProducts = products;
-            renderProductCarousel(filteredProducts);
-            document.getElementById('section-title').innerText = "Resultados da Busca";
+            const minPrice = document.getElementById('filter-min').value;
+            const maxPrice = document.getElementById('filter-max').value;
+            
+            let url = 'categorias.html?categoria=todos';
+            if (ordenacao) url += `&ordenacao=${ordenacao.value}`;
+            if (minPrice) url += `&min=${minPrice}`;
+            if (maxPrice) url += `&max=${maxPrice}`;
+            
+            window.location.href = url;
         }
 
         function clearFilters() {
             document.querySelectorAll('input[name="ordenacao"]').forEach(el => el.checked = false);
-            document.getElementById('filter-min').value = ''; document.getElementById('filter-max').value = '';
-            filteredProducts = [...allProducts];
-            renderProductCarousel(filteredProducts);
-            document.getElementById('section-title').innerText = "Produtos em Destaque";
-            toggleFilterSidebar();
+            document.getElementById('filter-min').value = '';
+            document.getElementById('filter-max').value = '';
+            applyFilters();
         }
 
-        function renderProductCarousel(products) {
-            const track = document.getElementById('productTrack');
-            const emptyMsg = document.getElementById('empty-msg');
-            if(products.length === 0) { track.innerHTML = ''; emptyMsg.style.display = 'block'; return; }
-            emptyMsg.style.display = 'none';
-            let html = '';
-            products.forEach(item => {
-                // Verifica se existe um desconto ativo para este produto
-                let precoHTML = '';
-                let descontoAtivo = null;
-                
-                if (item.descontos && item.descontos.length > 0) {
-                    // Pega o primeiro desconto ativo da lista
-                    const desc = item.descontos[0];
-                    if (desc.ativo === 'sim') {
-                        descontoAtivo = desc;
-                    }
-                }
+        // =========================================
+        //  FUNÇÃO PARA CRIAR CARDS DE PRODUTOS
+        // =========================================
+        function criarProductCard(item) {
+            let precoHTML = '';
+            let descontoAtivo = null;
+            
+            if (item.descontos && item.descontos.length > 0) {
+                const desc = item.descontos[0];
+                if (desc.ativo === 'sim') descontoAtivo = desc;
+            }
 
-                if (descontoAtivo) {
-                    // Exibe o preço promocional
-                    const descontoPercentual = Math.round((1 - (descontoAtivo.preco_promocional / item.preco)) * 100);
-                    precoHTML = `
-                        <div class="tag-oferta">-${descontoPercentual}%</div>
-                        <div class="price-old">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>
-                        <div class="price-main promocional">R$ ${descontoAtivo.preco_promocional.toFixed(2).replace('.', ',')}</div>
-                    `;
-                } else {
-                    // Exibe o preço normal
-                    precoHTML = `<div class="price-main">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>`;
-                }
-
-                html += `
-                    <div class="product-card">
-                        <div class="product-img-wrap"><img src="${item.imagem || 'https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'}" alt="${item.nome}" onerror="this.src='https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'"></div>
-                        <div class="product-title">${item.nome}</div>
-                        <div class="product-desc">${item.descricao || ''}</div>
-                        <div class="price-area">${precoHTML}</div>
-                        <button class="btn-buy" onclick="adicionarAoCarrinho('${item.nome}', ${descontoAtivo ? descontoAtivo.preco_promocional : item.preco}, '${item.codigo}')">Comprar</button>
-                    </div>
+            if (descontoAtivo) {
+                const descontoPercentual = Math.round((1 - (descontoAtivo.preco_promocional / item.preco)) * 100);
+                precoHTML = `
+                    <div class="tag-oferta">-${descontoPercentual}%</div>
+                    <div class="price-old">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>
+                    <div class="price-main promocional">R$ ${descontoAtivo.preco_promocional.toFixed(2).replace('.', ',')}</div>
                 `;
+            } else {
+                precoHTML = `<div class="price-main">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>`;
+            }
+
+            return `
+                <div class="product-card">
+                    <div class="product-img-wrap"><img src="${item.imagem || 'https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'}" alt="${item.nome}" onerror="this.src='https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'"></div>
+                    <div class="product-title">${item.nome}</div>
+                    <div class="product-desc">${item.descricao || ''}</div>
+                    <div class="price-area">${precoHTML}</div>
+                    <button class="btn-buy" onclick="adicionarAoCarrinho('${item.nome}', ${descontoAtivo ? descontoAtivo.preco_promocional : item.preco}, '${item.codigo}')">Comprar</button>
+                </div>
+            `;
+        }
+
+        // =========================================
+        //  FUNÇÃO PARA RENDERIZAR UM CARROSSEL
+        // =========================================
+        function renderCarousel(trackId, products, maxItems) {
+            const track = document.getElementById(trackId);
+            if (!track) return;
+            
+            // Limita o número de itens
+            const itemsToShow = products.slice(0, maxItems || 10);
+            
+            if (itemsToShow.length === 0) {
+                track.innerHTML = '<p class="empty-msg" style="padding:20px;">Nenhum produto nesta categoria.</p>';
+                return;
+            }
+
+            let html = '';
+            itemsToShow.forEach(item => {
+                html += criarProductCard(item);
             });
             track.innerHTML = html;
-            currentProductSlide = 0;
-            updateProductCarousel();
+            
+            // Reseta a posição do carrossel
+            const wrapper = track.parentElement;
+            const key = trackId.replace('track-', '');
+            carouselPositions[key] = 0;
+            updateCarouselPosition(trackId);
         }
 
-        function updateProductCarousel() {
-            const track = document.getElementById('productTrack');
-            const visibleWidth = track.parentElement.offsetWidth;
-            const totalContentWidth = track.scrollWidth;
-            const maxSlide = Math.max(0, totalContentWidth - visibleWidth);
-            const currentTranslate = Math.min(currentProductSlide, maxSlide);
-            track.style.transform = `translateX(-${currentTranslate}px)`;
-        }
-
-        function moveProductCarousel(direction) {
-            const track = document.getElementById('productTrack');
+        // =========================================
+        //  MOVIMENTAÇÃO DO CARROSSEL
+        // =========================================
+        function moveCarousel(key, direction) {
+            const track = document.getElementById(`track-${key}`);
+            if (!track) return;
+            
             const card = track.querySelector('.product-card');
-            if(!card) return;
+            if (!card) return;
+            
             const step = card.offsetWidth + 15;
             const maxTranslate = track.scrollWidth - track.parentElement.offsetWidth;
-            currentProductSlide += direction * step;
-            if(currentProductSlide < 0) currentProductSlide = 0;
-            if(currentProductSlide > maxTranslate) currentProductSlide = maxTranslate;
-            updateProductCarousel();
+            
+            if (!carouselPositions[key]) carouselPositions[key] = 0;
+            carouselPositions[key] += direction * step;
+            
+            if (carouselPositions[key] < 0) carouselPositions[key] = 0;
+            if (carouselPositions[key] > maxTranslate) carouselPositions[key] = maxTranslate;
+            
+            track.style.transform = `translateX(-${carouselPositions[key]}px)`;
         }
 
+        function updateCarouselPosition(trackId) {
+            const track = document.getElementById(trackId);
+            if (!track) return;
+            const key = trackId.replace('track-', '');
+            const currentPos = carouselPositions[key] || 0;
+            track.style.transform = `translateX(-${currentPos}px)`;
+        }
+
+        // =========================================
+        //  FUNÇÕES DE CARRINHO E PEDIDO (Mantidas)
+        // =========================================
         function mascaraTelefone(input) {
             let valor = input.value.replace(/\D/g, '');
             if (valor.length > 11) valor = valor.slice(0, 11);
@@ -598,9 +604,11 @@
             } catch (error) { alert('Erro ao enviar o pedido: ' + error.message); console.error(error); }
         }
 
+        // =========================================
+        //  FUNÇÃO PRINCIPAL: CARREGAR DADOS E MONTAR A PÁGINA
+        // =========================================
         async function carregarProdutos() {
             try {
-                // 🔥 Busca os produtos e os descontos ativos relacionados
                 const resposta = await fetch(`${SUPABASE_URL}/rest/v1/produtos?select=*,descontos(*)`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });
@@ -614,17 +622,65 @@
                     const visivel = item.visivel ? item.visivel.toString().toLowerCase() : 'sim';
                     return visivel !== 'nao' && visivel !== '0';
                 });
-                
-                filteredProducts = [...allProducts];
-                renderProductCarousel(filteredProducts);
-            } catch (erro) { console.error("Erro ao carregar produtos:", erro); document.getElementById('empty-msg').style.display = 'block'; document.getElementById('empty-msg').innerText = "Erro ao carregar produtos. Verifique a conexão."; }
+
+                // 1. Identificar produtos em desconto (primeiro carrossel)
+                const produtosDesconto = allProducts.filter(p => 
+                    p.descontos && p.descontos.length > 0 && p.descontos[0].ativo === 'sim'
+                );
+                renderCarousel('track-descontos', produtosDesconto, 10);
+
+                // 2. Agrupar os outros produtos por categoria
+                const categorias = [...new Set(allProducts.map(p => p.categoria))].filter(c => c);
+
+                const container = document.getElementById('categorias-container');
+                let htmlCategorias = '';
+
+                categorias.forEach(cat => {
+                    const produtosCat = allProducts.filter(p => p.categoria === cat);
+                    if (produtosCat.length === 0) return;
+
+                    const catNome = cat.charAt(0).toUpperCase() + cat.slice(1);
+                    const trackId = `track-${cat}`;
+
+                    htmlCategorias += `
+                        <div class="category-section">
+                            <div class="category-header">
+                                <h2>${catNome}</h2>
+                                <a href="categorias.html?categoria=${cat}" class="btn-ver-mais">Ver Mais +</a>
+                            </div>
+                            <div class="product-carousel-wrapper" id="wrapper-${cat}">
+                                <button class="product-nav-btn prev" onclick="moveCarousel('${cat}', -1)">❮</button>
+                                <button class="product-nav-btn next" onclick="moveCarousel('${cat}', 1)">❯</button>
+                                <div class="product-carousel-track" id="${trackId}"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = htmlCategorias;
+
+                // 3. Renderizar os produtos em cada carrossel de categoria
+                categorias.forEach(cat => {
+                    const produtosCat = allProducts.filter(p => p.categoria === cat);
+                    renderCarousel(`track-${cat}`, produtosCat, 10);
+                });
+
+                document.getElementById('empty-msg').style.display = 'none';
+
+            } catch (erro) { 
+                console.error("Erro ao carregar produtos:", erro); 
+                document.getElementById('empty-msg').style.display = 'block'; 
+                document.getElementById('empty-msg').innerText = "Erro ao carregar produtos. Verifique a conexão."; 
+            }
         }
 
         function performSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
-            if(query === '') { filteredProducts = [...allProducts]; document.getElementById('section-title').innerText = "Produtos em Destaque"; } 
-            else { filteredProducts = allProducts.filter(p => p.nome.toLowerCase().includes(query)); document.getElementById('section-title').innerText = "Resultados da Busca"; }
-            renderProductCarousel(filteredProducts);
+            if(query === '') {
+                window.location.reload();
+            } else {
+                window.location.href = `categorias.html?busca=${encodeURIComponent(query)}`;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -657,7 +713,6 @@
                 if (scrollTop > 20) header.classList.add('shrink');
                 else header.classList.remove('shrink');
             });
-            window.addEventListener('resize', () => { updateProductCarousel(); });
         });
         
         carregarProdutos();

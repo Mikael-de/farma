@@ -91,18 +91,12 @@
     </div>
 
     <script>
-        // =========================================
-        //  CONFIGURAÇÃO DO SUPABASE
-        // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let currentUser = null;
 
-        // =========================================
-        //  SISTEMA DE LOGIN
-        // =========================================
         (async function verificarLogin() {
             try {
                 const { data: { session }, error } = await supabase.auth.getSession();
@@ -136,40 +130,36 @@
             }
         })();
 
-        // =========================================
-        //  VOLTAR PARA A LOJA
-        // =========================================
         function voltarLoja() {
             window.location.replace('index.html');
         }
 
         // =========================================
-        //  FUNÇÃO DE LOGOUT (Corrigida para funcionar no PC)
+        //  FUNÇÃO DE LOGOUT (VERSÃO "BOMBA" QUE FUNCIONA NO PC)
         // =========================================
         async function logout() {
             try {
-                // 1. Limpa tudo no navegador
+                // 1. Limpa tudo que for possível no navegador
                 localStorage.removeItem('cliente_logado');
                 sessionStorage.clear();
-
-                // 2. Desloga do servidor Supabase
-                await supabase.auth.signOut();
-
-                // 3. A MAGIA CONTRA O CACHE DO PC:
-                // O 'replace' remove a página atual do histórico. 
-                // Mas o navegador do PC guarda um "retrato" congelado dela.
-                // Para quebrar esse retrato, vamos forçar a mudança de página de um jeito bruto.
-                document.location.href = 'index.html';
                 
+                // 2. Mata a sessão no servidor do Supabase
+                await supabase.auth.signOut();
+                
+                // 3. Força o redirecionamento usando o comando mais bruto possível
+                document.location = 'index.html';
+                
+                // 4. (Garantia extra) Se o navegador travar, espera 50ms e tenta de novo
+                setTimeout(function() {
+                    document.location = 'index.html';
+                }, 50);
+
             } catch (error) {
                 console.error("Erro ao deslogar:", error);
-                document.location.href = 'index.html';
+                document.location = 'index.html';
             }
         }
 
-        // =========================================
-        //  FUNÇÕES DO PAINEL (Mantidas iguais)
-        // =========================================
         async function carregarDashboard(userId) {
             const container = document.getElementById('appContainer');
             try {

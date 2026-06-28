@@ -46,13 +46,23 @@
         .mobile-user-icon svg { width: 28px; height: 28px; fill: var(--primary-green); transition: fill 0.2s; }
         .mobile-user-icon:hover svg { fill: var(--accent-green); }
 
-        /* ===== LAYOUT DA PRATELEIRA (GRADE) ===== */
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 900; display: none; opacity: 0; transition: opacity 0.3s; }
+        .sidebar-overlay.open { display: block; opacity: 1; }
+        .sidebar-menu { position: fixed; top: 0; left: -300px; width: 300px; height: 100%; background: white; z-index: 901; box-shadow: 4px 0 15px rgba(0,0,0,0.1); transition: left 0.3s ease; padding: 20px; overflow-y: auto; }
+        .sidebar-menu.open { left: 0; }
+        .sidebar-menu h3 { color: var(--primary-green); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-menu ul li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+        .sidebar-menu ul li a { font-weight: 500; color: #333; display: block; }
+        .sidebar-menu ul li a:hover { color: var(--accent-green); }
+
+        /* ===== LAYOUT DA PRATELEIRA ===== */
         .container { max-width: 1300px; margin: 20px auto 30px; padding: 0 20px; flex: 1; }
         .page-title { color: var(--primary-green); font-size: 1.8rem; margin-bottom: 20px; }
         
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            /* No PC fica com 4 a 5 colunas, no celular 2 colunas rígidas */
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 20px;
         }
 
@@ -60,7 +70,7 @@
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(27, 94, 32, 0.12); border-color: var(--accent-green); }
         .product-img-wrap { height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
         .product-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .product-title { font-weight: 600; font-size: 1rem; color: var(--text-dark); margin-bottom: 5px; line-height: 1.3; height: 42px; overflow: hidden; }
+        .product-title { font-weight: 600; font-size: 1rem; color: var(--text-dark); margin-bottom: 5px; line-height: 1.3; height: 42px; overflow: hidden; word-break: break-word; }
         .product-desc { font-size: 0.75rem; color: #999; margin-bottom: 10px; height: 30px; overflow: hidden; }
         .price-area { margin-bottom: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
         .price-main { font-size: 1.3rem; font-weight: 700; color: var(--text-dark); }
@@ -131,11 +141,12 @@
 
         /* ===== RESPONSIVIDADE DA PRATELEIRA ===== */
         @media (max-width: 800px) {
-            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            /* No celular, 2 colunas fixas para não espremer */
+            .products-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
         }
-        @media (max-width: 500px) {
-            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .logo-area img { height: 38px; }
+        @media (max-width: 400px) {
+            .products-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .product-title { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -158,6 +169,7 @@
     </header>
 
     <nav class="main-nav">
+        <!-- BOTÃO DO MENU CORRIGIDO E FUNCIONAL -->
         <button onclick="toggleSidebar()">
             <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
             Categorias
@@ -172,6 +184,7 @@
         </a>
     </nav>
 
+    <!-- MENU LATERAL FUNCIONAL -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <div class="sidebar-menu" id="sidebarMenu">
         <h3>Categorias <button onclick="toggleSidebar()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;">✕</button></h3>
@@ -249,7 +262,15 @@
             }
         });
 
-        function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }
+        // =========================================
+        //  FUNÇÃO DO MENU LATERAL (CORRIGIDA)
+        // =========================================
+        function toggleSidebar() {
+            const menu = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            menu.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
 
         function mascaraTelefone(input) {
             let valor = input.value.replace(/\D/g, '');

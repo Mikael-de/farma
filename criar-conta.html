@@ -18,7 +18,7 @@
             width: 100%;
             max-width: 420px;
             border: 1px solid #f0f0f0;
-            display: none; /* Escondido por padrão, será mostrado pelo JS */
+            display: none;
         }
 
         .login-card.active { display: block; }
@@ -33,7 +33,7 @@
             max-width: 420px;
             border: 1px solid #f0f0f0;
             text-align: center;
-            display: none; /* Escondido por padrão */
+            display: none;
         }
         .success-card.active { display: block; }
         .success-card h2 { color: #1b5e20; margin-bottom: 15px; }
@@ -171,7 +171,22 @@
             }
 
             try {
-                // 1. Cria o usuário no Auth (Supabase já enviará o e-mail automaticamente)
+                // =========================================
+                //  VERIFICAÇÃO DE E-MAIL DUPLICADO
+                // =========================================
+                const { error: checkError } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin
+                });
+
+                // Se o erro for "User not found", significa que o e-mail está LIVRE.
+                // Se NÃO houver erro (ou se o erro for outro), o e-mail JÁ EXISTE.
+                if (checkError && checkError.message !== "User not found") {
+                    throw new Error("Este e-mail já está cadastrado em outra conta. Tente fazer login ou recuperar sua senha.");
+                }
+
+                // =========================================
+                //  CRIAÇÃO DA CONTA
+                // =========================================
                 const { data, error } = await supabase.auth.signUp({
                     email: email,
                     password: senha,
@@ -188,7 +203,9 @@
                     throw new Error('Erro desconhecido ao criar usuário.');
                 }
 
-                // 2. Salva os dados na tabela 'clientes'
+                // =========================================
+                //  SALVAR NA TABELA CLIENTES
+                // =========================================
                 const perfilResponse = await fetch(`${SUPABASE_URL}/rest/v1/clientes`, {
                     method: 'POST',
                     headers: {
@@ -209,7 +226,9 @@
                     alert('Conta criada, mas houve um erro ao salvar seus dados adicionais. Entre em contato com o suporte.');
                 }
 
-                // 3. Mostra a tela de sucesso com o e-mail do cliente
+                // =========================================
+                //  MOSTRAR TELA DE SUCESSO
+                // =========================================
                 document.getElementById('formCard').classList.remove('active');
                 document.getElementById('successCard').classList.add('active');
                 document.getElementById('emailDisplay').innerText = email;

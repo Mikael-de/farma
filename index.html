@@ -352,9 +352,6 @@
     </footer>
 
     <script>
-        // =========================================
-        //  CONFIGURAÇÃO DO SUPABASE
-        // =========================================
         var SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         var SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
         var SHEETDB_API_URL = 'https://sheetdb.io/api/v1/munh3scrx4jbl';
@@ -364,20 +361,12 @@
         let filteredProducts = [];
         let currentProductSlide = 0;
 
-        // =========================================
-        //  VERIFICA SE O USUÁRIO ACABOU DE LOGAR (APENAS REDIRECIONA SE TIVER TOKEN NA URL)
-        // =========================================
         document.addEventListener('DOMContentLoaded', function() {
             const hash = window.location.hash;
             if (hash && hash.includes('access_token')) {
-                // Se chegou aqui com token, redireciona para a conta
                 window.location.href = 'minha-conta.html';
                 return;
             }
-            
-            // Se NÃO tiver token na URL, ELE FICA NA LOJA.
-            // Mesmo que esteja logado no localStorage, ele fica na loja.
-            // O botão "Minha Conta" no menu vai levá-lo ao painel.
         });
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }

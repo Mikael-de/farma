@@ -80,7 +80,8 @@
             <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 5px;">Gerencie seus pedidos e dados pessoais.</p>
         </div>
         <div class="actions">
-            <a href="index.html" class="btn-header btn-back">⬅ Voltar para a Loja</a>
+            <!-- BOTÃO DE VOLTAR CORRIGIDO: Usa 'onclick' para recarregar sem cache -->
+            <a href="javascript:void(0)" onclick="voltarLoja()" class="btn-header btn-back">⬅ Voltar para a Loja</a>
             <a href="https://wa.me/5547996475401?text=Olá! Preciso de ajuda com minha conta." target="_blank" class="btn-header btn-support">💬 Suporte</a>
             <button class="btn-header btn-logout" onclick="logout()">Sair</button>
         </div>
@@ -102,45 +103,33 @@
 
         // =========================================
         //  SISTEMA DE LOGIN A PROVA DE FALHAS
-        //  Roda imediatamente ao abrir a página
         // =========================================
         (async function verificarLogin() {
             try {
-                // 1. Tenta pegar o usuário atual via sessão do Supabase (A forma mais segura)
                 const { data: { session }, error } = await supabase.auth.getSession();
 
                 if (error) throw error;
 
                 if (session) {
-                    // Se o Supabase reconheceu a sessão
                     currentUser = session.user;
                     localStorage.setItem('cliente_logado', JSON.stringify(currentUser));
-                    
-                    // Remove o # da URL para não ficar feio
                     if (window.location.hash) {
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
-
-                    // Carrega o painel
                     carregarDashboard(currentUser.id);
                     return;
                 }
 
-                // 2. Se o Supabase não reconheceu, tenta o localStorage (para casos de recarga manual)
                 const userString = localStorage.getItem('cliente_logado');
                 if (userString) {
                     currentUser = JSON.parse(userString);
-                    
-                    // Remove o # da URL para não ficar feio
                     if (window.location.hash) {
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
-
                     carregarDashboard(currentUser.id);
                     return;
                 }
 
-                // 3. Se nada funcionar, manda pro login
                 window.location.href = 'login.html';
 
             } catch (err) {
@@ -149,12 +138,24 @@
             }
         })();
 
+        // =========================================
+        //  FUNÇÕES DE NAVEGAÇÃO
+        // =========================================
+        function voltarLoja() {
+            // Essa função força o navegador a ir para o index.html sem usar cache,
+            // permitindo que ele veja a loja e não seja redirecionado de volta para cá.
+            window.location.replace('index.html');
+        }
+
         function logout() {
             localStorage.removeItem('cliente_logado');
             supabase.auth.signOut();
             window.location.href = 'index.html';
         }
 
+        // =========================================
+        //  FUNÇÕES DO PAINEL (Mantidas iguais)
+        // =========================================
         async function carregarDashboard(userId) {
             const container = document.getElementById('appContainer');
             try {

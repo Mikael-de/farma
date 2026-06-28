@@ -48,7 +48,7 @@
 
         /* ===== LAYOUT DA PRATELEIRA (GRADE) ===== */
         .container { max-width: 1300px; margin: 20px auto 30px; padding: 0 20px; flex: 1; }
-        .page-title { color: var(--primary-green); font-size: 1.8rem; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .page-title { color: var(--primary-green); font-size: 1.8rem; margin-bottom: 20px; }
         
         .products-grid {
             display: grid;
@@ -129,11 +129,14 @@
         .footer-bottom { max-width: 1300px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.9rem; }
         .footer-bottom strong { color: white; }
 
-        @media (max-width: 600px) {
+        /* ===== RESPONSIVIDADE DA PRATELEIRA ===== */
+        @media (max-width: 800px) {
             .products-grid { grid-template-columns: repeat(2, 1fr); }
-            .page-title { flex-direction: column; align-items: flex-start; }
         }
-        @media (max-width: 500px) { .logo-area img { height: 38px; } }
+        @media (max-width: 500px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .logo-area img { height: 38px; }
+        }
     </style>
 </head>
 <body>
@@ -158,10 +161,6 @@
         <button onclick="toggleSidebar()">
             <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
             Categorias
-        </button>
-        <button onclick="toggleFilterSidebar()">
-            <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm2 5h12v2H6v-2zm2 5h8v2H8v-2z"/></svg>
-            Filtrar
         </button>
         <div class="links-desktop">
             <a href="minha-conta.html" style="font-weight: 500; font-size: 0.95rem; color: var(--primary-green);">Minha Conta</a>
@@ -190,43 +189,10 @@
     <div class="container">
         <div class="page-title">
             <h1 id="page-title">Todos os Produtos</h1>
-            <button class="btn-filter" onclick="toggleFilterSidebar()" style="background: white; border: 1px solid #ddd; padding: 8px 16px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; color: #333; transition: 0.2s;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M2 14h4M10 8h4M18 16h4"/></svg>
-                Filtrar
-            </button>
         </div>
-        
-        <div class="products-grid" id="productsGrid">
-            <!-- Produtos renderizados via JS -->
-        </div>
+        <div class="products-grid" id="productsGrid"></div>
         <div id="empty-msg" class="empty-msg" style="display:none;">Nenhum produto encontrado.</div>
     </div>
-
-    <div class="filter-sidebar" id="filterSidebar">
-        <h3>Filtrar Produtos <button onclick="toggleFilterSidebar()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;float:right;">✕</button></h3>
-        <div class="filter-section">
-            <h4>Ordenar</h4>
-            <div class="filter-options">
-                <label><input type="radio" name="ordenacao" value="a-z" onchange="applyFilters()"> A → Z</label>
-                <label><input type="radio" name="ordenacao" value="z-a" onchange="applyFilters()"> Z → A</label>
-                <label><input type="radio" name="ordenacao" value="menor-preco" onchange="applyFilters()"> Menor preço</label>
-                <label><input type="radio" name="ordenacao" value="maior-preco" onchange="applyFilters()"> Maior preço</label>
-            </div>
-        </div>
-        <div class="filter-section">
-            <h4>Preço</h4>
-            <div class="price-range-container">
-                <input type="number" id="filter-min" placeholder="Mín" min="0" onchange="applyFilters()">
-                <input type="number" id="filter-max" placeholder="Máx" min="0" onchange="applyFilters()">
-            </div>
-        </div>
-        <div class="filter-actions">
-            <button class="btn-clear" onclick="clearFilters()">Limpar</button>
-            <button class="btn-apply" onclick="toggleFilterSidebar(); applyFilters();">Aplicar</button>
-        </div>
-    </div>
-
-    <div class="sidebar-overlay" id="filterOverlay" onclick="toggleFilterSidebar()"></div>
 
     <div class="cart-float" id="cartFloat" onclick="toggleCartModal()">
         <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9 2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9 2-2-2zM7.11 6.8l.52 1.2h11.7c.78 0 1.44-.5 1.69-1.2l2.98-5.88c.1-.2.1-.4.1-.52 0-.8-.7-1.4-1.4-1.4H5.89l-.98-1.96C4.85.5 4.45 0 3.8 0H1v2h2l3.2 6.8L4.39 14.8C4.19 15.2 4 15.6 4 16c0 1.1.9 2 2 2h14v-2H6l.8-1.6h9.71l2.45-4.4H7.11z"/></svg>
@@ -271,12 +237,8 @@
     </footer>
 
     <script>
-        // =========================================
-        //  CONFIGURAÇÃO DO SUPABASE
-        // =========================================
         var SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         var SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
-
         let cart = [];
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -288,7 +250,6 @@
         });
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }
-        function toggleFilterSidebar() { document.getElementById('filterSidebar').classList.toggle('open'); document.getElementById('filterOverlay').classList.toggle('open'); }
 
         function mascaraTelefone(input) {
             let valor = input.value.replace(/\D/g, '');
@@ -403,7 +364,6 @@
                 status: 'Novo', 
                 criado_em: new Date().toISOString() 
             };
-            
             try {
                 await salvarPedidoSupabase(pedido);
                 alert('Pedido enviado para a farmácia com sucesso!');
@@ -411,50 +371,16 @@
             } catch (error) { alert('Erro ao enviar o pedido: ' + error.message); console.error(error); }
         }
 
-        function applyFilters() {
-            const ordenacao = document.querySelector('input[name="ordenacao"]:checked');
-            const minPrice = parseFloat(document.getElementById('filter-min').value);
-            const maxPrice = parseFloat(document.getElementById('filter-max').value);
-            
-            const params = new URLSearchParams(window.location.search);
-            if (ordenacao) params.set('ordenacao', ordenacao.value);
-            else params.delete('ordenacao');
-            
-            if (!isNaN(minPrice)) params.set('min', minPrice);
-            else params.delete('min');
-            
-            if (!isNaN(maxPrice)) params.set('max', maxPrice);
-            else params.delete('max');
-            
-            window.location.search = params.toString();
-        }
-
-        function clearFilters() {
-            document.querySelectorAll('input[name="ordenacao"]').forEach(el => el.checked = false);
-            document.getElementById('filter-min').value = '';
-            document.getElementById('filter-max').value = '';
-            applyFilters();
-        }
-
         function performSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
-            if(query === '') {
-                window.location.href = 'categorias.html?categoria=todos';
-            } else {
-                window.location.href = `categorias.html?busca=${encodeURIComponent(query)}`;
-            }
+            if(query === '') { window.location.href = 'categorias.html?categoria=todos'; } 
+            else { window.location.href = `categorias.html?busca=${encodeURIComponent(query)}`; }
         }
 
-        // =========================================
-        //  FUNÇÃO PRINCIPAL: CARREGAR DADOS DA PRATELEIRA
-        // =========================================
         async function carregarPrateleira() {
             const params = new URLSearchParams(window.location.search);
             const categoria = params.get('categoria') || 'todos';
             const busca = params.get('busca') || '';
-            const ordenacao = params.get('ordenacao') || '';
-            const minPrice = parseFloat(params.get('min'));
-            const maxPrice = parseFloat(params.get('max'));
 
             const titleEl = document.getElementById('page-title');
             
@@ -462,7 +388,6 @@
                 const resposta = await fetch(`${SUPABASE_URL}/rest/v1/produtos?select=*,descontos(*)`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });
-                
                 if (!resposta.ok) throw new Error(`Erro HTTP ${resposta.status}`);
                 const data = await resposta.json();
                 
@@ -471,32 +396,18 @@
                     return visivel !== 'nao' && visivel !== '0';
                 });
 
-                // Filtrar por busca
                 if (busca) {
                     products = products.filter(p => p.nome.toLowerCase().includes(busca.toLowerCase()));
                     titleEl.innerText = `Resultados para "${busca}"`;
-                } 
-                // Filtrar por categoria
-                else if (categoria !== 'todos') {
+                } else if (categoria !== 'todos') {
                     products = products.filter(p => p.categoria === categoria);
                     titleEl.innerText = categoria.charAt(0).toUpperCase() + categoria.slice(1);
                 } else {
                     titleEl.innerText = 'Todos os Produtos';
                 }
 
-                // Filtrar por preço
-                if (!isNaN(minPrice)) products = products.filter(p => p.preco >= minPrice);
-                if (!isNaN(maxPrice)) products = products.filter(p => p.preco <= maxPrice);
-
-                // Ordenar
-                if (ordenacao === 'a-z') products.sort((a,b) => a.nome.localeCompare(b.nome));
-                else if (ordenacao === 'z-a') products.sort((a,b) => b.nome.localeCompare(a.nome));
-                else if (ordenacao === 'menor-preco') products.sort((a,b) => a.preco - b.preco);
-                else if (ordenacao === 'maior-preco') products.sort((a,b) => b.preco - a.preco);
-
                 const grid = document.getElementById('productsGrid');
                 const emptyMsg = document.getElementById('empty-msg');
-
                 if (products.length === 0) {
                     grid.innerHTML = '';
                     emptyMsg.style.display = 'block';
@@ -508,12 +419,10 @@
                 products.forEach(item => {
                     let precoHTML = '';
                     let descontoAtivo = null;
-                    
                     if (item.descontos && item.descontos.length > 0) {
                         const desc = item.descontos[0];
                         if (desc.ativo === 'sim') descontoAtivo = desc;
                     }
-
                     if (descontoAtivo) {
                         const descontoPercentual = Math.round((1 - (descontoAtivo.preco_promocional / item.preco)) * 100);
                         precoHTML = `
@@ -524,7 +433,6 @@
                     } else {
                         precoHTML = `<div class="price-main">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>`;
                     }
-
                     html += `
                         <div class="product-card">
                             <div class="product-img-wrap"><img src="${item.imagem || 'https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'}" alt="${item.nome}" onerror="this.src='https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'"></div>
@@ -536,7 +444,6 @@
                     `;
                 });
                 grid.innerHTML = html;
-
             } catch (erro) { 
                 console.error("Erro ao carregar produtos:", erro); 
                 document.getElementById('productsGrid').innerHTML = '<p class="empty-msg" style="color:red;">Erro ao carregar produtos. Verifique a conexão.</p>';

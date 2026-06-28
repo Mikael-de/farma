@@ -73,10 +73,11 @@
         /* ===== CSS DOS CARROSSÉIS ===== */
         .container { max-width: 1300px; margin: 10px auto 30px; padding: 0 20px; flex: 1; position: relative; }
         
-        .category-section { margin-bottom: 50px; }
+        .category-section { margin-bottom: 40px; }
         .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .category-header h2 { color: var(--primary-green); font-size: 1.6rem; }
-        .btn-ver-mais { background: var(--primary-green); color: white; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+        .category-header h2 { color: var(--primary-green); font-size: 1.4rem; }
+        
+        .btn-ver-mais { background: var(--primary-green); color: white; padding: 6px 16px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.85rem; transition: 0.2s; }
         .btn-ver-mais:hover { background: var(--accent-green); transform: scale(1.05); }
 
         .product-carousel-wrapper { position: relative; overflow: hidden; border-radius: 12px; }
@@ -101,6 +102,7 @@
         .product-nav-btn.next { right: -15px; }
         .empty-msg { text-align: center; padding: 40px; color: #888; font-size: 1.2rem; }
 
+        /* ===== CARRINHO E MODAIS (Mantidos) ===== */
         .cart-float { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; background-color: var(--primary-green); border-radius: 50%; display: none; justify-content: center; align-items: center; text-decoration: none; z-index: 998; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease; }
         .cart-float.show { display: flex; }
         .cart-float:hover { transform: scale(1.1); }
@@ -159,10 +161,11 @@
         .footer-bottom { max-width: 1300px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.9rem; }
         .footer-bottom strong { color: white; }
 
+        /* ===== RESPONSIVIDADE DOS CARROSSÉIS ===== */
         @media (max-width: 1400px) { .product-carousel-track .product-card { min-width: calc(25% - 12px); } }
         @media (max-width: 1100px) { .product-carousel-track .product-card { min-width: calc(33.33% - 12px); } }
         @media (max-width: 800px) { .product-carousel-track .product-card { min-width: calc(50% - 12px); } }
-        @media (max-width: 600px) { .product-carousel-track .product-card { min-width: calc(100% - 12px); } }
+        @media (max-width: 600px) { .product-carousel-track .product-card { min-width: calc(50% - 12px); } }
         
         @media (max-width: 1024px) {
             .main-header { flex-wrap: nowrap; padding: 10px 15px; gap: 10px; }
@@ -215,10 +218,6 @@
             <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
             Categorias
         </button>
-        <button onclick="toggleFilterSidebar()">
-            <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm2 5h12v2H6v-2zm2 5h8v2H8v-2z"/></svg>
-            Filtrar
-        </button>
         <div class="links-desktop">
             <a href="minha-conta.html" style="font-weight: 500; font-size: 0.95rem; color: var(--primary-green);">Minha Conta</a>
             <a href="laminas.html" style="font-weight: 500; font-size: 0.95rem; color: var(--primary-green);">Ofertas da Semana</a>
@@ -241,31 +240,6 @@
             <li><a href="categorias.html?categoria=cosmeticos">Cosméticos</a></li>
             <li><a href="categorias.html?categoria=utilitarios">Utilitários</a></li>
         </ul>
-    </div>
-
-    <div class="sidebar-overlay" id="filterOverlay" onclick="toggleFilterSidebar()"></div>
-    <div class="filter-sidebar" id="filterSidebar">
-        <h3>Filtrar Produtos <button onclick="toggleFilterSidebar()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;float:right;">✕</button></h3>
-        <div class="filter-section">
-            <h4>Ordenar</h4>
-            <div class="filter-options">
-                <label><input type="radio" name="ordenacao" value="a-z" onchange="applyFilters()"> A → Z</label>
-                <label><input type="radio" name="ordenacao" value="z-a" onchange="applyFilters()"> Z → A</label>
-                <label><input type="radio" name="ordenacao" value="menor-preco" onchange="applyFilters()"> Menor preço</label>
-                <label><input type="radio" name="ordenacao" value="maior-preco" onchange="applyFilters()"> Maior preço</label>
-            </div>
-        </div>
-        <div class="filter-section">
-            <h4>Preço</h4>
-            <div class="price-range-container">
-                <input type="number" id="filter-min" placeholder="Mín" min="0" onchange="applyFilters()">
-                <input type="number" id="filter-max" placeholder="Máx" min="0" onchange="applyFilters()">
-            </div>
-        </div>
-        <div class="filter-actions">
-            <button class="btn-clear" onclick="clearFilters()">Limpar</button>
-            <button class="btn-apply" onclick="toggleFilterSidebar(); applyFilters();">Aplicar</button>
-        </div>
     </div>
 
     <section class="banner-area">
@@ -295,6 +269,7 @@
         <div id="empty-msg" class="empty-msg" style="display:none;">Nenhum produto encontrado.</div>
     </div>
 
+    <!-- CARRINHO E WHATSAPP FLUTUANTES -->
     <div class="cart-float" id="cartFloat" onclick="toggleCartModal()">
         <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9 2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9 2-2-2zM7.11 6.8l.52 1.2h11.7c.78 0 1.44-.5 1.69-1.2l2.98-5.88c.1-.2.1-.4.1-.52 0-.8-.7-1.4-1.4-1.4H5.89l-.98-1.96C4.85.5 4.45 0 3.8 0H1v2h2l3.2 6.8L4.39 14.8C4.19 15.2 4 15.6 4 16c0 1.1.9 2 2 2h14v-2H6l.8-1.6h9.71l2.45-4.4H7.11z"/></svg>
         <span class="cart-badge" id="cartBadge">0</span>
@@ -338,15 +313,10 @@
     </footer>
 
     <script>
-        // =========================================
-        //  CONFIGURAÇÃO DO SUPABASE
-        // =========================================
         var SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         var SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
-
         let cart = [];
         let allProducts = [];
-        // Objeto para guardar a posição de cada carrossel individualmente
         let carouselPositions = {};
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -358,48 +328,18 @@
         });
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }
-        function toggleFilterSidebar() { document.getElementById('filterSidebar').classList.toggle('open'); document.getElementById('filterOverlay').classList.toggle('open'); }
 
-        // =========================================
-        //  LÓGICA DE NAVEGAÇÃO E FILTRO (Mantida)
-        // =========================================
         function filterCategory(category) {
             window.location.href = `categorias.html?categoria=${category}`;
         }
 
-        function applyFilters() {
-            // Redireciona para a página de prateleira com os filtros aplicados
-            const ordenacao = document.querySelector('input[name="ordenacao"]:checked');
-            const minPrice = document.getElementById('filter-min').value;
-            const maxPrice = document.getElementById('filter-max').value;
-            
-            let url = 'categorias.html?categoria=todos';
-            if (ordenacao) url += `&ordenacao=${ordenacao.value}`;
-            if (minPrice) url += `&min=${minPrice}`;
-            if (maxPrice) url += `&max=${maxPrice}`;
-            
-            window.location.href = url;
-        }
-
-        function clearFilters() {
-            document.querySelectorAll('input[name="ordenacao"]').forEach(el => el.checked = false);
-            document.getElementById('filter-min').value = '';
-            document.getElementById('filter-max').value = '';
-            applyFilters();
-        }
-
-        // =========================================
-        //  FUNÇÃO PARA CRIAR CARDS DE PRODUTOS
-        // =========================================
         function criarProductCard(item) {
             let precoHTML = '';
             let descontoAtivo = null;
-            
             if (item.descontos && item.descontos.length > 0) {
                 const desc = item.descontos[0];
                 if (desc.ativo === 'sim') descontoAtivo = desc;
             }
-
             if (descontoAtivo) {
                 const descontoPercentual = Math.round((1 - (descontoAtivo.preco_promocional / item.preco)) * 100);
                 precoHTML = `
@@ -410,7 +350,6 @@
             } else {
                 precoHTML = `<div class="price-main">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>`;
             }
-
             return `
                 <div class="product-card">
                     <div class="product-img-wrap"><img src="${item.imagem || 'https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'}" alt="${item.nome}" onerror="this.src='https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'"></div>
@@ -422,53 +361,33 @@
             `;
         }
 
-        // =========================================
-        //  FUNÇÃO PARA RENDERIZAR UM CARROSSEL
-        // =========================================
         function renderCarousel(trackId, products, maxItems) {
             const track = document.getElementById(trackId);
             if (!track) return;
-            
-            // Limita o número de itens
             const itemsToShow = products.slice(0, maxItems || 10);
-            
             if (itemsToShow.length === 0) {
                 track.innerHTML = '<p class="empty-msg" style="padding:20px;">Nenhum produto nesta categoria.</p>';
                 return;
             }
-
             let html = '';
-            itemsToShow.forEach(item => {
-                html += criarProductCard(item);
-            });
+            itemsToShow.forEach(item => { html += criarProductCard(item); });
             track.innerHTML = html;
-            
-            // Reseta a posição do carrossel
-            const wrapper = track.parentElement;
             const key = trackId.replace('track-', '');
             carouselPositions[key] = 0;
             updateCarouselPosition(trackId);
         }
 
-        // =========================================
-        //  MOVIMENTAÇÃO DO CARROSSEL
-        // =========================================
         function moveCarousel(key, direction) {
             const track = document.getElementById(`track-${key}`);
             if (!track) return;
-            
             const card = track.querySelector('.product-card');
             if (!card) return;
-            
             const step = card.offsetWidth + 15;
             const maxTranslate = track.scrollWidth - track.parentElement.offsetWidth;
-            
             if (!carouselPositions[key]) carouselPositions[key] = 0;
             carouselPositions[key] += direction * step;
-            
             if (carouselPositions[key] < 0) carouselPositions[key] = 0;
             if (carouselPositions[key] > maxTranslate) carouselPositions[key] = maxTranslate;
-            
             track.style.transform = `translateX(-${carouselPositions[key]}px)`;
         }
 
@@ -480,9 +399,6 @@
             track.style.transform = `translateX(-${currentPos}px)`;
         }
 
-        // =========================================
-        //  FUNÇÕES DE CARRINHO E PEDIDO (Mantidas)
-        // =========================================
         function mascaraTelefone(input) {
             let valor = input.value.replace(/\D/g, '');
             if (valor.length > 11) valor = valor.slice(0, 11);
@@ -596,7 +512,6 @@
                 status: 'Novo', 
                 criado_em: new Date().toISOString() 
             };
-            
             try {
                 await salvarPedidoSupabase(pedido);
                 alert('Pedido enviado para a farmácia com sucesso!');
@@ -604,44 +519,30 @@
             } catch (error) { alert('Erro ao enviar o pedido: ' + error.message); console.error(error); }
         }
 
-        // =========================================
-        //  FUNÇÃO PRINCIPAL: CARREGAR DADOS E MONTAR A PÁGINA
-        // =========================================
         async function carregarProdutos() {
             try {
                 const resposta = await fetch(`${SUPABASE_URL}/rest/v1/produtos?select=*,descontos(*)`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });
-                
                 if (!resposta.ok) throw new Error(`Erro HTTP ${resposta.status}`);
                 const data = await resposta.json();
-                
                 if (!data || data.length === 0) { document.getElementById('empty-msg').style.display = 'block'; return; }
-                
                 allProducts = data.filter(item => {
                     const visivel = item.visivel ? item.visivel.toString().toLowerCase() : 'sim';
                     return visivel !== 'nao' && visivel !== '0';
                 });
 
-                // 1. Identificar produtos em desconto (primeiro carrossel)
-                const produtosDesconto = allProducts.filter(p => 
-                    p.descontos && p.descontos.length > 0 && p.descontos[0].ativo === 'sim'
-                );
+                const produtosDesconto = allProducts.filter(p => p.descontos && p.descontos.length > 0 && p.descontos[0].ativo === 'sim');
                 renderCarousel('track-descontos', produtosDesconto, 10);
 
-                // 2. Agrupar os outros produtos por categoria
                 const categorias = [...new Set(allProducts.map(p => p.categoria))].filter(c => c);
-
                 const container = document.getElementById('categorias-container');
                 let htmlCategorias = '';
-
                 categorias.forEach(cat => {
                     const produtosCat = allProducts.filter(p => p.categoria === cat);
                     if (produtosCat.length === 0) return;
-
                     const catNome = cat.charAt(0).toUpperCase() + cat.slice(1);
                     const trackId = `track-${cat}`;
-
                     htmlCategorias += `
                         <div class="category-section">
                             <div class="category-header">
@@ -656,17 +557,12 @@
                         </div>
                     `;
                 });
-
                 container.innerHTML = htmlCategorias;
-
-                // 3. Renderizar os produtos em cada carrossel de categoria
                 categorias.forEach(cat => {
                     const produtosCat = allProducts.filter(p => p.categoria === cat);
                     renderCarousel(`track-${cat}`, produtosCat, 10);
                 });
-
                 document.getElementById('empty-msg').style.display = 'none';
-
             } catch (erro) { 
                 console.error("Erro ao carregar produtos:", erro); 
                 document.getElementById('empty-msg').style.display = 'block'; 
@@ -676,11 +572,8 @@
 
         function performSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
-            if(query === '') {
-                window.location.reload();
-            } else {
-                window.location.href = `categorias.html?busca=${encodeURIComponent(query)}`;
-            }
+            if(query === '') { window.location.reload(); } 
+            else { window.location.href = `categorias.html?busca=${encodeURIComponent(query)}`; }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -706,7 +599,6 @@
             nextBtn.addEventListener('click', function(e) { e.stopPropagation(); goToSlide(currentSlide + 1); startAutoSlide(); });
             dots.forEach((dot, index) => { dot.addEventListener('click', function(e) { e.stopPropagation(); goToSlide(index); startAutoSlide(); }); });
             startAutoSlide();
-            
             const header = document.getElementById('mainHeader');
             window.addEventListener('scroll', function() {
                 let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -714,7 +606,6 @@
                 else header.classList.remove('shrink');
             });
         });
-        
         carregarProdutos();
     </script>
 </body>

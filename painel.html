@@ -81,7 +81,7 @@
         <input type="email" id="emailInput" placeholder="E-mail do atendente" value="">
         <input type="password" id="passwordInput" placeholder="Senha" value="">
         <button class="btn-login" onclick="fazerLogin()">Entrar no Painel</button>
-        <p style="text-align:center; margin-top: 15px; font-size: 0.8rem; color: #888;">Use o e-mail e senha cadastrados no Supabase.</p>
+        <p style="text-align:center; margin-top: 15px; font-size: 0.8rem; color: #888;">Digite seu e-mail e senha cadastrados.</p>
     </div>
 
     <div id="dashboard-container">
@@ -113,13 +113,10 @@
         // =========================================
         (async function verificarLogin() {
             try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                if (error) throw error;
-
-                if (session) {
-                    currentUser = session.user;
+                const userString = localStorage.getItem('funcionario_logado');
+                if (userString) {
+                    currentUser = JSON.parse(userString);
                     entrarPainel(currentUser);
-                    return;
                 }
             } catch (err) {
                 console.error("Erro de sessão:", err);
@@ -133,21 +130,26 @@
             if(!email || !password) { alert('Preencha o e-mail e a senha!'); return; }
 
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password,
-                });
+                // Chama a função SQL que criamos para verificar e-mail e senha
+                const { data, error } = await supabase
+                    .rpc('login_funcionario', {
+                        email_attempt: email,
+                        senha_attempt: password
+                    });
 
                 if (error) {
-                    alert('Erro no login: ' + error.message);
+                    alert('Erro no banco de dados: ' + error.message);
                     return;
                 }
 
-                if (data.user) {
-                    currentUser = data.user;
-                    entrarPainel(currentUser);
+                if (data && data.length > 0) {
+                    // Login bem sucedido!
+                    const user = data[0];
+                    localStorage.setItem('funcionario_logado', JSON.stringify(user));
+                    currentUser = user;
+                    entrarPainel(user);
                 } else {
-                    alert('Usuário não encontrado.');
+                    alert('E-mail ou senha incorretos.');
                 }
 
             } catch (error) {
@@ -156,17 +158,14 @@
         }
 
         function entrarPainel(user) {
-            document.getElementById('nomeUsuarioDisplay').innerText = user.email;
+            document.getElementById('nomeUsuarioDisplay').innerText = user.nome || user.email;
             document.getElementById('login-container').style.display = 'none';
             document.getElementById('dashboard-container').style.display = 'block';
             carregarPedidos();
         }
 
         async function fazerLogout() {
-            localStorage.removeItem('atendente_logado');
-            const { error } = await supabase.auth.signOut();
-            if (error) console.error("Erro ao deslogar:", error);
-            
+            localStorage.removeItem('funcionario_logado');
             document.getElementById('dashboard-container').style.display = 'none';
             document.getElementById('login-container').style.display = 'block';
             document.getElementById('emailInput').value = '';
@@ -176,7 +175,6 @@
         async function carregarPedidos() {
             const lista = document.getElementById('listaPedidos');
             try {
-                // Busca os pedidos ordenados pelo mais recente
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/pedidos?select=*&order=criado_em.desc`, {
                     headers: { 'apikey': SUPABASE_KEY }
                 });

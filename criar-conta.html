@@ -6,13 +6,14 @@
     <title>Criar Conta - Farmácia</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- ⚡ Importação da biblioteca do Supabase -->
+    <!-- ⚡ Importação obrigatória do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
+        /* Tela de Cadastro */
         .login-card {
             background: #ffffff;
             padding: 40px 30px;
@@ -21,24 +22,52 @@
             width: 100%;
             max-width: 420px;
             border: 1px solid #f0f0f0;
+            display: none; /* Escondido por padrão */
         }
+        .login-card.active { display: block; }
 
-        .login-card h1 {
+        /* Tela de Sucesso (após criar a conta) */
+        .success-card {
+            background: #ffffff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid #f0f0f0;
             text-align: center;
-            color: #1b5e20;
-            font-size: 1.8rem;
+            display: none;
+        }
+        .success-card.active { display: block; }
+        .success-card h2 { color: #1b5e20; margin-bottom: 15px; }
+        .success-card p { color: #555; margin-bottom: 10px; font-size: 0.95rem; line-height: 1.5; }
+        .success-card .email-destaque {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 15px;
+            border-radius: 8px;
+            color: #166534;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin: 20px 0;
+            word-break: break-all;
         }
-
-        .login-card h2 {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 20px;
-            font-weight: 600;
+        .btn-ok {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #1b5e20;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+            margin-top: 10px;
         }
+        .btn-ok:hover { background: #388E3C; }
 
+        /* Formulário */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 0.9rem; color: #555; margin-bottom: 5px; }
         .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; outline: none; transition: border 0.2s; }
@@ -69,7 +98,8 @@
 </head>
 <body>
 
-    <div class="login-card">
+    <!-- TELA DE CADASTRO -->
+    <div class="login-card active" id="formCard">
         <h1>Bem-vindo</h1>
         <h2>Crie sua conta</h2>
 
@@ -98,6 +128,18 @@
         <button class="btn-primary" onclick="criarConta()">Criar sua conta</button>
         
         <a href="login.html" class="btn-back">Já tenho uma conta, fazer login</a>
+    </div>
+
+    <!-- TELA DE SUCESSO (VERIFIQUE O E-MAIL) -->
+    <div class="success-card" id="successCard">
+        <h2>📧 Verifique seu e-mail</h2>
+        <p>Enviamos um link de confirmação para o e-mail abaixo. Clique no link para ativar sua conta e poder fazer o login.</p>
+        
+        <div class="email-destaque" id="emailDisplay">email@exemplo.com</div>
+        
+        <p style="font-size: 0.85rem; color: #888;">Após confirmar, volte aqui e faça o login.</p>
+        
+        <a href="login.html" class="btn-ok">Ir para o Login</a>
     </div>
 
     <script>
@@ -135,10 +177,30 @@
             }
 
             try {
-                // 1. Cria o usuário no Auth do Supabase
+                // =========================================
+                //  VERIFICAÇÃO DE E-MAIL DUPLICADO
+                // =========================================
+                const { error: checkError } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin
+                });
+
+                // Se o erro for "User not found", significa que o e-mail está LIVRE.
+                if (checkError && checkError.message !== "User not found") {
+                    throw new Error("Este e-mail já está cadastrado em outra conta. Tente fazer login ou recuperar sua senha.");
+                }
+
+                // =========================================
+                //  CRIAÇÃO DA CONTA
+                // =========================================
                 const { data, error } = await supabase.auth.signUp({
                     email: email,
                     password: senha,
+                    options: {
+                        data: { 
+                            nome_completo: nome, 
+                            telefone: telefone 
+                        }
+                    }
                 });
 
                 if (error) {
@@ -149,9 +211,9 @@
                     throw new Error('Erro desconhecido ao criar usuário.');
                 }
 
-                // 2. Salva os dados adicionais na tabela 'clientes'
-                // Nota: Usamos 'Authorization: Bearer SUPABASE_KEY' porque isso é um INSERT público
-                // Mas na prática, podemos usar a API REST com a chave anônima para facilitar.
+                // =========================================
+                //  SALVAR NA TABELA CLIENTES
+                // =========================================
                 const perfilResponse = await fetch(`${SUPABASE_URL}/rest/v1/clientes`, {
                     method: 'POST',
                     headers: {
@@ -169,11 +231,15 @@
 
                 if (!perfilResponse.ok) {
                     console.error('Erro ao salvar perfil.', await perfilResponse.text());
-                    alert('Conta criada, mas houve um erro ao salvar seus dados. Tente editar depois em "Meus Dados".');
-                } else {
-                    alert('Conta criada com sucesso! Faça o login.');
-                    window.location.href = 'login.html';
+                    alert('Conta criada, mas houve um erro ao salvar seus dados adicionais. Entre em contato com o suporte.');
                 }
+
+                // =========================================
+                //  MOSTRAR TELA DE SUCESSO
+                // =========================================
+                document.getElementById('formCard').classList.remove('active');
+                document.getElementById('successCard').classList.add('active');
+                document.getElementById('emailDisplay').innerText = email;
 
             } catch (error) {
                 alert('Erro: ' + error.message);

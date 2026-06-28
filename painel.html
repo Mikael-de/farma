@@ -10,7 +10,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg-panel); padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
         
-        /* ======== TELA DE LOGIN ======== */
         #login-container {
             width: 100%; max-width: 400px;
             margin-top: 50px;
@@ -21,33 +20,12 @@
             border: 1px solid #eee;
         }
         #login-container h2 { color: var(--primary-green); text-align: center; margin-bottom: 20px; }
-        #login-container input {
-            width: 100%; padding: 12px; margin-bottom: 15px;
-            border: 1px solid #ccc; border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-        }
-        .btn-login {
-            width: 100%; padding: 12px; background: var(--primary-green);
-            color: white; border: none; border-radius: 8px; cursor: pointer;
-            font-weight: 700; font-size: 1rem; transition: 0.2s;
-        }
+        #login-container input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: 'Poppins', sans-serif; }
+        .btn-login { width: 100%; padding: 12px; background: var(--primary-green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: 0.2s; }
         .btn-login:hover { background: var(--accent-green); }
 
-        /* ======== DASHBOARD (SÓ APARECE SE LOGADO) ======== */
         #dashboard-container { display: none; width: 100%; max-width: 1300px; }
-        
-        .header-panel {
-            background: var(--primary-green);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .header-panel { background: var(--primary-green); color: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         .header-panel h1 { font-size: 1.8rem; }
         .header-panel p { font-size: 0.9rem; opacity: 0.8; }
         .btn-limpar { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
@@ -126,9 +104,6 @@
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
         
-        // =========================================
-        //  SISTEMA DE LOGIN COM "LEMBRAR DE MIM"
-        // =========================================
         document.addEventListener('DOMContentLoaded', function() {
             const savedUser = localStorage.getItem('atendente_logado');
             if (savedUser) {
@@ -197,9 +172,6 @@
             document.getElementById('passwordInput').value = '';
         }
 
-        // =========================================
-        //  SISTEMA DE PEDIDOS
-        // =========================================
         let userLogado = null;
 
         async function carregarPedidos() {

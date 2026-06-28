@@ -42,7 +42,6 @@
         .status-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; flex: 1; }
         .status-dot { width: 14px; height: 14px; border-radius: 50%; background: #eee; border: 2px solid white; box-shadow: 0 0 0 2px #eee; }
         .status-label { font-size: 0.6rem; text-align: center; margin-top: 5px; color: #bbb; font-weight: 600; }
-        
         .status-step.done .status-dot { background: #28a745; box-shadow: 0 0 0 2px #28a745; }
         .status-step.done .status-label { color: #28a745; }
         .status-step.active .status-dot { background: #0d6efd; box-shadow: 0 0 0 2px #0d6efd; animation: pulse-dot 1.5s infinite; }
@@ -87,18 +86,16 @@
     </div>
 
     <div class="container" id="appContainer">
-        <!-- Conteúdo será renderizado aqui pelo JavaScript -->
+        <!-- Conteúdo renderizado aqui -->
     </div>
 
     <script>
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
-
         let currentUser = null;
 
         // =========================================
-        //  CAPTURADOR DE TOKEN DO GOOGLE (MUITO IMPORTANTE!)
-        //  Roda antes de qualquer carregamento de página
+        //  CAPTURADOR DE TOKEN DO GOOGLE (AQUI VAI FUNCIONAR!)
         // =========================================
         (function() {
             const hash = window.location.hash;
@@ -114,7 +111,9 @@
                     .then(data => {
                         if (data.id) {
                             localStorage.setItem('cliente_logado', JSON.stringify(data));
+                            // Limpa a URL suja
                             window.history.replaceState({}, document.title, window.location.pathname);
+                            // Recarrega para mostrar o painel
                             location.reload(); 
                         }
                     })

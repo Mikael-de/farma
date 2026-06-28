@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farmácia - Encarte Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
     <style>
         :root { --bg-topbar: #e8f5e9; --primary-green: #1b5e20; --primary-dark-green: #143c16; --accent-green: #388E3C; --text-dark: #333333; --text-light: #666666; --whatsapp-green: #25D366; --border-light: #c8e6c9; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -352,9 +353,11 @@
     </footer>
 
     <script>
+        // =========================================
+        //  CONFIGURAÇÃO DO SUPABASE
+        // =========================================
         var SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         var SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
-        var SHEETDB_API_URL = 'https://sheetdb.io/api/v1/munh3scrx4jbl';
 
         let cart = [];
         let allProducts = [];
@@ -413,21 +416,38 @@
             emptyMsg.style.display = 'none';
             let html = '';
             products.forEach(item => {
+                // Verifica se existe um desconto ativo para este produto
                 let precoHTML = '';
-                if (item.promocao === 'sim' && item.precoAntigo !== '') {
+                let descontoAtivo = null;
+                
+                if (item.descontos && item.descontos.length > 0) {
+                    // Pega o primeiro desconto ativo da lista
+                    const desc = item.descontos[0];
+                    if (desc.ativo === 'sim') {
+                        descontoAtivo = desc;
+                    }
+                }
+
+                if (descontoAtivo) {
+                    // Exibe o preço promocional
+                    const descontoPercentual = Math.round((1 - (descontoAtivo.preco_promocional / item.preco)) * 100);
                     precoHTML = `
-                        <div class="tag-oferta">-${Math.round((1 - item.price / item.precoAntigo) * 100)}%</div>
-                        <div class="price-old">R$ ${item.precoAntigoDisplay}</div>
-                        <div class="price-main promocional">R$ ${item.precoDisplay}</div>
+                        <div class="tag-oferta">-${descontoPercentual}%</div>
+                        <div class="price-old">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>
+                        <div class="price-main promocional">R$ ${descontoAtivo.preco_promocional.toFixed(2).replace('.', ',')}</div>
                     `;
-                } else { precoHTML = `<div class="price-main">R$ ${item.precoDisplay}</div>`; }
+                } else {
+                    // Exibe o preço normal
+                    precoHTML = `<div class="price-main">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>`;
+                }
+
                 html += `
                     <div class="product-card">
-                        <div class="product-img-wrap"><img src="${item.imagem}" alt="${item.nome}" onerror="this.src='https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'"></div>
+                        <div class="product-img-wrap"><img src="${item.imagem || 'https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'}" alt="${item.nome}" onerror="this.src='https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem'"></div>
                         <div class="product-title">${item.nome}</div>
-                        <div class="product-desc">${item.desc}</div>
+                        <div class="product-desc">${item.descricao || ''}</div>
                         <div class="price-area">${precoHTML}</div>
-                        <button class="btn-buy" onclick="adicionarAoCarrinho('${item.nome}', 'R$ ${item.precoDisplay}', '${item.codigo}')">Comprar</button>
+                        <button class="btn-buy" onclick="adicionarAoCarrinho('${item.nome}', ${descontoAtivo ? descontoAtivo.preco_promocional : item.preco}, '${item.codigo}')">Comprar</button>
                     </div>
                 `;
             });
@@ -468,8 +488,7 @@
         }
 
         function adicionarAoCarrinho(productName, productPrice, productCode) {
-            const rawPrice = productPrice.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
-            const priceFloat = parseFloat(rawPrice);
+            const priceFloat = parseFloat(productPrice);
             if (isNaN(priceFloat)) return;
             const existingItem = cart.find(item => item.name === productName);
             if (existingItem) { existingItem.quantity += 1; } 
@@ -581,29 +600,19 @@
 
         async function carregarProdutos() {
             try {
-                const resposta = await fetch(SHEETDB_API_URL);
+                // 🔥 Busca os produtos e os descontos ativos relacionados
+                const resposta = await fetch(`${SUPABASE_URL}/rest/v1/produtos?select=*,descontos(*)`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                
                 if (!resposta.ok) throw new Error(`Erro HTTP ${resposta.status}`);
                 const data = await resposta.json();
+                
                 if (!data || data.length === 0) { document.getElementById('empty-msg').style.display = 'block'; return; }
                 
-                allProducts = [];
-                data.forEach(item => {
-                    const visivel = item.Visivel ? item.Visivel.toString().toLowerCase() : 'sim';
-                    if (visivel === 'nao' || visivel === '0') { return; }
-                    const priceRaw = parseFloat((item.Preco || '0').replace(',', '.').replace(/[^0-9.]/g, ''));
-                    const priceOldRaw = parseFloat((item.PrecoAntigo || '').replace(',', '.').replace(/[^0-9.]/g, ''));
-                    allProducts.push({
-                        nome: item.Nome || 'Sem nome',
-                        desc: item.Descricao || '',
-                        precoDisplay: item.Preco || '0,00',
-                        price: isNaN(priceRaw) ? 0 : priceRaw,
-                        precoAntigoDisplay: item.PrecoAntigo || '',
-                        precoAntigo: isNaN(priceOldRaw) ? 0 : priceOldRaw,
-                        promocao: item.Promocao ? item.Promocao.toString().toLowerCase() : 'nao',
-                        imagem: item.Imagem || 'https://placehold.co/200x200/cccccc/ffffff?text=Sem+Imagem',
-                        categoria: item.Categoria ? item.Categoria.toLowerCase() : 'medicamentos',
-                        codigo: item.Codigo ? item.Codigo.toString() : 'SEM CÓDIGO'
-                    });
+                allProducts = data.filter(item => {
+                    const visivel = item.visivel ? item.visivel.toString().toLowerCase() : 'sim';
+                    return visivel !== 'nao' && visivel !== '0';
                 });
                 
                 filteredProducts = [...allProducts];

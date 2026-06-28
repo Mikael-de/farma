@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Conta - Farmácia</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
     <style>
         :root { --primary-green: #1b5e20; --accent-green: #388E3C; --bg-panel: #f0f2f5; --bg-topbar: #e8f5e9; --whatsapp-green: #25D366; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -86,58 +87,71 @@
     </div>
 
     <div class="container" id="appContainer">
-        <!-- Conteúdo renderizado aqui -->
+        <div style="text-align:center; padding:40px; color:#888; font-size:1.2rem;">Carregando sua conta...</div>
     </div>
 
     <script>
+        // =========================================
+        //  CONFIGURAÇÃO DO SUPABASE
+        // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         let currentUser = null;
 
         // =========================================
-        //  CAPTURADOR DE TOKEN DO GOOGLE (SEM RECARREGAR A PÁGINA!)
+        //  SISTEMA DE LOGIN A PROVA DE FALHAS
+        //  Roda imediatamente ao abrir a página
         // =========================================
-        (function() {
-            const hash = window.location.hash;
-            if (hash && hash.includes('access_token')) {
-                const params = new URLSearchParams(hash.substring(1));
-                const accessToken = params.get('access_token');
+        (async function verificarLogin() {
+            try {
+                // 1. Tenta pegar o usuário atual via sessão do Supabase (A forma mais segura)
+                const { data: { session }, error } = await supabase.auth.getSession();
 
-                if (accessToken) {
-                    fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                        headers: { 'Authorization': `Bearer ${accessToken}` }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.id) {
-                            // Salva o usuário e limpa a URL suja
-                            localStorage.setItem('cliente_logado', JSON.stringify(data));
-                            window.history.replaceState({}, document.title, window.location.pathname);
-                            
-                            // DEFINE O USUÁRIO AQUI E FORÇA O CARREGAMENTO DO PAINEL
-                            currentUser = data;
-                            carregarDashboard(data.id);
-                        }
-                    })
-                    .catch(err => console.error("Erro ao buscar usuário:", err));
-                    return; // Para a execução aqui
-                }
-            }
+                if (error) throw error;
 
-            // Se não tiver token na URL, verifica o localStorage
-            document.addEventListener('DOMContentLoaded', function() {
-                const userString = localStorage.getItem('cliente_logado');
-                if(!userString) {
-                    window.location.href = 'login.html'; 
+                if (session) {
+                    // Se o Supabase reconheceu a sessão
+                    currentUser = session.user;
+                    localStorage.setItem('cliente_logado', JSON.stringify(currentUser));
+                    
+                    // Remove o # da URL para não ficar feio
+                    if (window.location.hash) {
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+
+                    // Carrega o painel
+                    carregarDashboard(currentUser.id);
                     return;
                 }
-                currentUser = JSON.parse(userString);
-                carregarDashboard(currentUser.id);
-            });
+
+                // 2. Se o Supabase não reconheceu, tenta o localStorage (para casos de recarga manual)
+                const userString = localStorage.getItem('cliente_logado');
+                if (userString) {
+                    currentUser = JSON.parse(userString);
+                    
+                    // Remove o # da URL para não ficar feio
+                    if (window.location.hash) {
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+
+                    carregarDashboard(currentUser.id);
+                    return;
+                }
+
+                // 3. Se nada funcionar, manda pro login
+                window.location.href = 'login.html';
+
+            } catch (err) {
+                console.error("Erro crítico de autenticação:", err);
+                window.location.href = 'login.html';
+            }
         })();
 
         function logout() {
             localStorage.removeItem('cliente_logado');
+            supabase.auth.signOut();
             window.location.href = 'index.html';
         }
 

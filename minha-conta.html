@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Conta - Farmácia</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- ⚡ IMPORTAÇÃO DA BIBLIOTECA DO SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+
     <style>
         :root { --primary-green: #1b5e20; --accent-green: #388E3C; --bg-panel: #f0f2f5; --bg-topbar: #e8f5e9; --whatsapp-green: #25D366; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -91,15 +94,22 @@
     </div>
 
     <script>
+        // =========================================
+        //  CONFIGURAÇÃO DO SUPABASE
+        // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let currentUser = null;
 
+        // =========================================
+        //  SISTEMA DE LOGIN A PROVA DE FALHAS
+        // =========================================
         (async function verificarLogin() {
             try {
                 const { data: { session }, error } = await supabase.auth.getSession();
+
                 if (error) throw error;
 
                 if (session) {
@@ -130,36 +140,35 @@
             }
         })();
 
+        // =========================================
+        //  FUNÇÕES DE NAVEGAÇÃO E LOGOUT
+        // =========================================
         function voltarLoja() {
             window.location.replace('index.html');
         }
 
-        // =========================================
-        //  FUNÇÃO DE LOGOUT (VERSÃO "BOMBA" QUE FUNCIONA NO PC)
-        // =========================================
+        // FUNÇÃO DE LOGOUT CORRIGIDA COM ASYNC/AWAIT E FORÇA BRUTA
         async function logout() {
             try {
                 // 1. Limpa tudo que for possível no navegador
                 localStorage.removeItem('cliente_logado');
                 sessionStorage.clear();
                 
-                // 2. Mata a sessão no servidor do Supabase
+                // 2. Mata a sessão no servidor do Supabase e espera terminar
                 await supabase.auth.signOut();
                 
-                // 3. Força o redirecionamento usando o comando mais bruto possível
-                document.location = 'index.html';
-                
-                // 4. (Garantia extra) Se o navegador travar, espera 50ms e tenta de novo
-                setTimeout(function() {
-                    document.location = 'index.html';
-                }, 50);
-
+                // 3. Redireciona para a loja (Isso limpa o cache da página atual)
+                window.location.href = 'index.html';
             } catch (error) {
                 console.error("Erro ao deslogar:", error);
-                document.location = 'index.html';
+                // Se der erro, força a saída mesmo assim
+                window.location.href = 'index.html';
             }
         }
 
+        // =========================================
+        //  FUNÇÕES DO PAINEL
+        // =========================================
         async function carregarDashboard(userId) {
             const container = document.getElementById('appContainer');
             try {

@@ -365,14 +365,18 @@
         let currentProductSlide = 0;
 
         // =========================================
-        //  VERIFICA SE O USUÁRIO JÁ ESTÁ LOGADO (Auth UI)
-        //  Se estiver, redireciona para a área da conta
+        //  VERIFICA SE HÁ TOKEN NA URL (APENAS PARA ACABOU DE LOGAR)
         // =========================================
         document.addEventListener('DOMContentLoaded', function() {
-            const userString = localStorage.getItem('cliente_logado');
-            if (userString) {
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token')) {
+                // Se chegou aqui com token, redireciona para a conta
                 window.location.href = 'minha-conta.html';
+                return;
             }
+            
+            // Se NÃO tiver token na URL, NÃO FAZ NADA.
+            // O usuário pode ficar na loja. O botão "Minha Conta" vai levá-lo ao painel.
         });
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }

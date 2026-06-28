@@ -102,7 +102,7 @@
         .product-nav-btn.next { right: -15px; }
         .empty-msg { text-align: center; padding: 40px; color: #888; font-size: 1.2rem; }
 
-        /* ===== CARRINHO E MODAIS (Mantidos) ===== */
+        /* ===== CARRINHO E MODAIS ===== */
         .cart-float { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; background-color: var(--primary-green); border-radius: 50%; display: none; justify-content: center; align-items: center; text-decoration: none; z-index: 998; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease; }
         .cart-float.show { display: flex; }
         .cart-float:hover { transform: scale(1.1); }
@@ -161,11 +161,20 @@
         .footer-bottom { max-width: 1300px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.9rem; }
         .footer-bottom strong { color: white; }
 
-        /* ===== RESPONSIVIDADE DOS CARROSSÉIS ===== */
+        /* ===== RESPONSIVIDADE DOS CARROSSÉIS (CORRIGIDO) ===== */
         @media (max-width: 1400px) { .product-carousel-track .product-card { min-width: calc(25% - 12px); } }
         @media (max-width: 1100px) { .product-carousel-track .product-card { min-width: calc(33.33% - 12px); } }
         @media (max-width: 800px) { .product-carousel-track .product-card { min-width: calc(50% - 12px); } }
-        @media (max-width: 600px) { .product-carousel-track .product-card { min-width: calc(50% - 12px); } }
+        /* No celular, garante que 2 produtos caibam na tela sem estourar */
+        @media (max-width: 600px) {
+            .product-carousel-track .product-card { min-width: calc(50% - 12px); }
+            .product-carousel-track { gap: 10px; }
+        }
+        @media (max-width: 400px) {
+            .product-carousel-track .product-card { min-width: calc(50% - 10px); padding: 15px 10px; }
+            .product-title { font-size: 0.9rem; }
+            .price-main { font-size: 1.1rem; }
+        }
         
         @media (max-width: 1024px) {
             .main-header { flex-wrap: nowrap; padding: 10px 15px; gap: 10px; }
@@ -255,7 +264,6 @@
         <div class="banner-text-content"><h2>OFERTAS DE INVERNO</h2><p>Validade 01/07 a 15/07</p></div>
     </section>
 
-    <!-- CONTAINER ONDE OS CARROSSÉIS SERÃO INSERIDOS -->
     <div class="container" id="mainContainer">
         <div id="carrossel-descontos" style="margin-bottom: 40px;">
             <div class="category-header"><h2>🔥 Ofertas Imperdíveis</h2></div>
@@ -269,7 +277,6 @@
         <div id="empty-msg" class="empty-msg" style="display:none;">Nenhum produto encontrado.</div>
     </div>
 
-    <!-- CARRINHO E WHATSAPP FLUTUANTES -->
     <div class="cart-float" id="cartFloat" onclick="toggleCartModal()">
         <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9 2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9 2-2-2zM7.11 6.8l.52 1.2h11.7c.78 0 1.44-.5 1.69-1.2l2.98-5.88c.1-.2.1-.4.1-.52 0-.8-.7-1.4-1.4-1.4H5.89l-.98-1.96C4.85.5 4.45 0 3.8 0H1v2h2l3.2 6.8L4.39 14.8C4.19 15.2 4 15.6 4 16c0 1.1.9 2 2 2h14v-2H6l.8-1.6h9.71l2.45-4.4H7.11z"/></svg>
         <span class="cart-badge" id="cartBadge">0</span>
@@ -366,7 +373,7 @@
             if (!track) return;
             const itemsToShow = products.slice(0, maxItems || 10);
             if (itemsToShow.length === 0) {
-                track.innerHTML = '<p class="empty-msg" style="padding:20px;">Nenhum produto nesta categoria.</p>';
+                track.innerHTML = '<p class="empty-msg" style="padding:20px; font-size:0.9rem; color:#888;">Nenhum produto nesta categoria.</p>';
                 return;
             }
             let html = '';

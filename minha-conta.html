@@ -91,38 +91,72 @@
     </div>
 
     <script>
+        // =========================================
+        //  CONFIGURAÇÃO DO SUPABASE
+        // =========================================
         const SUPABASE_URL = 'https://ibpmlpebfwdyuondosca.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         let currentUser = null;
 
-        (async function verificarLogin() {
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                if (error) throw error;
-                if (session) {
-                    currentUser = session.user;
-                    localStorage.setItem('cliente_logado', JSON.stringify(currentUser));
-                    if (window.location.hash) {
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                    }
-                    carregarDashboard(currentUser.id);
-                    return;
+        // =========================================
+        //  CAPTURA DE EMERGÊNCIA DO TOKEN (GOOGLE)
+        // =========================================
+        (function() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token')) {
+                const params = new URLSearchParams(hash.substring(1));
+                const accessToken = params.get('access_token');
+
+                if (accessToken) {
+                    fetch(`${SUPABASE_URL}/auth/v1/user`, {
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.id) {
+                            localStorage.setItem('cliente_logado', JSON.stringify(data));
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                            currentUser = data;
+                            carregarDashboard(data.id);
+                        }
+                    })
+                    .catch(err => console.error("Erro ao buscar usuário:", err));
+                    
+                    // PARA A EXECUÇÃO AQUI
+                    return; 
                 }
-                const userString = localStorage.getItem('cliente_logado');
-                if (userString) {
-                    currentUser = JSON.parse(userString);
-                    if (window.location.hash) {
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                    }
-                    carregarDashboard(currentUser.id);
-                    return;
-                }
-                window.location.href = 'login.html';
-            } catch (err) {
-                console.error("Erro crítico de autenticação:", err);
-                window.location.href = 'login.html';
             }
+
+            // Se NÃO tiver token na URL, verifica o localStorage
+            (async function verificarLogin() {
+                try {
+                    const { data: { session }, error } = await supabase.auth.getSession();
+                    if (error) throw error;
+                    if (session) {
+                        currentUser = session.user;
+                        localStorage.setItem('cliente_logado', JSON.stringify(currentUser));
+                        if (window.location.hash) {
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                        }
+                        carregarDashboard(currentUser.id);
+                        return;
+                    }
+                    const userString = localStorage.getItem('cliente_logado');
+                    if (userString) {
+                        currentUser = JSON.parse(userString);
+                        if (window.location.hash) {
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                        }
+                        carregarDashboard(currentUser.id);
+                        return;
+                    }
+                    window.location.href = 'login.html';
+                } catch (err) {
+                    console.error("Erro crítico de autenticação:", err);
+                    window.location.href = 'login.html';
+                }
+            })();
         })();
 
         function voltarLoja() {

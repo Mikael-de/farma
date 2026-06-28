@@ -6,7 +6,7 @@
     <title>Minha Conta - Farmácia</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- ⚡ IMPORTAÇÃO DA BIBLIOTECA DO SUPABASE (OBRIGATÓRIA PARA O LOGOUT FUNCIONAR) -->
+    <!-- ⚡ IMPORTAÇÃO DA BIBLIOTECA DO SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
 
     <style>
@@ -83,11 +83,9 @@
             <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 5px;">Gerencie seus pedidos e dados pessoais.</p>
         </div>
         <div class="actions">
-            <!-- BOTÃO DE VOLTAR CORRIGIDO -->
             <a href="javascript:void(0)" onclick="voltarLoja()" class="btn-header btn-back">⬅ Voltar para a Loja</a>
             <a href="https://wa.me/5547996475401?text=Olá! Preciso de ajuda com minha conta." target="_blank" class="btn-header btn-support">💬 Suporte</a>
-            <!-- BOTÃO DE SAIR -->
-            <button class="btn-header btn-logout" onclick="logout()">Sair</button>
+            <button class="btn-header btn-logout" onclick="logout()">🚪 Sair</button>
         </div>
     </div>
 
@@ -146,22 +144,25 @@
         //  FUNÇÕES DE NAVEGAÇÃO E LOGOUT
         // =========================================
         function voltarLoja() {
-            // Vai para a loja sem o navegador prender o estado
             window.location.replace('index.html');
         }
 
         function logout() {
-            // Remove os dados locais
+            // 1. Apaga os dados do navegador
             localStorage.removeItem('cliente_logado');
+            sessionStorage.clear(); // Limpa memória temporária
             
-            // Desloga do Supabase (AQUI FUNCIONA POR CAUSA DA BIBLIOTECA IMPORTADA NO HEAD)
+            // 2. Desloga do Supabase
             supabase.auth.signOut().then(() => {
-                // Vai para a loja
+                // 3. AQUI ESTÁ A MÁGICA: Em vez de "window.location.href", usamos isso:
+                // Isso força o navegador a esquecer completamente a página atual e buscar a loja do zero.
                 window.location.href = 'index.html';
+                window.location.reload(true); // Força o recarregamento sem cache
             }).catch((err) => {
                 console.error("Erro ao deslogar do Supabase:", err);
-                // Se der erro, força o redirecionamento mesmo assim
+                // Se o Supabase falhar, ainda assim força a saída
                 window.location.href = 'index.html';
+                window.location.reload(true);
             });
         }
 

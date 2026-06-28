@@ -365,7 +365,7 @@
         let currentProductSlide = 0;
 
         // =========================================
-        //  VERIFICA SE HÁ TOKEN NA URL (APENAS PARA ACABOU DE LOGAR)
+        //  VERIFICA SE O USUÁRIO ACABOU DE LOGAR (APENAS REDIRECIONA SE TIVER TOKEN NA URL)
         // =========================================
         document.addEventListener('DOMContentLoaded', function() {
             const hash = window.location.hash;
@@ -375,8 +375,9 @@
                 return;
             }
             
-            // Se NÃO tiver token na URL, NÃO FAZ NADA.
-            // O usuário pode ficar na loja. O botão "Minha Conta" vai levá-lo ao painel.
+            // Se NÃO tiver token na URL, ELE FICA NA LOJA.
+            // Mesmo que esteja logado no localStorage, ele fica na loja.
+            // O botão "Minha Conta" no menu vai levá-lo ao painel.
         });
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }

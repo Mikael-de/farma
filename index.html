@@ -217,7 +217,7 @@
     <header class="main-header" id="mainHeader">
         <div class="header-left">
             <div class="logo-area"><a href="https://www.farmaciasbrasilpoupalar.com.br/"><img src="logo.png"></a></div>
-            <div class="header-info"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+            <div class="header-info"><svg viewBox="0 0 24 24"></svg></div>
         </div>
         <div class="search-bar">
             <input type="text" id="search-input" placeholder="Busque seu medicamento..." onkeyup="performSearch()">
@@ -365,20 +365,30 @@
         let currentProductSlide = 0;
 
         // =========================================
-        //  VERIFICA SE O USUÁRIO ACABOU DE LOGAR (APENAS REDIRECIONA SE TIVER TOKEN NA URL)
+        //  VERIFICADOR DE EMERGÊNCIA DO GOOGLE (EXECUTA IMEDIATAMENTE)
         // =========================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const hash = window.location.hash;
+        (function verificarLoginGoogle() {
+            var hash = window.location.hash;
             if (hash && hash.includes('access_token')) {
-                // Se chegou aqui com token, redireciona para a conta
-                window.location.href = 'minha-conta.html';
-                return;
+                var params = new URLSearchParams(hash.substring(1));
+                var accessToken = params.get('access_token');
+                if (accessToken) {
+                    fetch(SUPABASE_URL + '/auth/v1/user', {
+                        headers: { 'Authorization': 'Bearer ' + accessToken }
+                    })
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (data.id) {
+                            localStorage.setItem('cliente_logado', JSON.stringify(data));
+                            window.location.href = 'minha-conta.html';
+                        }
+                    })
+                    .catch(function(err) {
+                        console.error("Erro ao buscar usuário:", err);
+                    });
+                }
             }
-            
-            // Se NÃO tiver token na URL, ELE FICA NA LOJA.
-            // Mesmo que esteja logado no localStorage, ele fica na loja.
-            // O botão "Minha Conta" no menu vai levá-lo ao painel.
-        });
+        })();
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }
         function toggleFilterSidebar() { document.getElementById('filterSidebar').classList.toggle('open'); document.getElementById('filterOverlay').classList.toggle('open'); }

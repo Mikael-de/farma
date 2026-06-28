@@ -5,34 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Identificação - Farmácia</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Importação da biblioteca do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
-        .login-card { background: #ffffff; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 420px; border: 1px solid #f0f0f0; }
-        .login-card h1 { text-align: center; color: #1b5e20; font-size: 1.8rem; font-weight: 700; margin-bottom: 5px; }
-        .login-card h2 { text-align: center; font-size: 1.2rem; color: #333; margin-bottom: 25px; font-weight: 600; }
+        .login-card {
+            background: #ffffff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .login-card h1 {
+            text-align: center;
+            color: #1b5e20;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .login-card h2 {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
 
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 0.9rem; color: #555; margin-bottom: 5px; }
         .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; outline: none; transition: border 0.2s; }
         .form-group input:focus { border-color: #388E3C; }
         
-        .btn-google { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; background: white; border: 1px solid #d1d5db; border-radius: 8px; cursor: pointer; font-weight: 600; color: #333; margin-bottom: 20px; transition: 0.2s; }
+        .btn-google {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 12px;
+            background: white; border: 1px solid #d1d5db; border-radius: 8px;
+            cursor: pointer; font-weight: 600; color: #333; margin-bottom: 20px;
+            transition: 0.2s;
+        }
         .btn-google:hover { background: #f8f9fa; border-color: #bbb; }
 
-        .btn-primary { width: 100%; padding: 12px; background: #1b5e20; color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; }
+        .btn-primary {
+            width: 100%; padding: 12px;
+            background: #1b5e20; color: white; border: none; border-radius: 8px;
+            font-weight: 700; font-size: 1rem; cursor: pointer;
+            transition: 0.2s;
+        }
         .btn-primary:hover { background: #388E3C; }
 
-        .separator { display: flex; align-items: center; text-align: center; margin: 25px 0; color: #999; font-size: 0.9rem; }
-        .separator::before, .separator::after { content: ''; flex: 1; border-bottom: 1px solid #e0e0e0; }
+        .separator {
+            display: flex; align-items: center; text-align: center;
+            margin: 25px 0; color: #999; font-size: 0.9rem;
+        }
+        .separator::before, .separator::after {
+            content: ''; flex: 1; border-bottom: 1px solid #e0e0e0;
+        }
         .separator span { padding: 0 10px; }
 
-        .link-criar-conta { display: block; text-align: center; margin-top: 15px; color: #1b5e20; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
-        .link-criar-conta:hover { text-decoration: underline; }
+        /* CORREÇÃO DO BOTÃO DE CRIAR CONTA */
+        .btn-create-account {
+            width: 100%; padding: 12px;
+            background: transparent; 
+            color: #1b5e20; 
+            border: 2px solid #1b5e20; 
+            border-radius: 8px;
+            font-weight: 700; font-size: 1rem; cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: block; 
+            text-align: center;
+        }
+        .btn-create-account:hover { 
+            background: #1b5e20; 
+            color: white; 
+        }
 
-        @media (max-width: 480px) { .login-card { padding: 25px 15px; } }
+        @media (max-width: 480px) {
+            .login-card { padding: 25px 15px; }
+        }
     </style>
 </head>
 <body>
@@ -61,7 +119,8 @@
 
         <div class="separator"><span>Ainda não é cliente?</span></div>
 
-        <a href="criar-conta.html" class="link-criar-conta">Crie sua conta</a>
+        <!-- BOTÃO DE CRIAR CONTA CORRIGIDO -->
+        <a href="criar-conta.html" class="btn-create-account">Crie sua conta</a>
     </div>
 
     <script>
@@ -69,14 +128,11 @@
         const SUPABASE_KEY = 'sb_publishable_tkr3tvS9SK7IzpqLIUzjdA_7rAXAUfe';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // =========================================
-        //  FUNÇÃO DE LOGIN COM GOOGLE (MANDANDO DIRETO PARA MINHA-CONTA.HTML)
-        // =========================================
         async function loginGoogle() {
             const { data, error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin + '/minha-conta.html' // <--- AQUI É A MUDANÇA
+                    redirectTo: window.location.origin
                 }
             });
             if (error) {
@@ -85,16 +141,19 @@
             }
         }
 
-        // =========================================
-        //  FUNÇÃO DE LOGIN COM E-MAIL E SENHA (NÃO MEXIDA)
-        // =========================================
         async function loginEmail() {
             const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
             
-            if(!email || !password) { alert('Preencha e-mail e senha.'); return; }
+            if(!email || !password) {
+                alert('Preencha e-mail e senha.');
+                return;
+            }
 
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
 
             if (error) {
                 alert('Erro no login: ' + error.message);
@@ -103,6 +162,13 @@
                 window.location.href = 'minha-conta.html';
             }
         }
+
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' && session) {
+                localStorage.setItem('cliente_logado', JSON.stringify(session.user));
+                window.location.href = 'minha-conta.html';
+            }
+        });
     </script>
 </body>
 </html>

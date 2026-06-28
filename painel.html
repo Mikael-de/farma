@@ -81,7 +81,7 @@
         <input type="email" id="emailInput" placeholder="E-mail do atendente" value="">
         <input type="password" id="passwordInput" placeholder="Senha" value="">
         <button class="btn-login" onclick="fazerLogin()">Entrar no Painel</button>
-        <p style="text-align:center; margin-top: 15px; font-size: 0.8rem; color: #888;">Digite seu e-mail e senha cadastrados.</p>
+        <p style="text-align:center; margin-top: 15px; font-size: 0.8rem; color: #888;">Digite seu e-mail e senha.</p>
     </div>
 
     <div id="dashboard-container">
@@ -130,12 +130,12 @@
             if(!email || !password) { alert('Preencha o e-mail e a senha!'); return; }
 
             try {
-                // Chama a função SQL que criamos para verificar e-mail e senha
+                // Busca na tabela onde o email E a senha batem exatamente
                 const { data, error } = await supabase
-                    .rpc('login_funcionario', {
-                        email_attempt: email,
-                        senha_attempt: password
-                    });
+                    .from('funcionarios')
+                    .select('*')
+                    .eq('email', email)
+                    .eq('senha', password);
 
                 if (error) {
                     alert('Erro no banco de dados: ' + error.message);

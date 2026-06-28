@@ -95,7 +95,7 @@
         let currentUser = null;
 
         // =========================================
-        //  CAPTURADOR DE TOKEN DO GOOGLE (AQUI VAI FUNCIONAR!)
+        //  CAPTURADOR DE TOKEN DO GOOGLE (SEM RECARREGAR A PÁGINA!)
         // =========================================
         (function() {
             const hash = window.location.hash;
@@ -110,27 +110,31 @@
                     .then(res => res.json())
                     .then(data => {
                         if (data.id) {
+                            // Salva o usuário e limpa a URL suja
                             localStorage.setItem('cliente_logado', JSON.stringify(data));
-                            // Limpa a URL suja
                             window.history.replaceState({}, document.title, window.location.pathname);
-                            // Recarrega para mostrar o painel
-                            location.reload(); 
+                            
+                            // DEFINE O USUÁRIO AQUI E FORÇA O CARREGAMENTO DO PAINEL
+                            currentUser = data;
+                            carregarDashboard(data.id);
                         }
                     })
                     .catch(err => console.error("Erro ao buscar usuário:", err));
+                    return; // Para a execução aqui
                 }
             }
-        })();
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const userString = localStorage.getItem('cliente_logado');
-            if(!userString) {
-                window.location.href = 'login.html'; 
-                return;
-            }
-            currentUser = JSON.parse(userString);
-            carregarDashboard(currentUser.id);
-        });
+            // Se não tiver token na URL, verifica o localStorage
+            document.addEventListener('DOMContentLoaded', function() {
+                const userString = localStorage.getItem('cliente_logado');
+                if(!userString) {
+                    window.location.href = 'login.html'; 
+                    return;
+                }
+                currentUser = JSON.parse(userString);
+                carregarDashboard(currentUser.id);
+            });
+        })();
 
         function logout() {
             localStorage.removeItem('cliente_logado');

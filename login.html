@@ -92,7 +92,10 @@
         async function loginGoogle() {
             const { data, error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
-                options: { redirectTo: window.location.origin }
+                options: {
+                    // AGORA VAI DIRETO PARA O PAINEL
+                    redirectTo: window.location.origin + '/minha-conta.html'
+                }
             });
             if (error) {
                 alert('Erro ao fazer login com Google: ' + error.message);

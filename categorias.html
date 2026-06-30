@@ -180,7 +180,7 @@
             <div class="header-info"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
         </div>
         <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Busque seu medicamento..." onkeyup="performSearch()">
+            <input type="text" id="search-input" placeholder="Busque seu medicamento..." oninput="debounceSearch()">
             <button onclick="performSearch()" aria-label="Buscar"><svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
     </header>
@@ -399,6 +399,15 @@
             } catch (error) { alert('Erro ao enviar o pedido: ' + error.message); console.error(error); }
         }
 
+        // ===== DEBOUNCE DA PESQUISA =====
+        let searchTimeout;
+        function debounceSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch();
+            }, 600);
+        }
+
         function performSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
             if(query === '') { window.location.href = 'categorias.html?categoria=todos'; } 
@@ -428,8 +437,6 @@
                     products = products.filter(p => p.nome.toLowerCase().includes(busca.toLowerCase()));
                     titleEl.innerText = `Resultados para "${busca}"`;
                 } else if (categoria !== 'todos') {
-                    // ===== CORREÇÃO AQUI =====
-                    // Mapeia o link (ex: medicamentos) para o nome real do banco (Medicamentos)
                     const mapaCategorias = {
                         'medicamentos': 'Medicamentos',
                         'higiene': 'Higiene',
@@ -440,14 +447,8 @@
                         'cuidados_pessoais': 'Cuidados Pessoais',
                         'skincare': 'Skincare'
                     };
-                    
-                    // Pega o nome correto do banco
                     const categoriaReal = mapaCategorias[categoria] || categoria;
-                    
-                    // Filtra os produtos com o nome real do banco
                     products = products.filter(p => p.categoria === categoriaReal);
-                    
-                    // Define o título bonito na tela
                     titleEl.innerText = categoria.charAt(0).toUpperCase() + categoria.slice(1).replace(/_/g, ' ');
                 } else {
                     titleEl.innerText = 'Todos os Produtos';
@@ -480,8 +481,6 @@
                     } else {
                         precoHTML = `<div class="price-main">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>`;
                     }
-                    
-                    // Corrige aspas e acentos no nome do produto para o botão
                     const nomeSeguro = item.nome.replace(/"/g, '&quot;').replace(/'/g, "\\'");
                     const precoFinal = descontoAtivo ? descontoAtivo.preco_promocional : item.preco;
 

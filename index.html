@@ -12,7 +12,6 @@
         body { background: #f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
         a { text-decoration: none; color: inherit; } ul { list-style: none; }
 
-        /* ===== HEADER E TOP BAR ===== */
         .top-bar { background: var(--bg-topbar); padding: 8px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #2e4a33; border-bottom: 1px solid var(--border-light); flex-wrap: wrap; }
         .top-bar a { color: var(--primary-green); font-weight: 600; }
         .top-bar a:hover { text-decoration: underline; }
@@ -57,7 +56,6 @@
         .sidebar-menu ul li a { font-weight: 500; color: #333; display: block; }
         .sidebar-menu ul li a:hover { color: var(--accent-green); }
 
-        /* ===== BANNER ===== */
         .banner-area { width: 100%; padding: 20px 15px 30px; background: linear-gradient(135deg, var(--primary-green), var(--accent-green)); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; border-bottom: 4px solid #1b5e20; }
         .banner-carousel-wrapper { width: 100%; max-width: 1200px; height: auto; aspect-ratio: 16/9; max-height: 350px; position: relative; margin-bottom: 20px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
         .banner-carousel-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease-in-out; z-index: 1; }
@@ -72,7 +70,6 @@
         .banner-text-content h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .banner-text-content p { font-size: clamp(0.9rem, 2vw, 1.1rem); margin-top: 8px; opacity: 0.9; font-weight: 300; }
 
-        /* ===== CSS DOS CARROSSÉIS ===== */
         .container { width: 100%; max-width: 1400px; margin: 10px auto 30px; padding: 0 15px; flex: 1; position: relative; }
         
         .category-section { margin-bottom: 40px; }
@@ -104,7 +101,6 @@
         .product-nav-btn.next { right: -10px; }
         .empty-msg { text-align: center; padding: 40px; color: #888; font-size: 1.2rem; }
 
-        /* ===== CARRINHO E MODAIS ===== */
         .cart-float { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; background-color: var(--primary-green); border-radius: 50%; display: none; justify-content: center; align-items: center; text-decoration: none; z-index: 998; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease; }
         .cart-float.show { display: flex; }
         .cart-float:hover { transform: scale(1.1); }
@@ -163,7 +159,6 @@
         .footer-bottom { max-width: 1400px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.9rem; }
         .footer-bottom strong { color: white; }
 
-        /* ===== RESPONSIVIDADE ===== */
         @media (max-width: 1024px) {
             .main-header { flex-wrap: nowrap; padding: 10px 15px; gap: 10px; }
             .header-left { min-width: auto; gap: 5px; flex-shrink: 0; }
@@ -215,7 +210,7 @@
             <div class="header-info"><svg viewBox="0 0 24 24"></svg></div>
         </div>
         <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Busque seu medicamento..." onkeyup="performSearch()">
+            <input type="text" id="search-input" placeholder="Busque seu medicamento..." oninput="debounceSearch()">
             <button onclick="performSearch()" aria-label="Buscar"><svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
     </header>
@@ -295,7 +290,7 @@
 
     <div class="ticket-modal-overlay" id="ticketModal" onclick="closeTicketModal(event)">
         <div class="ticket-modal" onclick="event.stopPropagation()">
-            <div class="ticket-header"><h3>Ticket de Compra</h3><p>Farmácia Brasil Poupa Lar - Brusque</p></div>
+            <div class="ticket-header"><h3>🧾 Ticket de Compra</h3><p>Farmácia Brasil Poupa Lar - Brusque</p></div>
             <div class="ticket-cliente-area">
                 <label for="inputClienteNome">Nome do Cliente:</label><input type="text" id="inputClienteNome" placeholder="Ex: João da Silva" value="">
                 <label for="inputClienteTel">WhatsApp do Cliente (com DDD):</label><input type="text" id="inputClienteTel" placeholder="(47) 99999-9999" maxlength="15" oninput="mascaraTelefone(this)">
@@ -524,6 +519,47 @@
             } catch (error) { alert('Erro ao enviar o pedido: ' + error.message); console.error(error); }
         }
 
+        // ===== DEBOUNCE DA PESQUISA =====
+        let searchTimeout;
+        function debounceSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch();
+            }, 600);
+        }
+
+        function performSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            if(query === '') { window.location.reload(); } 
+            else { window.location.href = `categorias.html?busca=${encodeURIComponent(query)}`; }
+        }
+
+        // ===== SCROLL LATERAL (TOUCH) PARA CARROSSÉIS =====
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let currentCarouselKey = '';
+
+        document.addEventListener('touchstart', function(e) {
+            const track = e.target.closest('.product-carousel-track');
+            if (track) {
+                touchStartX = e.changedTouches[0].screenX;
+                currentCarouselKey = track.id.replace('track-', '');
+            }
+        });
+
+        document.addEventListener('touchend', function(e) {
+            const track = e.target.closest('.product-carousel-track');
+            if (track && currentCarouselKey) {
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) moveCarousel(currentCarouselKey, 1);
+                    else moveCarousel(currentCarouselKey, -1);
+                }
+                currentCarouselKey = '';
+            }
+        });
+
         async function carregarProdutos() {
             try {
                 const resposta = await fetch(`${SUPABASE_URL}/rest/v1/produtos?select=*,descontos(*)`, {
@@ -573,12 +609,6 @@
                 document.getElementById('empty-msg').style.display = 'block'; 
                 document.getElementById('empty-msg').innerText = "Erro ao carregar produtos. Verifique a conexão."; 
             }
-        }
-
-        function performSearch() {
-            const query = document.getElementById('search-input').value.toLowerCase().trim();
-            if(query === '') { window.location.reload(); } 
-            else { window.location.href = `categorias.html?busca=${encodeURIComponent(query)}`; }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
